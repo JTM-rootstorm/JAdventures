@@ -30,7 +30,7 @@ public class Location {
         this.monsterLivingHere = monsterLivingHere;
     }
 
-    public void setDescription(String description){
+    /*public void setDescription(String description){
         this.description = description;
     }
 
@@ -48,7 +48,7 @@ public class Location {
 
     public void setLocationToNorth(Location locationToNorth) {
         this.locationToNorth = locationToNorth;
-    }
+    }*/
 
     public void setLocationToEast(Location locationToEast) {
         this.locationToEast = locationToEast;
