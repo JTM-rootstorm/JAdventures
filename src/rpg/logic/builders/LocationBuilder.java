@@ -1,4 +1,4 @@
-package rpg.logic.builders.location;
+package rpg.logic.builders;
 
 import rpg.logic.Location;
 import rpg.logic.enums.LocationID;

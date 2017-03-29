@@ -1,8 +1,7 @@
-package rpg.logic.builders.quest;
+package rpg.logic.builders;
 
 import rpg.logic.enums.QuestID;
 import rpg.logic.quests.Quest;
-import rpg.logic.quests.QuestCompletionItem;
 
 public class QuestBuilder {
     private QuestID ID;

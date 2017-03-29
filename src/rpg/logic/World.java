@@ -1,7 +1,7 @@
 package rpg.logic;
 
-import rpg.logic.builders.location.LocationBuilder;
-import rpg.logic.builders.quest.QuestBuilder;
+import rpg.logic.builders.LocationBuilder;
+import rpg.logic.builders.QuestBuilder;
 import rpg.logic.entity.Monster;
 import rpg.logic.enums.*;
 import rpg.logic.item.*;
