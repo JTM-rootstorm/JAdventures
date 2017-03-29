@@ -232,21 +232,10 @@ public class GameUI {
     }
 
     private void moveTo(Location newLocation){
-        if(newLocation.getItemRequiredToEnter() != null){
-            boolean playerHadRequiredItem = false;
-
-            for(InventoryItem item : _player.getInventory()){
-                if(item.getDetails().getID() == newLocation.getItemRequiredToEnter().getID()){
-                    playerHadRequiredItem = true;
-                    break;
-                }
-            }
-
-            if(!playerHadRequiredItem){
-                rtbMessages.append("\nYou must have a " + newLocation.getItemRequiredToEnter().getName()
-                        + " to enter this location\n");
-                return;
-            }
+        if(!hasRequiredItemToEnter(newLocation)){
+            rtbMessages.append("\nYou must have a " + newLocation.getItemRequiredToEnter().getName()
+                    + " to enter this location\n");
+            return;
         }
 
         _player.setCurrentLocation(newLocation);
@@ -263,57 +252,19 @@ public class GameUI {
         lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
 
         if(newLocation.getQuestAvailableHere() != null){
-            boolean playerAlreadyHasQuest = false;
-            boolean playerAlreadyCompletedQuest = false;
-
-            for(PlayerQuest quest : _player.getQuests()){
-                if(quest.getDetails().getID() == newLocation.getQuestAvailableHere().getID()){
-                    playerAlreadyHasQuest = true;
-
-                    if(quest.isCompleted()){
-                        playerAlreadyCompletedQuest = true;
-                    }
-                }
-            }
+            boolean playerAlreadyHasQuest = _player.hasThisQuest(newLocation.getQuestAvailableHere());
+            boolean playerAlreadyCompletedQuest = _player.completedThisQuest(newLocation.getQuestAvailableHere());
 
             if(playerAlreadyHasQuest){
                 if(!playerAlreadyCompletedQuest){
-                    boolean playerHasAllItemsToCompleteQuest = true;
-
-                    for(QuestCompletionItem qci : newLocation.getQuestAvailableHere().getQuestCompletionItems()){
-                        boolean foundItemsInPlayerInventory = false;
-
-                        for(InventoryItem item : _player.getInventory()){
-                            if(item.getDetails().getID() == qci.getDetails().getID()){
-                                foundItemsInPlayerInventory = true;
-
-                                if(item.getQuantity() < qci.getQuantity()){
-                                    playerHasAllItemsToCompleteQuest = false;
-                                    break;
-                                }
-
-                                break;
-                            }
-                        }
-
-                        if(!foundItemsInPlayerInventory){
-                            playerHasAllItemsToCompleteQuest = false;
-                            break;
-                        }
-                    }
+                    boolean playerHasAllItemsToCompleteQuest =
+                            _player.hasAllQuestCompletionItems(newLocation.getQuestAvailableHere());
 
                     if(playerHasAllItemsToCompleteQuest){
                         rtbMessages.append("You complete the \'"
                                 + newLocation.getQuestAvailableHere().getName() + "\' quest.\n");
 
-                        for(QuestCompletionItem qci : newLocation.getQuestAvailableHere().getQuestCompletionItems()){
-                            for(InventoryItem item : _player.getInventory()){
-                                if(item.getDetails().getID() == qci.getDetails().getID()){
-                                    item.setQuantity(item.getQuantity() - qci.getQuantity());
-                                    break;
-                                }
-                            }
-                        }
+                        _player.removeQuestCompletionItems(newLocation.getQuestAvailableHere());
 
                         rtbMessages.append("You receive: \n"
                                 + Integer.toString(newLocation.getQuestAvailableHere().getRewardExperiencePoints())
@@ -324,27 +275,9 @@ public class GameUI {
                         _player.addExperiencePoints(newLocation.getQuestAvailableHere().getRewardExperiencePoints());
                         _player.addGold(newLocation.getQuestAvailableHere().getRewardGold());
 
-                        boolean addedItemToPlayerInventory = false;
+                        _player.addItemToInventory(newLocation.getQuestAvailableHere().getRewardItem());
 
-                        for(InventoryItem item : _player.getInventory()){
-                            if(item.getDetails().getID() == newLocation.getQuestAvailableHere().getRewardItem().getID()){
-                                item.incrementQuantity();
-                                addedItemToPlayerInventory = true;
-                                break;
-                            }
-                        }
-
-                        if(!addedItemToPlayerInventory){
-                            _player.getInventory()
-                                    .add(new InventoryItem(newLocation.getQuestAvailableHere().getRewardItem(), 1));
-                        }
-
-                        for(PlayerQuest playerQuest : _player.getQuests()){
-                            if(playerQuest.getDetails().getID() == newLocation.getQuestAvailableHere().getID()){
-                                playerQuest.setCompleted(true);
-                                break;
-                            }
-                        }
+                        _player.markQuestAsCompleted(newLocation.getQuestAvailableHere());
                     }
                 }
             }
@@ -396,6 +329,27 @@ public class GameUI {
             btnUsePotion.setVisible(false);
         }
 
+        updateQuestListInUI();
+        updateWeaponListInUI();
+        updateInventoryListInUI();
+        updatePotionListInUI();
+    }
+
+    private Boolean hasRequiredItemToEnter(Location location){
+        if(location.getItemRequiredToEnter() == null){
+            return true;
+        }
+
+        for(InventoryItem item : _player.getInventory()){
+            if(item.getDetails().getID() == location.getItemRequiredToEnter().getID()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void updateInventoryListInUI(){
         DefaultTableModel invModel = (DefaultTableModel) dgvInventory.getModel();
         invModel.setRowCount(0);
 
@@ -407,7 +361,9 @@ public class GameUI {
 
         dgvInventory.setModel(invModel);
         dgvInventory.revalidate();
+    }
 
+    private void updateQuestListInUI(){
         DefaultTableModel questModel = (DefaultTableModel) dgvQuests.getModel();
         questModel.setRowCount(0);
 
@@ -415,6 +371,11 @@ public class GameUI {
             questModel.addRow(new Object[] {quest.getDetails().getName(), quest.isCompleted()});
         }
 
+        dgvQuests.setModel(questModel);
+        dgvQuests.revalidate();
+    }
+
+    private void updateWeaponListInUI(){
         java.util.List<Weapon> weapons = new ArrayList<>();
 
         for(InventoryItem item : _player.getInventory()){
@@ -435,7 +396,9 @@ public class GameUI {
             cboWeapons.setModel(new DefaultComboBoxModel<>(weaps));
             cboWeapons.setSelectedIndex(0);
         }
+    }
 
+    private void updatePotionListInUI(){
         List<HealingPotion> healingPotions = new ArrayList<>();
 
         for(InventoryItem item : _player.getInventory()){
