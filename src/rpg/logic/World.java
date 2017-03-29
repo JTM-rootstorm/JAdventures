@@ -1,5 +1,6 @@
 package rpg.logic;
 
+import org.jetbrains.annotations.Nullable;
 import rpg.logic.builders.LocationBuilder;
 import rpg.logic.builders.QuestBuilder;
 import rpg.logic.entity.Monster;
@@ -162,6 +163,7 @@ public class World {
                 guardPost, bridge, spiderField));
     }
 
+    @Nullable
     public static Item ItemByID(ItemID id){
         for(Item item : items){
             if(item.getID() == id){
@@ -172,6 +174,7 @@ public class World {
         return null;
     }
 
+    @Nullable
     public static Monster MonsterByID(MonsterID id){
         for(Monster monster : monsters){
             if(monster.getID() == id){
@@ -182,6 +185,7 @@ public class World {
         return null;
     }
 
+    @Nullable
     private static Quest QuestByID(QuestID id){
         for(Quest quest : quests){
             if(quest.getID() == id){
@@ -192,6 +196,7 @@ public class World {
         return null;
     }
 
+    @Nullable
     public static Location LocationByID(LocationID id){
         for(Location location : locations){
             if(location.getID() == id){

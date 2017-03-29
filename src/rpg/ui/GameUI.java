@@ -1,10 +1,11 @@
 package rpg.ui;
 
+import org.jetbrains.annotations.NotNull;
 import rpg.logic.Location;
+import rpg.logic.RandomNumberGenerator;
 import rpg.logic.World;
 import rpg.logic.entity.Monster;
 import rpg.logic.entity.Player;
-import rpg.logic.enums.ItemID;
 import rpg.logic.enums.LocationID;
 import rpg.logic.item.HealingPotion;
 import rpg.logic.item.InventoryItem;
@@ -15,7 +16,6 @@ import rpg.logic.quests.QuestCompletionItem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -136,11 +136,13 @@ public class GameUI {
         btnUseWeapon = new JButton("Use");
         btnUseWeapon.setLocation(620,559);
         btnUseWeapon.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        btnUseWeapon.addActionListener(e -> fightMonster());
         gamePanel.add(btnUseWeapon);
 
         btnUsePotion = new JButton("Use");
         btnUsePotion.setLocation(620,593);
         btnUsePotion.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        btnUsePotion.addActionListener(e -> drinkPotion());
         gamePanel.add(btnUsePotion);
 
         btnNorth = new JButton("North");
@@ -171,10 +173,7 @@ public class GameUI {
     private void initPlayer() {
         _player = new Player(10,10,20,0,1);
 
-        lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
-        lblGold.setText(Integer.toString(_player.getGold()));
-        lblExperience.setText(Integer.toString(_player.getExpPoints()));
-        lblLevel.setText(Integer.toString(_player.getLevel()));
+        updatePlayerLabels();
     }
 
     private void initComboBoxes() {
@@ -335,6 +334,7 @@ public class GameUI {
         updatePotionListInUI();
     }
 
+    @NotNull
     private Boolean hasRequiredItemToEnter(Location location){
         if(location.getItemRequiredToEnter() == null){
             return true;
@@ -419,5 +419,113 @@ public class GameUI {
             cboPotions.setModel(new DefaultComboBoxModel<>(pots));
             cboPotions.setSelectedIndex(0);
         }
+    }
+
+    private void updatePlayerLabels(){
+        lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
+        lblGold.setText(Integer.toString(_player.getGold()));
+        lblExperience.setText(Integer.toString(_player.getExpPoints()));
+        lblLevel.setText(Integer.toString(_player.getLevel()));
+    }
+
+    private void fightMonster(){
+        Weapon currentWeapon = (Weapon)cboWeapons.getSelectedItem();
+
+        int damageToMonster = RandomNumberGenerator.NumberBetween(currentWeapon.getMinDamage(),
+                currentWeapon.getMaxDamage());
+
+        _currentMonster.setCurrentHitPoints(_currentMonster.getCurrentHitPoints() - damageToMonster);
+
+        rtbMessages.append("You hit the " + _currentMonster.getName() + " for " + damageToMonster + " points.\n");
+
+        if(_currentMonster.getCurrentHitPoints() <= 0){
+            rtbMessages.append("\nYou defeated the " + _currentMonster.getName() + "\n");
+
+            _player.setExpPoints(_player.getExpPoints() + _currentMonster.getRewardExperiencePoints());
+            rtbMessages.append("You receive " + _currentMonster.getRewardExperiencePoints() + " experience points.\n");
+
+            _player.setGold(_player.getGold() + _currentMonster.getRewardGold());
+            rtbMessages.append("You receive " + _currentMonster.getRewardGold() + " gold.\n");
+
+            List<InventoryItem> lootedItems = new ArrayList<>();
+
+            for(LootItem lootItem : _currentMonster.getLootTable()){
+                if(RandomNumberGenerator.NumberBetween(1, 100) <= lootItem.getDropPercentage()){
+                    lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
+                }
+            }
+
+            if(lootedItems.size() == 0){
+                for(LootItem lootItem : _currentMonster.getLootTable()){
+                    if(lootItem.isDefaultItem()){
+                        lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
+                    }
+                }
+            }
+
+            for(InventoryItem item : lootedItems){
+                _player.addItemToInventory(item.getDetails());
+
+                if(item.getQuantity() == 1){
+                    rtbMessages.append("You loot " + item.getQuantity() + " " + item.getDetails().getName() + "\n");
+                }
+                else{
+                    rtbMessages.append("You loot " + item.getQuantity() + " " + item.getDetails().getNamePlural() + "\n");
+                }
+            }
+
+            updatePlayerLabels();
+            updateInventoryListInUI();
+            updateWeaponListInUI();
+            updatePotionListInUI();
+
+            rtbMessages.append("\n");
+
+            moveTo(_player.getCurrentLocation());
+        }
+        else{
+            monsterAttack();
+        }
+    }
+
+    private void monsterAttack(){
+        int damageToPlayer = RandomNumberGenerator.NumberBetween(0, _currentMonster.getMaxDamage());
+
+        rtbMessages.append("The " + _currentMonster.getName() + " did " + damageToPlayer + " points of damage.\n");
+
+        _player.setCurrentHitPoints(_player.getCurrentHitPoints() - damageToPlayer);
+
+        updatePlayerLabels();
+
+        if(_player.getCurrentHitPoints() <= 0){
+            rtbMessages.append("The " + _currentMonster.getName() + " killed you.\n");
+
+            moveTo(World.LocationByID(LocationID.HOME));
+        }
+    }
+
+    private void drinkPotion(){
+        HealingPotion potion = (HealingPotion)cboPotions.getSelectedItem();
+
+        _player.setCurrentHitPoints(_player.getCurrentHitPoints() + potion.getAmountToHeal());
+
+        if(_player.getCurrentHitPoints() > _player.getMaxHitPoints()){
+            _player.setCurrentHitPoints(_player.getMaxHitPoints());
+        }
+
+        for(InventoryItem item : _player.getInventory()){
+            if(item.getDetails().getID() == potion.getID()){
+                item.setQuantity(item.getQuantity() - 1);
+                break;
+            }
+        }
+
+        rtbMessages.append("You drink a " + potion.getName() + "\n");
+
+        monsterAttack();
+
+        updatePlayerLabels();
+        updateInventoryListInUI();
+        updatePotionListInUI();
     }
 }
