@@ -3,15 +3,15 @@ package rpg.logic.entity;
 import rpg.logic.Location;
 import rpg.logic.item.InventoryItem;
 import rpg.logic.item.Item;
+import rpg.logic.item.weapon.Weapon;
 import rpg.logic.quests.PlayerQuest;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Entity implements Serializable{
+public class Player extends Entity{
     private int gold;
     private int expPoints;
     private int level;
@@ -19,11 +19,9 @@ public class Player extends Entity implements Serializable{
     private List<InventoryItem> inventory;
     private List<PlayerQuest> quests;
 
-    private Location currentLocation;
+    private Location currentLocation = null;
 
-    public Player(){
-        super();
-    }
+    private Weapon currentWeapon = null;
 
     public Player(int currentHitPoints, int maxHitPoints, int gold, int expPoints, int level){
         super(currentHitPoints, maxHitPoints);
@@ -58,6 +56,10 @@ public class Player extends Entity implements Serializable{
         this.currentLocation = currentLocation;
     }
 
+    public void setCurrentWeapon(Weapon currentWeapon) {
+        this.currentWeapon = currentWeapon;
+    }
+
     public void addExperiencePoints(int xp){
         expPoints += xp;
     }
@@ -88,6 +90,10 @@ public class Player extends Entity implements Serializable{
 
     public Location getCurrentLocation() {
         return currentLocation;
+    }
+
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
     }
 
     public Boolean hasThisQuest(Quest quest){

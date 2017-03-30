@@ -17,6 +17,7 @@ import rpg.logic.quests.QuestCompletionItem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,6 +185,11 @@ public class GameUI {
         cboWeapons = new JComboBox<>();
         cboWeapons.setLocation(369,559);
         cboWeapons.setSize(150,20);
+        cboWeapons.addItemListener(e -> {
+            if(e.getStateChange() == ItemEvent.SELECTED){
+                _player.setCurrentWeapon((Weapon)e.getItem());
+            }
+        });
         gamePanel.add(cboWeapons);
 
         cboPotions = new JComboBox<>();
@@ -398,7 +404,13 @@ public class GameUI {
             Weapon[] weaps = new Weapon[weapons.size()];
             weaps = weapons.toArray(weaps);
             cboWeapons.setModel(new DefaultComboBoxModel<>(weaps));
-            cboWeapons.setSelectedIndex(0);
+
+            if(_player.getCurrentWeapon() != null){
+                cboWeapons.setSelectedItem(_player.getCurrentWeapon());
+            }
+            else{
+                cboWeapons.setSelectedIndex(0);
+            }
         }
     }
 

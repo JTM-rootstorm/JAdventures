@@ -231,6 +231,7 @@ public class World {
             if(!debugFlag){
                 path = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
                         .getLocation().getPath(), "UTF-8");
+                path = FilenameUtils.getPath(path);
                 path += object.getClass().getSimpleName() + ".json";
             }
             else{
@@ -242,7 +243,8 @@ public class World {
             }
 
             FileWriter writer = new FileWriter(path);
-            String json = gson.toJson(object);
+            /*String json = gson.toJson(object);
+            writer.write(json);*/
             writer.write(teststr);
             System.out.println(path);
             writer.close();
