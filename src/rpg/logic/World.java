@@ -1,15 +1,25 @@
 package rpg.logic;
 
+import com.google.gson.Gson;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
 import rpg.logic.builders.LocationBuilder;
 import rpg.logic.builders.QuestBuilder;
 import rpg.logic.entity.Monster;
-import rpg.logic.enums.*;
-import rpg.logic.item.*;
-import rpg.logic.item.weapon.*;
+import rpg.logic.enums.ItemID;
+import rpg.logic.enums.LocationID;
+import rpg.logic.enums.MonsterID;
+import rpg.logic.enums.QuestID;
+import rpg.logic.item.HealingPotion;
+import rpg.logic.item.Item;
+import rpg.logic.item.LootItem;
+import rpg.logic.item.weapon.Weapon;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +34,14 @@ public class World {
 
     }
 
-    public static void populateItems(){
+    public static void init(){
+        populateItems();
+        populateMonsters();
+        populateQuests();
+        populateLocations();
+    }
+
+    private static void populateItems(){
         items.add(new Weapon(ItemID.RUSTY_SWORD, "Rusty Sword",
                 "Rusty Swords", 0, 5));
         items.add(new Item(ItemID.RAT_TAIL, "Rat Tail", "Rat Tails"));
@@ -39,7 +56,7 @@ public class World {
         items.add(new Item(ItemID.ADVENTURER_PASS, "Adventurer Pass", "Adventurer Passes"));
     }
 
-    public static void populateMonsters(){
+    private static void populateMonsters(){
         Monster rat = new Monster(MonsterID.RAT, "Rat", 5, 3,
                 10, 3, 3);
         rat.getLootTable().add(new LootItem(ItemByID(ItemID.RAT_TAIL), 75, false));
@@ -58,7 +75,7 @@ public class World {
         monsters.addAll(Arrays.asList(rat, snake, giantSpider));
     }
 
-    public static void populateQuests(){
+    private static void populateQuests(){
         Quest clearAlchemistGuarden = new QuestBuilder().id(QuestID.CLEAR_ALCHEMIST_GARDEN)
                     .name("Clear the Alchemist's Garden")
                     .description("Kill rats in the alchemist's garden and bring back 3 rat tails. You will receive a " +
@@ -82,7 +99,7 @@ public class World {
         quests.addAll(Arrays.asList(clearAlchemistGuarden, clearFarmersField));
     }
 
-    public static void populateLocations(){
+    private static void populateLocations(){
         Location home = new LocationBuilder().id(LocationID.HOME)
                 .name("Home")
                 .description("It's your house.")
@@ -205,5 +222,32 @@ public class World {
         }
 
         return null;
+    }
+
+    public static void saveObjectToJson(Object object, boolean debugFlag){
+        Gson gson = new Gson();
+        try {
+            String path, teststr = "";
+            if(!debugFlag){
+                path = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
+                        .getLocation().getPath(), "UTF-8");
+                path += object.getClass().getSimpleName() + ".json";
+            }
+            else{
+                path = "/E:/IntelliJ Workspace/gamedev/rpg-game/" + object.getClass().getSimpleName() + ".json";
+                teststr = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
+                        .getLocation().getPath(), "UTF-8");
+                teststr = FilenameUtils.getPath(teststr);
+                teststr += object.getClass().getSimpleName() + ".json";
+            }
+
+            FileWriter writer = new FileWriter(path);
+            String json = gson.toJson(object);
+            writer.write(teststr);
+            System.out.println(path);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -17,11 +17,10 @@ import rpg.logic.quests.QuestCompletionItem;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameUI {
-    private JFrame gameFrame;
     private JPanel gamePanel;
 
     private JLabel lblHitPoints;
@@ -64,7 +63,7 @@ public class GameUI {
         final int WIDTH = 735;
         final int HEIGHT = 690;
 
-        gameFrame = new JFrame();
+        JFrame gameFrame = new JFrame();
         gamePanel = new JPanel();
 
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -168,11 +167,16 @@ public class GameUI {
         btnWest.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnWest.addActionListener(e -> moveTo(_player.getCurrentLocation().getLocationToWest()));
         gamePanel.add(btnWest);
+
+        JButton btnSave = new JButton("Save");
+        btnSave.setLocation(620, 600);
+        btnSave.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        btnSave.addActionListener(e -> saveGame());
+        gamePanel.add(btnSave);
     }
 
     private void initPlayer() {
         _player = new Player(10,10,20,0,1);
-
         updatePlayerLabels();
     }
 
@@ -527,5 +531,9 @@ public class GameUI {
         updatePlayerLabels();
         updateInventoryListInUI();
         updatePotionListInUI();
+    }
+
+    private void saveGame(){
+        World.saveObjectToJson(_player, true);
     }
 }

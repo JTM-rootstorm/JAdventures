@@ -4,7 +4,11 @@ public class Entity {
     private int currentHitPoints;
     private int maxHitPoints;
 
-    public Entity(int currentHitPoints, int maxHitPoints){
+    Entity(){
+
+    }
+
+    Entity(int currentHitPoints, int maxHitPoints){
         this.currentHitPoints = currentHitPoints;
         this.maxHitPoints = maxHitPoints;
     }

@@ -1,6 +1,5 @@
 package rpg.logic;
 
-import com.sun.istack.internal.Nullable;
 import rpg.logic.entity.Monster;
 import rpg.logic.enums.LocationID;
 import rpg.logic.item.Item;
@@ -8,17 +7,17 @@ import rpg.logic.quests.Quest;
 
 public class Location {
     private final LocationID ID;
-    private String name;
-    private String description;
+    private transient String name;
+    private transient String description;
 
-    private Item itemRequiredToEnter;
-    private Quest questAvailableHere;
-    private Monster monsterLivingHere;
+    private transient Item itemRequiredToEnter;
+    private transient Quest questAvailableHere;
+    private transient Monster monsterLivingHere;
 
-    private Location locationToNorth;
-    private Location locationToEast;
-    private Location locationToSouth;
-    private Location locationToWest;
+    private transient Location locationToNorth = null;
+    private transient Location locationToEast = null;
+    private transient Location locationToSouth = null;
+    private transient Location locationToWest = null;
 
     public Location(LocationID id, String name, String description, Item itemRequiredToEnter, Quest questAvailableHere,
                     Monster monsterLivingHere){
@@ -46,23 +45,23 @@ public class Location {
         this.monsterLivingHere = monsterLivingHere;
     }
 
-    public void setLocationToNorth(Location locationToNorth) {
+    void setLocationToNorth(Location locationToNorth) {
         this.locationToNorth = locationToNorth;
     }
 
-    public void setLocationToEast(Location locationToEast) {
+    void setLocationToEast(Location locationToEast) {
         this.locationToEast = locationToEast;
     }
 
-    public void setLocationToSouth(Location locationToSouth) {
+    void setLocationToSouth(Location locationToSouth) {
         this.locationToSouth = locationToSouth;
     }
 
-    public void setLocationToWest(Location locationToWest) {
+    void setLocationToWest(Location locationToWest) {
         this.locationToWest = locationToWest;
     }
 
-    public LocationID getID(){
+    LocationID getID(){
         return ID;
     }
 

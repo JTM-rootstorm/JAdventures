@@ -8,10 +8,7 @@ import java.awt.*;
 public class GameRunner {
     public static void main(String[] args){
         Runnable gameRunner = () -> {
-            World.populateItems();
-            World.populateMonsters();
-            World.populateQuests();
-            World.populateLocations();
+            World.init();
             GameUI gameUI = new GameUI();
         };
 
