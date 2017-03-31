@@ -1,6 +1,6 @@
 package rpg.logic.entity;
 
-public class Entity {
+public class Entity{
     private int currentHitPoints;
     private int maxHitPoints;
 

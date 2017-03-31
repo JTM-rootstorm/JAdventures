@@ -6,6 +6,7 @@ import rpg.logic.RandomNumberGenerator;
 import rpg.logic.World;
 import rpg.logic.entity.Monster;
 import rpg.logic.entity.Player;
+import rpg.logic.enums.ItemID;
 import rpg.logic.enums.LocationID;
 import rpg.logic.item.HealingPotion;
 import rpg.logic.item.InventoryItem;
@@ -57,6 +58,7 @@ public class GameUI {
         initTextBoxes();
         initDataTables();
 
+        _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD));
         moveTo(World.LocationByID(LocationID.HOME));
     }
 
@@ -170,7 +172,7 @@ public class GameUI {
         gamePanel.add(btnWest);
 
         JButton btnSave = new JButton("Save");
-        btnSave.setLocation(620, 600);
+        btnSave.setLocation(620, 630);
         btnSave.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnSave.addActionListener(e -> saveGame());
         gamePanel.add(btnSave);
@@ -438,7 +440,7 @@ public class GameUI {
     }
 
     private void updatePlayerLabels(){
-        lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
+        //lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
         lblGold.setText(Integer.toString(_player.getGold()));
         lblExperience.setText(Integer.toString(_player.getExpPoints()));
         lblLevel.setText(Integer.toString(_player.getLevel()));

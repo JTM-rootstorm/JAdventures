@@ -16,6 +16,7 @@ import rpg.logic.item.LootItem;
 import rpg.logic.item.weapon.Weapon;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
+import rpg.ui.GameUI;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,6 +30,8 @@ public class World {
     private static List<Monster> monsters = new ArrayList<>();
     private static List<Quest> quests = new ArrayList<>();
     private static List<Location> locations = new ArrayList<>();
+
+    private static GameUI gameUI;
 
     private World(){
 
@@ -178,6 +181,10 @@ public class World {
 
         locations.addAll(Arrays.asList(home, townSquare, farmhouse, farmersField, alchemistHut, alchemistGarden,
                 guardPost, bridge, spiderField));
+    }
+
+    public static void setGameUI(GameUI ui){
+        gameUI = ui;
     }
 
     @Nullable
