@@ -14,6 +14,9 @@ import rpg.logic.item.LootItem;
 import rpg.logic.item.weapon.Weapon;
 import rpg.logic.quests.PlayerQuest;
 import rpg.logic.quests.QuestCompletionItem;
+import rpg.ui.components.GameCboBox;
+import rpg.ui.components.GameLabel;
+import rpg.ui.components.GameTable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,19 +28,19 @@ import java.util.List;
 public class GameUI {
     private JPanel gamePanel;
 
-    private JLabel lblHitPoints;
-    private JLabel lblGold;
-    private JLabel lblExperience;
-    private JLabel lblLevel;
+    private GameLabel lblHitPoints;
+    private GameLabel lblGold;
+    private GameLabel lblExperience;
+    private GameLabel lblLevel;
 
-    private JComboBox<Weapon> cboWeapons;
-    private JComboBox<HealingPotion> cboPotions;
+    private GameCboBox<Weapon> cboWeapons;
+    private GameCboBox<HealingPotion> cboPotions;
 
     private JTextArea rtbLocation;
     private JTextArea rtbMessages;
 
-    private JTable dgvInventory;
-    private JTable dgvQuests;
+    private GameTable dgvInventory;
+    private GameTable dgvQuests;
 
     private JButton btnUseWeapon;
     private JButton btnUsePotion;
@@ -51,9 +54,11 @@ public class GameUI {
 
     public GameUI(){
         initFrame();
+
+        _player = World.getPlayer();
+
         initLabels();
         initButtons();
-        initPlayer();
         initComboBoxes();
         initTextBoxes();
         initDataTables();
@@ -110,25 +115,47 @@ public class GameUI {
         label5.setSize(110,10);
         gamePanel.add(label5);
 
-        lblHitPoints = new JLabel();
+        lblHitPoints = new GameLabel();
         lblHitPoints.setLocation(110,19);
         lblHitPoints.setSize(50,10);
+        lblHitPoints.addObserver(message -> {
+            if(message.equals("plr_curhp")){
+                lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
+            }
+        });
         gamePanel.add(lblHitPoints);
 
-        lblGold = new JLabel();
+        lblGold = new GameLabel();
         lblGold.setLocation(110,45);
         lblGold.setSize(50,10);
+        lblGold.addObserver(message -> {
+            if(message.equals("plr_gold")){
+                lblGold.setText(Integer.toString(_player.getGold()));
+            }
+        });
         gamePanel.add(lblGold);
 
-        lblExperience = new JLabel();
+        lblExperience = new GameLabel();
         lblExperience.setLocation(110,73);
         lblExperience.setSize(50,10);
+        lblExperience.addObserver(message -> {
+            if(message.equals("plr_exp")){
+                lblExperience.setText(Integer.toString(_player.getExpPoints()));
+            }
+        });
         gamePanel.add(lblExperience);
 
-        lblLevel = new JLabel();
+        lblLevel = new GameLabel();
         lblLevel.setLocation(110,99);
         lblLevel.setSize(50,10);
+        lblLevel.addObserver(message -> {
+            if(message.equals("plr_lvl")){
+                lblLevel.setText(Integer.toString(_player.getLevel()));
+            }
+        });
         gamePanel.add(lblLevel);
+
+        _player.fireInitMessages();
     }
 
     private void initButtons() {
@@ -178,13 +205,9 @@ public class GameUI {
         gamePanel.add(btnSave);
     }
 
-    private void initPlayer() {
-        _player = new Player(10,10,20,0,1);
-        updatePlayerLabels();
-    }
-
+    @SuppressWarnings("unchecked")
     private void initComboBoxes() {
-        cboWeapons = new JComboBox<>();
+        cboWeapons = new GameCboBox<>();
         cboWeapons.setLocation(369,559);
         cboWeapons.setSize(150,20);
         cboWeapons.addItemListener(e -> {
@@ -192,11 +215,65 @@ public class GameUI {
                 _player.setCurrentWeapon((Weapon)e.getItem());
             }
         });
+        cboWeapons.addObserver(message -> {
+            if(message.equals("plr_inv_additem")){
+                java.util.List<Weapon> weapons = new ArrayList<>();
+
+                for(InventoryItem item : _player.getInventory()){
+                    if(item.getDetails() instanceof Weapon){
+                        if(item.getQuantity() > 0){
+                            weapons.add((Weapon)item.getDetails());
+                        }
+                    }
+                }
+
+                if(weapons.size() == 0){
+                    cboWeapons.setVisible(false);
+                    btnUseWeapon.setVisible(false);
+                }
+                else{
+                    Weapon[] weaps = new Weapon[weapons.size()];
+                    weaps = weapons.toArray(weaps);
+                    cboWeapons.setModel(new DefaultComboBoxModel<>(weaps));
+
+                    if(_player.getCurrentWeapon() != null){
+                        cboWeapons.setSelectedItem(_player.getCurrentWeapon());
+                    }
+                    else{
+                        cboWeapons.setSelectedIndex(0);
+                    }
+                }
+            }
+        });
         gamePanel.add(cboWeapons);
 
-        cboPotions = new JComboBox<>();
+        cboPotions = new GameCboBox<>();
         cboPotions.setLocation(369,593);
         cboPotions.setSize(150,20);
+        cboPotions.addObserver(message -> {
+            if(message.equals("plr_inv_additem")){
+                List<HealingPotion> healingPotions = new ArrayList<>();
+
+                for(InventoryItem item : _player.getInventory()){
+                    if(item.getDetails() instanceof HealingPotion){
+                        if(item.getQuantity() > 0){
+                            healingPotions.add((HealingPotion)item.getDetails());
+                        }
+                    }
+                }
+
+                if(healingPotions.size() == 0){
+                    cboPotions.setVisible(false);
+                    btnUsePotion.setVisible(false);
+                }
+                else{
+                    HealingPotion[] pots = new HealingPotion[healingPotions.size()];
+                    pots = healingPotions.toArray(pots);
+                    cboPotions.setModel(new DefaultComboBoxModel<>(pots));
+                    cboPotions.setSelectedIndex(0);
+                }
+            }
+        });
         gamePanel.add(cboPotions);
     }
 
@@ -221,10 +298,25 @@ public class GameUI {
     private void initDataTables(){
         String[] invCol = {"Name", "Quantity"};
         DefaultTableModel invTableModel = new DefaultTableModel(invCol, 0);
-        dgvInventory = new JTable(invTableModel);
+        dgvInventory = new GameTable(invTableModel);
         dgvInventory.setDragEnabled(false);
         dgvInventory.setCellSelectionEnabled(false);
         dgvInventory.setEnabled(false);
+        dgvInventory.addObserver(message -> {
+            if(message.equals("plr_inv_additem")){
+                DefaultTableModel uInvModel = (DefaultTableModel) dgvInventory.getModel();
+                uInvModel.setRowCount(0);
+
+                for(InventoryItem item : _player.getInventory()){
+                    if(item.getQuantity() > 0){
+                        uInvModel.addRow(new Object[] {item.getDetails().getName(), item.getQuantity()});
+                    }
+                }
+
+                dgvInventory.setModel(uInvModel);
+                dgvInventory.revalidate();
+            }
+        });
         JScrollPane invPane = new JScrollPane(dgvInventory);
         invPane.setLocation(16,130);
         invPane.setSize(312,309);
@@ -232,10 +324,23 @@ public class GameUI {
 
         String[] questCol = {"Name", "Done?"};
         DefaultTableModel questModel = new DefaultTableModel(questCol, 0);
-        dgvQuests = new JTable(questModel);
+        dgvQuests = new GameTable(questModel);
         dgvQuests.setDragEnabled(false);
         dgvQuests.setCellSelectionEnabled(false);
         dgvQuests.setEnabled(true);
+        dgvQuests.addObserver(message -> {
+            if(message.equals("plr_quest")){
+                DefaultTableModel uQuestModel = (DefaultTableModel) dgvQuests.getModel();
+                uQuestModel.setRowCount(0);
+
+                for(PlayerQuest quest : _player.getQuests()){
+                    uQuestModel.addRow(new Object[] {quest.getDetails().getName(), quest.isCompleted()});
+                }
+
+                dgvQuests.setModel(uQuestModel);
+                dgvQuests.revalidate();
+            }
+        });
         JScrollPane qPane = new JScrollPane(dgvQuests);
         qPane.setLocation(16,446);
         qPane.setSize(312,189);
@@ -310,7 +415,7 @@ public class GameUI {
 
                 rtbMessages.append("\n");
 
-                _player.getQuests().add(new PlayerQuest(newLocation.getQuestAvailableHere()));
+                _player.addQuestToList(new PlayerQuest(newLocation.getQuestAvailableHere()));
             }
         }
 
@@ -339,11 +444,6 @@ public class GameUI {
             btnUseWeapon.setVisible(false);
             btnUsePotion.setVisible(false);
         }
-
-        updateQuestListInUI();
-        updateWeaponListInUI();
-        updateInventoryListInUI();
-        updatePotionListInUI();
     }
 
     @NotNull
@@ -359,91 +459,6 @@ public class GameUI {
         }
 
         return false;
-    }
-
-    private void updateInventoryListInUI(){
-        DefaultTableModel invModel = (DefaultTableModel) dgvInventory.getModel();
-        invModel.setRowCount(0);
-
-        for(InventoryItem item : _player.getInventory()){
-            if(item.getQuantity() > 0){
-                invModel.addRow(new Object[] {item.getDetails().getName(), item.getQuantity()});
-            }
-        }
-
-        dgvInventory.setModel(invModel);
-        dgvInventory.revalidate();
-    }
-
-    private void updateQuestListInUI(){
-        DefaultTableModel questModel = (DefaultTableModel) dgvQuests.getModel();
-        questModel.setRowCount(0);
-
-        for(PlayerQuest quest : _player.getQuests()){
-            questModel.addRow(new Object[] {quest.getDetails().getName(), quest.isCompleted()});
-        }
-
-        dgvQuests.setModel(questModel);
-        dgvQuests.revalidate();
-    }
-
-    private void updateWeaponListInUI(){
-        java.util.List<Weapon> weapons = new ArrayList<>();
-
-        for(InventoryItem item : _player.getInventory()){
-            if(item.getDetails() instanceof Weapon){
-                if(item.getQuantity() > 0){
-                    weapons.add((Weapon)item.getDetails());
-                }
-            }
-        }
-
-        if(weapons.size() == 0){
-            cboWeapons.setVisible(false);
-            btnUseWeapon.setVisible(false);
-        }
-        else{
-            Weapon[] weaps = new Weapon[weapons.size()];
-            weaps = weapons.toArray(weaps);
-            cboWeapons.setModel(new DefaultComboBoxModel<>(weaps));
-
-            if(_player.getCurrentWeapon() != null){
-                cboWeapons.setSelectedItem(_player.getCurrentWeapon());
-            }
-            else{
-                cboWeapons.setSelectedIndex(0);
-            }
-        }
-    }
-
-    private void updatePotionListInUI(){
-        List<HealingPotion> healingPotions = new ArrayList<>();
-
-        for(InventoryItem item : _player.getInventory()){
-            if(item.getDetails() instanceof HealingPotion){
-                if(item.getQuantity() > 0){
-                    healingPotions.add((HealingPotion)item.getDetails());
-                }
-            }
-        }
-
-        if(healingPotions.size() == 0){
-            cboPotions.setVisible(false);
-            btnUsePotion.setVisible(false);
-        }
-        else{
-            HealingPotion[] pots = new HealingPotion[healingPotions.size()];
-            pots = healingPotions.toArray(pots);
-            cboPotions.setModel(new DefaultComboBoxModel<>(pots));
-            cboPotions.setSelectedIndex(0);
-        }
-    }
-
-    private void updatePlayerLabels(){
-        //lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
-        lblGold.setText(Integer.toString(_player.getGold()));
-        lblExperience.setText(Integer.toString(_player.getExpPoints()));
-        lblLevel.setText(Integer.toString(_player.getLevel()));
     }
 
     private void fightMonster(){
@@ -492,11 +507,6 @@ public class GameUI {
                 }
             }
 
-            updatePlayerLabels();
-            updateInventoryListInUI();
-            updateWeaponListInUI();
-            updatePotionListInUI();
-
             rtbMessages.append("\n");
 
             moveTo(_player.getCurrentLocation());
@@ -512,8 +522,6 @@ public class GameUI {
         rtbMessages.append("The " + _currentMonster.getName() + " did " + damageToPlayer + " points of damage.\n");
 
         _player.setCurrentHitPoints(_player.getCurrentHitPoints() - damageToPlayer);
-
-        updatePlayerLabels();
 
         if(_player.getCurrentHitPoints() <= 0){
             rtbMessages.append("The " + _currentMonster.getName() + " killed you.\n");
@@ -541,10 +549,6 @@ public class GameUI {
         rtbMessages.append("You drink a " + potion.getName() + "\n");
 
         monsterAttack();
-
-        updatePlayerLabels();
-        updateInventoryListInUI();
-        updatePotionListInUI();
     }
 
     private void saveGame(){

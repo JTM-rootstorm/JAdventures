@@ -2,10 +2,12 @@ package rpg.logic;
 
 import com.google.gson.Gson;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import rpg.logic.builders.LocationBuilder;
 import rpg.logic.builders.QuestBuilder;
 import rpg.logic.entity.Monster;
+import rpg.logic.entity.Player;
 import rpg.logic.enums.ItemID;
 import rpg.logic.enums.LocationID;
 import rpg.logic.enums.MonsterID;
@@ -14,6 +16,7 @@ import rpg.logic.item.HealingPotion;
 import rpg.logic.item.Item;
 import rpg.logic.item.LootItem;
 import rpg.logic.item.weapon.Weapon;
+import rpg.logic.observer.GameObserver;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
 import rpg.ui.GameUI;
@@ -32,6 +35,9 @@ public class World {
     private static List<Location> locations = new ArrayList<>();
 
     private static GameUI gameUI;
+    private static Player _player;
+
+    private static List<GameObserver> observerList = new ArrayList<>();
 
     private World(){
 
@@ -42,6 +48,11 @@ public class World {
         populateMonsters();
         populateQuests();
         populateLocations();
+        initPlayer();
+    }
+
+    private static void initPlayer() {
+        _player = new Player(10,10,20,0,1);
     }
 
     private static void populateItems(){
@@ -183,8 +194,35 @@ public class World {
                 guardPost, bridge, spiderField));
     }
 
+    private static void ensureObserverListCreation(){
+        if(observerList == null){
+            observerList = new ArrayList<>();
+        }
+    }
+
+    public static void addObserverToList(GameObserver observer){
+        ensureObserverListCreation();
+        observerList.add(observer);
+    }
+
+    public static void removeObserverFromList(GameObserver observer){
+        ensureObserverListCreation();
+        observerList.remove(observer);
+    }
+
+    public static void sendObserverNotification(String message){
+        for(GameObserver observer : observerList){
+            observer.sendNotification(message);
+        }
+    }
+
     public static void setGameUI(GameUI ui){
         gameUI = ui;
+    }
+
+    @Contract(pure = true)
+    public static Player getPlayer(){
+        return _player;
     }
 
     @Nullable

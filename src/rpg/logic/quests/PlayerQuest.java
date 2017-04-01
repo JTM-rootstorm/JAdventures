@@ -1,5 +1,7 @@
 package rpg.logic.quests;
 
+import rpg.logic.World;
+
 public class PlayerQuest {
     private Quest details;
     private boolean isCompleted;
@@ -21,7 +23,8 @@ public class PlayerQuest {
         return isCompleted;
     }
 
-    public void setCompleted(boolean completed) {
-        isCompleted = completed;
+    public void setCompleted() {
+        isCompleted = true;
+        World.sendObserverNotification("plr_quest");
     }
 }

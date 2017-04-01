@@ -1,5 +1,7 @@
 package rpg.logic.item;
 
+import rpg.logic.World;
+
 public class InventoryItem {
     private Item details;
     private int quantity;
@@ -23,9 +25,10 @@ public class InventoryItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        World.sendObserverNotification("plr_inv_additem");
     }
 
     public void incrementQuantity(){
-        quantity++;
+        setQuantity(quantity + 1);
     }
 }
