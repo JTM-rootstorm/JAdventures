@@ -17,6 +17,7 @@ import rpg.logic.item.Item;
 import rpg.logic.item.LootItem;
 import rpg.logic.item.weapon.Weapon;
 import rpg.logic.observer.GameObserver;
+import rpg.logic.observer.MessageObserver;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
 import rpg.ui.GameUI;
@@ -36,8 +37,10 @@ public class World {
 
     private static GameUI gameUI;
     private static Player _player;
+    private static Monster _currentMonster;
 
     private static List<GameObserver> observerList = new ArrayList<>();
+    private static List<MessageObserver> messageObservers = new ArrayList<>();
 
     private World(){
 
@@ -198,6 +201,19 @@ public class World {
         if(observerList == null){
             observerList = new ArrayList<>();
         }
+
+        if(messageObservers == null){
+            messageObservers = new ArrayList<>();
+        }
+    }
+
+    public static void setCurrentMonster(Monster monster){
+        _currentMonster = monster;
+    }
+
+    @Contract(pure = true)
+    public static Monster getCurrentMonster(){
+        return _currentMonster;
     }
 
     public static void addObserverToList(GameObserver observer){
@@ -205,14 +221,30 @@ public class World {
         observerList.add(observer);
     }
 
+    public static void addMessengerObserver(MessageObserver observer){
+        ensureObserverListCreation();
+        messageObservers.add(observer);
+    }
+
     public static void removeObserverFromList(GameObserver observer){
         ensureObserverListCreation();
         observerList.remove(observer);
     }
 
+    public static void removeMessengerObserver(MessageObserver observer){
+        ensureObserverListCreation();
+        messageObservers.remove(observer);
+    }
+
     public static void sendObserverNotification(String message){
         for(GameObserver observer : observerList){
             observer.sendNotification(message);
+        }
+    }
+
+    public static void sendMessengerObserverNotification(String type, String message){
+        for(MessageObserver mo : messageObservers){
+            mo.sendMessage(type, message);
         }
     }
 

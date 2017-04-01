@@ -4,9 +4,11 @@ import rpg.logic.World;
 import rpg.logic.observer.GameObserver;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameCboBox<E> extends JComboBox {
-    private GameObserver observer;
+    private List<GameObserver> observerList = new ArrayList<>();
 
     public GameCboBox(){
         super();
@@ -16,12 +18,13 @@ public class GameCboBox<E> extends JComboBox {
         if(observer == null){
             return;
         }
-        this.observer = observer;
-        World.addObserverToList(this.observer);
+        observerList.add(observer);
+        World.addObserverToList(observer);
     }
 
-    public void removeObserver(){
-        World.removeObserverFromList(observer);
-        observer = null;
+    public void removeObservers(){
+        for(GameObserver observer : observerList){
+            World.removeObserverFromList(observer);
+        }
     }
 }

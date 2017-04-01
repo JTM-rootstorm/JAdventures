@@ -1,28 +1,18 @@
 package rpg.ui;
 
-import org.jetbrains.annotations.NotNull;
-import rpg.logic.Location;
-import rpg.logic.RandomNumberGenerator;
 import rpg.logic.World;
-import rpg.logic.entity.Monster;
 import rpg.logic.entity.Player;
 import rpg.logic.enums.ItemID;
-import rpg.logic.enums.LocationID;
 import rpg.logic.item.HealingPotion;
 import rpg.logic.item.InventoryItem;
-import rpg.logic.item.LootItem;
 import rpg.logic.item.weapon.Weapon;
 import rpg.logic.quests.PlayerQuest;
-import rpg.logic.quests.QuestCompletionItem;
-import rpg.ui.components.GameCboBox;
-import rpg.ui.components.GameLabel;
-import rpg.ui.components.GameTable;
+import rpg.ui.components.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameUI {
@@ -36,21 +26,13 @@ public class GameUI {
     private GameCboBox<Weapon> cboWeapons;
     private GameCboBox<HealingPotion> cboPotions;
 
-    private JTextArea rtbLocation;
-    private JTextArea rtbMessages;
+    private GameTextArea rtbLocation;
+    private GameTextArea rtbMessages;
 
     private GameTable dgvInventory;
     private GameTable dgvQuests;
 
-    private JButton btnUseWeapon;
-    private JButton btnUsePotion;
-    private JButton btnNorth;
-    private JButton btnEast;
-    private JButton btnSouth;
-    private JButton btnWest;
-
     private Player _player;
-    private Monster _currentMonster;
 
     public GameUI(){
         initFrame();
@@ -58,13 +40,13 @@ public class GameUI {
         _player = World.getPlayer();
 
         initLabels();
-        initButtons();
         initComboBoxes();
+        initButtons();
         initTextBoxes();
         initDataTables();
 
+        _player.moveHome();
         _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD));
-        moveTo(World.LocationByID(LocationID.HOME));
     }
 
     private void initFrame() {
@@ -162,40 +144,100 @@ public class GameUI {
         final int BUTTON_WIDTH = 100;
         final int BUTTON_HEIGHT = 20;
 
-        btnUseWeapon = new JButton("Use");
+        GameButton btnUseWeapon = new GameButton("Use");
         btnUseWeapon.setLocation(620,559);
         btnUseWeapon.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUseWeapon.addActionListener(e -> fightMonster());
+        btnUseWeapon.addActionListener(e -> _player.useWeapon((Weapon)cboWeapons.getSelectedItem()));
+        btnUseWeapon.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getMonsterLivingHere() == null || _player.getWeapons().size() == 0){
+                    btnUseWeapon.setVisible(false);
+                }
+                else{
+                    btnUseWeapon.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnUseWeapon);
 
-        btnUsePotion = new JButton("Use");
+        GameButton btnUsePotion = new GameButton("Use");
         btnUsePotion.setLocation(620,593);
         btnUsePotion.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUsePotion.addActionListener(e -> drinkPotion());
+        btnUsePotion.addActionListener(e -> _player.drinkPotion((HealingPotion)cboPotions.getSelectedItem()));
+        btnUsePotion.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getMonsterLivingHere() == null || _player.getPotions().size() == 0){
+                    btnUsePotion.setVisible(false);
+                }
+                else{
+                    btnUsePotion.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnUsePotion);
 
-        btnNorth = new JButton("North");
+        GameButton btnNorth = new GameButton("North");
         btnNorth.setLocation(493,433);
         btnNorth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnNorth.addActionListener(e -> moveTo(_player.getCurrentLocation().getLocationToNorth()));
+        btnNorth.addActionListener(e -> _player.moveNorth());
+        btnNorth.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getLocationToNorth() == null){
+                    btnNorth.setVisible(false);
+                }
+                else{
+                    btnNorth.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnNorth);
 
-        btnEast = new JButton("East");
+        GameButton btnEast = new GameButton("East");
         btnEast.setLocation(573,457);
         btnEast.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnEast.addActionListener(e -> moveTo(_player.getCurrentLocation().getLocationToEast()));
+        btnEast.addActionListener(e -> _player.moveEast());
+        btnEast.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getLocationToEast() == null){
+                    btnEast.setVisible(false);
+                }
+                else{
+                    btnEast.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnEast);
 
-        btnSouth = new JButton("South");
+        GameButton btnSouth = new GameButton("South");
         btnSouth.setLocation(493,487);
         btnSouth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnSouth.addActionListener(e -> moveTo(_player.getCurrentLocation().getLocationToSouth()));
+        btnSouth.addActionListener(e -> _player.moveSouth());
+        btnSouth.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getLocationToSouth() == null){
+                    btnSouth.setVisible(false);
+                }
+                else{
+                    btnSouth.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnSouth);
 
-        btnWest = new JButton("West");
+        GameButton btnWest = new GameButton("West");
         btnWest.setLocation(412,457);
         btnWest.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnWest.addActionListener(e -> moveTo(_player.getCurrentLocation().getLocationToWest()));
+        btnWest.addActionListener(e -> _player.moveWest());
+        btnWest.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getLocationToWest() == null){
+                    btnWest.setVisible(false);
+                }
+                else{
+                    btnWest.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(btnWest);
 
         JButton btnSave = new JButton("Save");
@@ -217,19 +259,10 @@ public class GameUI {
         });
         cboWeapons.addObserver(message -> {
             if(message.equals("plr_inv_additem")){
-                java.util.List<Weapon> weapons = new ArrayList<>();
-
-                for(InventoryItem item : _player.getInventory()){
-                    if(item.getDetails() instanceof Weapon){
-                        if(item.getQuantity() > 0){
-                            weapons.add((Weapon)item.getDetails());
-                        }
-                    }
-                }
+                List<Weapon> weapons = _player.getWeapons();
 
                 if(weapons.size() == 0){
                     cboWeapons.setVisible(false);
-                    btnUseWeapon.setVisible(false);
                 }
                 else{
                     Weapon[] weaps = new Weapon[weapons.size()];
@@ -245,6 +278,16 @@ public class GameUI {
                 }
             }
         });
+        cboWeapons.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getMonsterLivingHere() == null || _player.getWeapons().size() == 0){
+                    cboWeapons.setVisible(false);
+                }
+                else{
+                    cboWeapons.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(cboWeapons);
 
         cboPotions = new GameCboBox<>();
@@ -252,19 +295,10 @@ public class GameUI {
         cboPotions.setSize(150,20);
         cboPotions.addObserver(message -> {
             if(message.equals("plr_inv_additem")){
-                List<HealingPotion> healingPotions = new ArrayList<>();
-
-                for(InventoryItem item : _player.getInventory()){
-                    if(item.getDetails() instanceof HealingPotion){
-                        if(item.getQuantity() > 0){
-                            healingPotions.add((HealingPotion)item.getDetails());
-                        }
-                    }
-                }
+                List<HealingPotion> healingPotions = _player.getPotions();
 
                 if(healingPotions.size() == 0){
                     cboPotions.setVisible(false);
-                    btnUsePotion.setVisible(false);
                 }
                 else{
                     HealingPotion[] pots = new HealingPotion[healingPotions.size()];
@@ -274,20 +308,40 @@ public class GameUI {
                 }
             }
         });
+        cboPotions.addObserver(message -> {
+            if(message.equals("plr_move")){
+                if(_player.getCurrentLocation().getMonsterLivingHere() == null || _player.getPotions().size() == 0){
+                    cboPotions.setVisible(false);
+                }
+                else{
+                    cboPotions.setVisible(true);
+                }
+            }
+        });
         gamePanel.add(cboPotions);
     }
 
     private void initTextBoxes(){
-        rtbLocation = new JTextArea();
+        rtbLocation = new GameTextArea();
         rtbLocation.setEditable(false);
+        rtbLocation.addObserver((type, message) -> {
+            if(type.equals("location")){
+                rtbLocation.append(message);
+            }
+        });
         JScrollPane locPane = new JScrollPane(rtbLocation);
         locPane.setLocation(347,19);
         locPane.setSize(360,105);
         locPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         gamePanel.add(locPane);
 
-        rtbMessages = new JTextArea();
+        rtbMessages = new GameTextArea();
         rtbMessages.setEditable(false);
+        rtbMessages.addObserver(((type, message) -> {
+            if(type.equals("message")){
+                rtbMessages.append(message);
+            }
+        }));
         JScrollPane spane = new JScrollPane(rtbMessages);
         spane.setLocation(347,130);
         spane.setSize(360,286);
@@ -345,210 +399,6 @@ public class GameUI {
         qPane.setLocation(16,446);
         qPane.setSize(312,189);
         gamePanel.add(qPane);
-    }
-
-    private void moveTo(Location newLocation){
-        if(!hasRequiredItemToEnter(newLocation)){
-            rtbMessages.append("\nYou must have a " + newLocation.getItemRequiredToEnter().getName()
-                    + " to enter this location\n");
-            return;
-        }
-
-        _player.setCurrentLocation(newLocation);
-
-        btnNorth.setVisible((newLocation.getLocationToNorth() != null));
-        btnEast.setVisible((newLocation.getLocationToEast() != null));
-        btnSouth.setVisible((newLocation.getLocationToSouth() != null));
-        btnWest.setVisible((newLocation.getLocationToWest() != null));
-
-        rtbLocation.append("\n\n" + newLocation.getName() + "\n" + newLocation.getDescription());
-
-        _player.setCurrentHitPoints(_player.getMaxHitPoints());
-
-        lblHitPoints.setText(Integer.toString(_player.getCurrentHitPoints()));
-
-        if(newLocation.getQuestAvailableHere() != null){
-            boolean playerAlreadyHasQuest = _player.hasThisQuest(newLocation.getQuestAvailableHere());
-            boolean playerAlreadyCompletedQuest = _player.completedThisQuest(newLocation.getQuestAvailableHere());
-
-            if(playerAlreadyHasQuest){
-                if(!playerAlreadyCompletedQuest){
-                    boolean playerHasAllItemsToCompleteQuest =
-                            _player.hasAllQuestCompletionItems(newLocation.getQuestAvailableHere());
-
-                    if(playerHasAllItemsToCompleteQuest){
-                        rtbMessages.append("You complete the \'"
-                                + newLocation.getQuestAvailableHere().getName() + "\' quest.\n");
-
-                        _player.removeQuestCompletionItems(newLocation.getQuestAvailableHere());
-
-                        rtbMessages.append("You receive: \n"
-                                + Integer.toString(newLocation.getQuestAvailableHere().getRewardExperiencePoints())
-                                + " XP points\n"
-                                + Integer.toString(newLocation.getQuestAvailableHere().getRewardGold()) + " gold\n"
-                                + newLocation.getQuestAvailableHere().getRewardItem().getName() + "\n\n");
-
-                        _player.addExperiencePoints(newLocation.getQuestAvailableHere().getRewardExperiencePoints());
-                        _player.addGold(newLocation.getQuestAvailableHere().getRewardGold());
-
-                        _player.addItemToInventory(newLocation.getQuestAvailableHere().getRewardItem());
-
-                        _player.markQuestAsCompleted(newLocation.getQuestAvailableHere());
-                    }
-                }
-            }
-            else{
-                rtbMessages.append("You receive the \'"
-                        + newLocation.getQuestAvailableHere().getName() + "\' quest.\n"
-                        + "To complete it, return with:\n");
-
-                for(QuestCompletionItem qci : newLocation.getQuestAvailableHere().getQuestCompletionItems()){
-                    if(qci.getQuantity() == 1){
-                        rtbMessages.append(Integer.toString(qci.getQuantity())
-                                + " " + qci.getDetails().getName() + "\n");
-                    }
-                    else{
-                        rtbMessages.append(Integer.toString(qci.getQuantity())
-                                + " " + qci.getDetails().getNamePlural() + "\n");
-                    }
-                }
-
-                rtbMessages.append("\n");
-
-                _player.addQuestToList(new PlayerQuest(newLocation.getQuestAvailableHere()));
-            }
-        }
-
-        if(newLocation.getMonsterLivingHere() != null){
-            rtbMessages.append("You see a " + newLocation.getMonsterLivingHere().getName()
-                    + "\n");
-
-            Monster standardMonster = World.MonsterByID(newLocation.getMonsterLivingHere().getID());
-
-            _currentMonster = new Monster(standardMonster.getID(), standardMonster.getName(), standardMonster.getMaxDamage(),
-                    standardMonster.getRewardExperiencePoints(), standardMonster.getRewardGold(),
-                    standardMonster.getCurrentHitPoints(), standardMonster.getMaxHitPoints());
-
-            for(LootItem li : standardMonster.getLootTable()){
-                _currentMonster.getLootTable().add(li);
-            }
-
-            cboWeapons.setVisible(true);
-            cboPotions.setVisible(true);
-            btnUseWeapon.setVisible(true);
-            btnUsePotion.setVisible(true);
-        }
-        else{
-            cboWeapons.setVisible(false);
-            cboPotions.setVisible(false);
-            btnUseWeapon.setVisible(false);
-            btnUsePotion.setVisible(false);
-        }
-    }
-
-    @NotNull
-    private Boolean hasRequiredItemToEnter(Location location){
-        if(location.getItemRequiredToEnter() == null){
-            return true;
-        }
-
-        for(InventoryItem item : _player.getInventory()){
-            if(item.getDetails().getID() == location.getItemRequiredToEnter().getID()){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void fightMonster(){
-        Weapon currentWeapon = (Weapon)cboWeapons.getSelectedItem();
-
-        int damageToMonster = RandomNumberGenerator.NumberBetween(currentWeapon.getMinDamage(),
-                currentWeapon.getMaxDamage());
-
-        _currentMonster.setCurrentHitPoints(_currentMonster.getCurrentHitPoints() - damageToMonster);
-
-        rtbMessages.append("You hit the " + _currentMonster.getName() + " for " + damageToMonster + " points.\n");
-
-        if(_currentMonster.getCurrentHitPoints() <= 0){
-            rtbMessages.append("\nYou defeated the " + _currentMonster.getName() + "\n");
-
-            _player.setExpPoints(_player.getExpPoints() + _currentMonster.getRewardExperiencePoints());
-            rtbMessages.append("You receive " + _currentMonster.getRewardExperiencePoints() + " experience points.\n");
-
-            _player.setGold(_player.getGold() + _currentMonster.getRewardGold());
-            rtbMessages.append("You receive " + _currentMonster.getRewardGold() + " gold.\n");
-
-            List<InventoryItem> lootedItems = new ArrayList<>();
-
-            for(LootItem lootItem : _currentMonster.getLootTable()){
-                if(RandomNumberGenerator.NumberBetween(1, 100) <= lootItem.getDropPercentage()){
-                    lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
-                }
-            }
-
-            if(lootedItems.size() == 0){
-                for(LootItem lootItem : _currentMonster.getLootTable()){
-                    if(lootItem.isDefaultItem()){
-                        lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
-                    }
-                }
-            }
-
-            for(InventoryItem item : lootedItems){
-                _player.addItemToInventory(item.getDetails());
-
-                if(item.getQuantity() == 1){
-                    rtbMessages.append("You loot " + item.getQuantity() + " " + item.getDetails().getName() + "\n");
-                }
-                else{
-                    rtbMessages.append("You loot " + item.getQuantity() + " " + item.getDetails().getNamePlural() + "\n");
-                }
-            }
-
-            rtbMessages.append("\n");
-
-            moveTo(_player.getCurrentLocation());
-        }
-        else{
-            monsterAttack();
-        }
-    }
-
-    private void monsterAttack(){
-        int damageToPlayer = RandomNumberGenerator.NumberBetween(0, _currentMonster.getMaxDamage());
-
-        rtbMessages.append("The " + _currentMonster.getName() + " did " + damageToPlayer + " points of damage.\n");
-
-        _player.setCurrentHitPoints(_player.getCurrentHitPoints() - damageToPlayer);
-
-        if(_player.getCurrentHitPoints() <= 0){
-            rtbMessages.append("The " + _currentMonster.getName() + " killed you.\n");
-
-            moveTo(World.LocationByID(LocationID.HOME));
-        }
-    }
-
-    private void drinkPotion(){
-        HealingPotion potion = (HealingPotion)cboPotions.getSelectedItem();
-
-        _player.setCurrentHitPoints(_player.getCurrentHitPoints() + potion.getAmountToHeal());
-
-        if(_player.getCurrentHitPoints() > _player.getMaxHitPoints()){
-            _player.setCurrentHitPoints(_player.getMaxHitPoints());
-        }
-
-        for(InventoryItem item : _player.getInventory()){
-            if(item.getDetails().getID() == potion.getID()){
-                item.setQuantity(item.getQuantity() - 1);
-                break;
-            }
-        }
-
-        rtbMessages.append("You drink a " + potion.getName() + "\n");
-
-        monsterAttack();
     }
 
     private void saveGame(){
