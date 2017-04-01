@@ -16,7 +16,8 @@ public class Monster extends Entity {
 
     private List<LootItem> lootTable;
 
-    public Monster(MonsterID id, String name, int maxDamage, int rewardExperiencePoints, int rewardGold, int currentHitPoints, int maxHitPoints){
+    public Monster(MonsterID id, String name, int maxDamage, int rewardExperiencePoints,
+                   int rewardGold, int currentHitPoints, int maxHitPoints){
         super(currentHitPoints, maxHitPoints);
         ID = id;
         this.name = name;
@@ -27,26 +28,6 @@ public class Monster extends Entity {
         lootTable = new ArrayList<>();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setMaxDamage(int maxDamage){
-        this.maxDamage = maxDamage;
-    }
-
-    public void setRewardExperiencePoints(int rewardExperiencePoints){
-        this.rewardExperiencePoints = rewardExperiencePoints;
-    }
-
-    public void setRewardGold(int rewardGold){
-        this.rewardGold = rewardGold;
-    }
-
-    public void setLootTable(List<LootItem> lootTable) {
-        this.lootTable = lootTable;
-    }
-
     public MonsterID getID(){
         return ID;
     }
@@ -55,15 +36,15 @@ public class Monster extends Entity {
         return name;
     }
 
-    public int getMaxDamage(){
+    int getMaxDamage(){
         return maxDamage;
     }
 
-    public int getRewardExperiencePoints(){
+    int getRewardExperiencePoints(){
         return rewardExperiencePoints;
     }
 
-    public int getRewardGold(){
+    int getRewardGold(){
         return rewardGold;
     }
 

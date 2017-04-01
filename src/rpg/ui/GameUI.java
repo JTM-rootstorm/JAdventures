@@ -1,7 +1,6 @@
 package rpg.ui;
 
-import rpg.logic.World;
-import rpg.logic.enums.ItemID;
+import rpg.logic.core.World;
 import rpg.logic.item.InventoryItem;
 import rpg.logic.quests.PlayerQuest;
 import rpg.ui.components.*;
@@ -31,15 +30,11 @@ public class GameUI {
 
     public void init(){
         initFrame();
-
         initLabels();
         initComboBoxes();
         initButtons();
         initTextBoxes();
         initDataTables();
-
-        World.getPlayer().moveHome();
-        World.getPlayer().addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD));
     }
 
     private void initFrame() {
@@ -229,11 +224,10 @@ public class GameUI {
         });
         gamePanel.add(btnWest);
 
-        JButton btnSave = new JButton("Save");
+        /*JButton btnSave = new JButton("Save");
         btnSave.setLocation(620, 630);
         btnSave.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnSave.addActionListener(e -> World.saveObjectToJson(World.getPlayer(), true));
-        gamePanel.add(btnSave);
+        gamePanel.add(btnSave);*/
     }
 
     @SuppressWarnings("unchecked")

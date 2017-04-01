@@ -4,28 +4,24 @@ public class Entity{
     private int currentHitPoints;
     private int maxHitPoints;
 
-    Entity(){
-
-    }
-
     Entity(int currentHitPoints, int maxHitPoints){
         this.currentHitPoints = currentHitPoints;
         this.maxHitPoints = maxHitPoints;
-    }
-
-    public void setCurrentHitPoints(int hitPoints){
-        currentHitPoints = hitPoints;
-    }
-
-    public void setMaxHitPoints(int hitPoints){
-        maxHitPoints = hitPoints;
     }
 
     public int getCurrentHitPoints(){
         return currentHitPoints;
     }
 
-    public int getMaxHitPoints(){
+    public void setCurrentHitPoints(int hitPoints){
+        currentHitPoints = hitPoints;
+    }
+
+    int getMaxHitPoints(){
         return maxHitPoints;
+    }
+
+    public void setMaxHitPoints(int hitPoints){
+        maxHitPoints = hitPoints;
     }
 }

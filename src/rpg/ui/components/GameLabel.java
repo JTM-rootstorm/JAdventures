@@ -1,6 +1,6 @@
 package rpg.ui.components;
 
-import rpg.logic.World;
+import rpg.logic.core.World;
 import rpg.logic.observer.GameObserver;
 
 import javax.swing.*;

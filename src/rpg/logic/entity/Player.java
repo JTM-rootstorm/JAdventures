@@ -2,9 +2,9 @@ package rpg.logic.entity;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import rpg.logic.Location;
-import rpg.logic.RandomNumberGenerator;
-import rpg.logic.World;
+import rpg.logic.core.Location;
+import rpg.logic.core.RandomNumberGenerator;
+import rpg.logic.core.World;
 import rpg.logic.enums.LocationID;
 import rpg.logic.item.HealingPotion;
 import rpg.logic.item.InventoryItem;

@@ -1,10 +1,10 @@
 package rpg.logic.builders;
 
-import rpg.logic.Location;
-import rpg.logic.enums.LocationID;
-import rpg.logic.quests.Quest;
+import rpg.logic.core.Location;
 import rpg.logic.entity.Monster;
+import rpg.logic.enums.LocationID;
 import rpg.logic.item.Item;
+import rpg.logic.quests.Quest;
 
 public class LocationBuilder {
     private LocationID ID;

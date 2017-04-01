@@ -1,4 +1,4 @@
-package rpg.logic;
+package rpg.logic.core;
 
 import java.util.concurrent.ThreadLocalRandom;
 

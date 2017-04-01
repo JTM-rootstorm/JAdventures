@@ -1,6 +1,6 @@
 package rpg.logic.item;
 
-import rpg.logic.World;
+import rpg.logic.core.World;
 
 public class InventoryItem {
     private Item details;

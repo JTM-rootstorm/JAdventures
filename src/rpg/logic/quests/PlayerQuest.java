@@ -1,6 +1,6 @@
 package rpg.logic.quests;
 
-import rpg.logic.World;
+import rpg.logic.core.World;
 
 public class PlayerQuest {
     private Quest details;

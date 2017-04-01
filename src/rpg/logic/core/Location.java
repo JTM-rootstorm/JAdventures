@@ -1,4 +1,4 @@
-package rpg.logic;
+package rpg.logic.core;
 
 import rpg.logic.entity.Monster;
 import rpg.logic.enums.LocationID;

@@ -1,7 +1,5 @@
-package rpg.logic;
+package rpg.logic.core;
 
-import com.google.gson.Gson;
-import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import rpg.logic.builders.LocationBuilder;
@@ -20,10 +18,8 @@ import rpg.logic.observer.GameObserver;
 import rpg.logic.observer.MessageObserver;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
+import rpg.ui.GameUI;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +36,8 @@ public class World {
     private static List<GameObserver> observerList = new ArrayList<>();
     private static List<MessageObserver> messageObservers = new ArrayList<>();
 
+    private static GameUI gameUI;
+
     private World() {
 
     }
@@ -50,6 +48,11 @@ public class World {
         populateQuests();
         populateLocations();
         initPlayer();
+
+        gameUI.init();
+
+        _player.moveHome();
+        _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD));
     }
 
     private static void initPlayer() {
@@ -246,13 +249,17 @@ public class World {
         }
     }
 
+    public static void setGameUI(GameUI ui){
+        gameUI = ui;
+    }
+
     @Contract(pure = true)
     public static Player getPlayer() {
         return _player;
     }
 
     @Nullable
-    public static Item ItemByID(ItemID id) {
+    private static Item ItemByID(ItemID id) {
         for (Item item : items) {
             if (item.getID() == id) {
                 return item;
@@ -293,33 +300,5 @@ public class World {
         }
 
         return null;
-    }
-
-    public static void saveObjectToJson(Object object, boolean debugFlag) {
-        Gson gson = new Gson();
-        try {
-            String path, teststr = "";
-            if (!debugFlag) {
-                path = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
-                        .getLocation().getPath(), "UTF-8");
-                path = FilenameUtils.getPath(path);
-                path += object.getClass().getSimpleName() + ".json";
-            } else {
-                path = "/E:/IntelliJ Workspace/gamedev/rpg-game/" + object.getClass().getSimpleName() + ".json";
-                teststr = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
-                        .getLocation().getPath(), "UTF-8");
-                teststr = FilenameUtils.getPath(teststr);
-                teststr += object.getClass().getSimpleName() + ".json";
-            }
-
-            FileWriter writer = new FileWriter(path);
-            /*String json = gson.toJson(object);
-            writer.write(json);*/
-            writer.write(teststr);
-            System.out.println(path);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
