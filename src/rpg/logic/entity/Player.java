@@ -39,21 +39,11 @@ public class Player extends Entity {
         quests = new ArrayList<>();
     }
 
-    private void setGold(int gold) {
-        this.gold = gold;
-        World.sendObserverNotification("plr_gold");
-    }
-
     public void fireInitMessages() {
         World.sendObserverNotification("plr_gold");
         World.sendObserverNotification("plr_exp");
         World.sendObserverNotification("plr_curhp");
         World.sendObserverNotification("plr_lvl");
-    }
-
-    private void setExpPoints(int expPoints) {
-        this.expPoints = expPoints;
-        World.sendObserverNotification("plr_exp");
     }
 
     @Override
@@ -62,41 +52,35 @@ public class Player extends Entity {
         World.sendObserverNotification("plr_curhp");
     }
 
-    private void setLevel(int level) {
-        this.level = level;
-        World.sendObserverNotification("plr_lvl");
-    }
-
-    private void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
-        World.sendMessengerObserverNotification("location",
-                "\n\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
-    }
-
-    public void setCurrentWeapon(Object currentWeapon) {
-        if (currentWeapon instanceof Weapon) {
-            this.currentWeapon = (Weapon) currentWeapon;
-        }
-    }
-
     private void addExperiencePoints(int xp) {
         setExpPoints(expPoints + xp);
-    }
-
-    private void addGold(int gold) {
-        setGold(this.gold + gold);
     }
 
     public int getGold() {
         return gold;
     }
 
+    private void setGold(int gold) {
+        this.gold = gold;
+        World.sendObserverNotification("plr_gold");
+    }
+
     public int getExpPoints() {
         return expPoints;
     }
 
+    private void setExpPoints(int expPoints) {
+        this.expPoints = expPoints;
+        World.sendObserverNotification("plr_exp");
+    }
+
     public int getLevel() {
         return level;
+    }
+
+    private void setLevel(int level) {
+        this.level = level;
+        World.sendObserverNotification("plr_lvl");
     }
 
     @Contract(pure = true)
@@ -112,8 +96,20 @@ public class Player extends Entity {
         return currentLocation;
     }
 
+    private void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+        World.sendMessengerObserverNotification("location",
+                "\n\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
+    }
+
     public Weapon getCurrentWeapon() {
         return currentWeapon;
+    }
+
+    public void setCurrentWeapon(Object currentWeapon) {
+        if (currentWeapon instanceof Weapon) {
+            this.currentWeapon = (Weapon) currentWeapon;
+        }
     }
 
     @NotNull
@@ -252,59 +248,27 @@ public class Player extends Entity {
         setCurrentHitPoints(getMaxHitPoints());
 
         if (newLocation.getQuestAvailableHere() != null) {
-            boolean playerAlreadyHasQuest = hasThisQuest(newLocation.getQuestAvailableHere());
-            boolean playerAlreadyCompletedQuest = completedThisQuest(newLocation.getQuestAvailableHere());
+            if (hasThisQuest(newLocation.getQuestAvailableHere())) {
+                if (!completedThisQuest(newLocation.getQuestAvailableHere())) {
 
-            if (playerAlreadyHasQuest) {
-                if (!playerAlreadyCompletedQuest) {
-                    boolean playerHasAllItemsToCompleteQuest =
-                            hasAllQuestCompletionItems(newLocation.getQuestAvailableHere());
-
-                    if (playerHasAllItemsToCompleteQuest) {
-                        World.sendMessengerObserverNotification("message", "You complete the \'"
-                                + newLocation.getQuestAvailableHere().getName() + "\' quest.\n");
-                        removeQuestCompletionItems(newLocation.getQuestAvailableHere());
-
-                        World.sendMessengerObserverNotification("message", "You receive: \n"
-                                + Integer.toString(newLocation.getQuestAvailableHere().getRewardExperiencePoints())
-                                + " XP points\n"
-                                + Integer.toString(newLocation.getQuestAvailableHere().getRewardGold()) + " gold\n"
-                                + newLocation.getQuestAvailableHere().getRewardItem().getName() + "\n\n");
-
-                        addExperiencePoints(newLocation.getQuestAvailableHere().getRewardExperiencePoints());
-                        addGold(newLocation.getQuestAvailableHere().getRewardGold());
-
-                        addItemToInventory(newLocation.getQuestAvailableHere().getRewardItem());
-
-                        markQuestAsCompleted(newLocation.getQuestAvailableHere());
+                    if (hasAllQuestCompletionItems(newLocation.getQuestAvailableHere())) {
+                        completeQuest(newLocation.getQuestAvailableHere());
                     }
                 }
             } else {
-                World.sendMessengerObserverNotification("message", "You receive the \'"
-                        + newLocation.getQuestAvailableHere().getName() + "\' quest.\n"
-                        + "To complete it, return with:\n");
-
-                for (QuestCompletionItem qci : newLocation.getQuestAvailableHere().getQuestCompletionItems()) {
-                    if (qci.getQuantity() == 1) {
-                        World.sendMessengerObserverNotification("message",
-                                Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getName() + "\n");
-                    } else {
-                        World.sendMessengerObserverNotification("message",
-                                Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getNamePlural()
-                                        + "\n");
-                    }
-                }
-                World.sendMessengerObserverNotification("message", "\n");
-
-                addQuestToList(new PlayerQuest(newLocation.getQuestAvailableHere()));
+                giveQuestToPlayer(newLocation.getQuestAvailableHere());
             }
         }
 
-        if (newLocation.getMonsterLivingHere() != null) {
-            World.sendMessengerObserverNotification("message", "You see a "
-                    + newLocation.getMonsterLivingHere().getName() + "\n");
+        setMonsterForCurrentLocation(newLocation);
+    }
 
-            Monster standardMonster = World.MonsterByID(newLocation.getMonsterLivingHere().getID());
+    private void setMonsterForCurrentLocation(Location location) {
+        if (location.getMonsterLivingHere() != null) {
+            World.sendMessengerObserverNotification("message", "You see a "
+                    + location.getMonsterLivingHere().getName() + "\n");
+
+            Monster standardMonster = World.MonsterByID(location.getMonsterLivingHere().getID());
 
             World.setCurrentMonster(new Monster(standardMonster.getID(), standardMonster.getName(), standardMonster.getMaxDamage(),
                     standardMonster.getRewardExperiencePoints(), standardMonster.getRewardGold(),
@@ -316,6 +280,45 @@ public class Player extends Entity {
         } else {
             World.setCurrentMonster(null);
         }
+    }
+
+    private void completeQuest(Quest quest) {
+        World.sendMessengerObserverNotification("message", "You complete the \'"
+                + quest.getName() + "\' quest.\n");
+        removeQuestCompletionItems(quest);
+
+        World.sendMessengerObserverNotification("message", "You receive: \n"
+                + Integer.toString(quest.getRewardExperiencePoints())
+                + " XP points\n"
+                + Integer.toString(quest.getRewardGold()) + " gold\n"
+                + quest.getRewardItem().getName() + "\n\n");
+
+        addExperiencePoints(quest.getRewardExperiencePoints());
+        setGold(gold + quest.getRewardGold());
+
+        addItemToInventory(quest.getRewardItem());
+
+        markQuestAsCompleted(quest);
+    }
+
+    private void giveQuestToPlayer(Quest quest) {
+        World.sendMessengerObserverNotification("message", "You receive the \'"
+                + quest.getName() + "\' quest.\n"
+                + "To complete it, return with:\n");
+
+        for (QuestCompletionItem qci : quest.getQuestCompletionItems()) {
+            if (qci.getQuantity() == 1) {
+                World.sendMessengerObserverNotification("message",
+                        Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getName() + "\n");
+            } else {
+                World.sendMessengerObserverNotification("message",
+                        Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getNamePlural()
+                                + "\n");
+            }
+        }
+        World.sendMessengerObserverNotification("message", "\n");
+
+        addQuestToList(new PlayerQuest(quest));
     }
 
     public void useWeapon(Object cboObject) {

@@ -41,32 +41,16 @@ public class Location {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Item getItemRequiredToEnter() {
         return itemRequiredToEnter;
-    }
-
-    public void setItemRequiredToEnter(Item itemRequiredToEnter) {
-        this.itemRequiredToEnter = itemRequiredToEnter;
     }
 
     public Quest getQuestAvailableHere() {
         return questAvailableHere;
     }
 
-    public void setQuestAvailableHere(Quest questAvailableHere) {
-        this.questAvailableHere = questAvailableHere;
-    }
-
     public Monster getMonsterLivingHere() {
         return monsterLivingHere;
-    }
-
-    public void setMonsterLivingHere(Monster monsterLivingHere) {
-        this.monsterLivingHere = monsterLivingHere;
     }
 
     public Location getLocationToNorth() {
