@@ -12,8 +12,6 @@ import logic.item.weapon.Weapon;
 import logic.quests.PlayerQuest;
 import logic.quests.Quest;
 import logic.quests.QuestCompletionItem;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +81,6 @@ public class Player extends Entity {
         World.sendObserverNotification("plr_lvl");
     }
 
-    @Contract(pure = true)
     public List<InventoryItem> getInventory() {
         return inventory;
     }
@@ -112,7 +109,6 @@ public class Player extends Entity {
         }
     }
 
-    @NotNull
     private Boolean hasThisQuest(Quest quest) {
         for (PlayerQuest pq : quests) {
             if (pq.getDetails().getID() == quest.getID()) {
@@ -123,7 +119,6 @@ public class Player extends Entity {
         return false;
     }
 
-    @NotNull
     private Boolean completedThisQuest(Quest quest) {
         for (PlayerQuest pq : quests) {
             if (pq.getDetails().getID() == quest.getID()) {
@@ -134,7 +129,6 @@ public class Player extends Entity {
         return false;
     }
 
-    @NotNull
     private Boolean hasAllQuestCompletionItems(Quest quest) {
         for (QuestCompletionItem qci : quest.getQuestCompletionItems()) {
             boolean foundItemInPlayerInv = false;
@@ -221,7 +215,6 @@ public class Player extends Entity {
         return potions;
     }
 
-    @NotNull
     private Boolean hasRequiredItemToEnter(Location location) {
         if (location.getItemRequiredToEnter() == null) {
             return true;
