@@ -9,7 +9,8 @@ public class GameRunner {
     public static void main(String[] args){
         Runnable gameRunner = () -> {
             World.init();
-            World.setGameUI(new GameUI());
+            GameUI gameUI = new GameUI();
+            gameUI.init();
         };
 
         EventQueue.invokeLater(gameRunner);

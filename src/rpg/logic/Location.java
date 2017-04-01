@@ -20,7 +20,7 @@ public class Location {
     private transient Location locationToWest = null;
 
     public Location(LocationID id, String name, String description, Item itemRequiredToEnter, Quest questAvailableHere,
-                    Monster monsterLivingHere){
+                    Monster monsterLivingHere) {
         ID = id;
         this.name = name;
         this.description = description;
@@ -29,80 +29,80 @@ public class Location {
         this.monsterLivingHere = monsterLivingHere;
     }
 
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public void setItemRequiredToEnter(Item itemRequiredToEnter) {
-        this.itemRequiredToEnter = itemRequiredToEnter;
-    }
-
-    public void setQuestAvailableHere(Quest questAvailableHere) {
-        this.questAvailableHere = questAvailableHere;
-    }
-
-    public void setMonsterLivingHere(Monster monsterLivingHere) {
-        this.monsterLivingHere = monsterLivingHere;
-    }
-
-    void setLocationToNorth(Location locationToNorth) {
-        this.locationToNorth = locationToNorth;
-    }
-
-    void setLocationToEast(Location locationToEast) {
-        this.locationToEast = locationToEast;
-    }
-
-    void setLocationToSouth(Location locationToSouth) {
-        this.locationToSouth = locationToSouth;
-    }
-
-    void setLocationToWest(Location locationToWest) {
-        this.locationToWest = locationToWest;
-    }
-
-    LocationID getID(){
+    LocationID getID() {
         return ID;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Item getItemRequiredToEnter() {
         return itemRequiredToEnter;
     }
 
+    public void setItemRequiredToEnter(Item itemRequiredToEnter) {
+        this.itemRequiredToEnter = itemRequiredToEnter;
+    }
+
     public Quest getQuestAvailableHere() {
         return questAvailableHere;
+    }
+
+    public void setQuestAvailableHere(Quest questAvailableHere) {
+        this.questAvailableHere = questAvailableHere;
     }
 
     public Monster getMonsterLivingHere() {
         return monsterLivingHere;
     }
 
+    public void setMonsterLivingHere(Monster monsterLivingHere) {
+        this.monsterLivingHere = monsterLivingHere;
+    }
+
     public Location getLocationToNorth() {
         return locationToNorth;
+    }
+
+    void setLocationToNorth(Location locationToNorth) {
+        this.locationToNorth = locationToNorth;
     }
 
     public Location getLocationToEast() {
         return locationToEast;
     }
 
+    void setLocationToEast(Location locationToEast) {
+        this.locationToEast = locationToEast;
+    }
+
     public Location getLocationToSouth() {
         return locationToSouth;
+    }
+
+    void setLocationToSouth(Location locationToSouth) {
+        this.locationToSouth = locationToSouth;
     }
 
     public Location getLocationToWest() {
         return locationToWest;
     }
 
+    void setLocationToWest(Location locationToWest) {
+        this.locationToWest = locationToWest;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

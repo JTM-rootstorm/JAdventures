@@ -20,7 +20,6 @@ import rpg.logic.observer.GameObserver;
 import rpg.logic.observer.MessageObserver;
 import rpg.logic.quests.Quest;
 import rpg.logic.quests.QuestCompletionItem;
-import rpg.ui.GameUI;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,18 +34,17 @@ public class World {
     private static List<Quest> quests = new ArrayList<>();
     private static List<Location> locations = new ArrayList<>();
 
-    private static GameUI gameUI;
     private static Player _player;
     private static Monster _currentMonster;
 
     private static List<GameObserver> observerList = new ArrayList<>();
     private static List<MessageObserver> messageObservers = new ArrayList<>();
 
-    private World(){
+    private World() {
 
     }
 
-    public static void init(){
+    public static void init() {
         populateItems();
         populateMonsters();
         populateQuests();
@@ -55,10 +53,10 @@ public class World {
     }
 
     private static void initPlayer() {
-        _player = new Player(10,10,20,0,1);
+        _player = new Player(10, 10, 20, 0, 1);
     }
 
-    private static void populateItems(){
+    private static void populateItems() {
         items.add(new Weapon(ItemID.RUSTY_SWORD, "Rusty Sword",
                 "Rusty Swords", 0, 5));
         items.add(new Item(ItemID.RAT_TAIL, "Rat Tail", "Rat Tails"));
@@ -73,14 +71,14 @@ public class World {
         items.add(new Item(ItemID.ADVENTURER_PASS, "Adventurer Pass", "Adventurer Passes"));
     }
 
-    private static void populateMonsters(){
+    private static void populateMonsters() {
         Monster rat = new Monster(MonsterID.RAT, "Rat", 5, 3,
                 10, 3, 3);
         rat.getLootTable().add(new LootItem(ItemByID(ItemID.RAT_TAIL), 75, false));
         rat.getLootTable().add(new LootItem(ItemByID(ItemID.PIECE_OF_FUR), 75, true));
 
-        Monster snake = new Monster(MonsterID.SNAKE, "Snake", 5,3,10,
-                3,3);
+        Monster snake = new Monster(MonsterID.SNAKE, "Snake", 5, 3, 10,
+                3, 3);
         snake.getLootTable().add(new LootItem(ItemByID(ItemID.SNAKE_FANG), 75, false));
         snake.getLootTable().add(new LootItem(ItemByID(ItemID.SNAKE_SKIN), 75, true));
 
@@ -92,23 +90,23 @@ public class World {
         monsters.addAll(Arrays.asList(rat, snake, giantSpider));
     }
 
-    private static void populateQuests(){
+    private static void populateQuests() {
         Quest clearAlchemistGuarden = new QuestBuilder().id(QuestID.CLEAR_ALCHEMIST_GARDEN)
-                    .name("Clear the Alchemist's Garden")
-                    .description("Kill rats in the alchemist's garden and bring back 3 rat tails. You will receive a " +
-                            "healing potion and 10 gold pieces.")
-                    .rewardXP(20)
-                    .rewardGold(10)
+                .name("Clear the Alchemist's Garden")
+                .description("Kill rats in the alchemist's garden and bring back 3 rat tails. You will receive a " +
+                        "healing potion and 10 gold pieces.")
+                .rewardXP(20)
+                .rewardGold(10)
                 .buildQuest();
         clearAlchemistGuarden.getQuestCompletionItems().add(new QuestCompletionItem(ItemByID(ItemID.RAT_TAIL), 3));
         clearAlchemistGuarden.setRewardItem(ItemByID(ItemID.HEALING_POTION));
 
         Quest clearFarmersField = new QuestBuilder().id(QuestID.CLEAR_FARMERS_FIELD)
-                    .name("Clear the Farmer's Field")
-                    .description("Kill snakes in the farmer's field and bring back 3 snake fangs. You will receive an " +
-                            "adventurer's pass and 20 gold pieces.")
-                    .rewardXP(20)
-                    .rewardGold(20)
+                .name("Clear the Farmer's Field")
+                .description("Kill snakes in the farmer's field and bring back 3 snake fangs. You will receive an " +
+                        "adventurer's pass and 20 gold pieces.")
+                .rewardXP(20)
+                .rewardGold(20)
                 .buildQuest();
         clearFarmersField.getQuestCompletionItems().add(new QuestCompletionItem(ItemByID(ItemID.SNAKE_FANG), 3));
         clearFarmersField.setRewardItem(ItemByID(ItemID.ADVENTURER_PASS));
@@ -116,7 +114,7 @@ public class World {
         quests.addAll(Arrays.asList(clearAlchemistGuarden, clearFarmersField));
     }
 
-    private static void populateLocations(){
+    private static void populateLocations() {
         Location home = new LocationBuilder().id(LocationID.HOME)
                 .name("Home")
                 .description("It's your house.")
@@ -197,70 +195,66 @@ public class World {
                 guardPost, bridge, spiderField));
     }
 
-    private static void ensureObserverListCreation(){
-        if(observerList == null){
+    private static void ensureObserverListCreation() {
+        if (observerList == null) {
             observerList = new ArrayList<>();
         }
 
-        if(messageObservers == null){
+        if (messageObservers == null) {
             messageObservers = new ArrayList<>();
         }
     }
 
-    public static void setCurrentMonster(Monster monster){
-        _currentMonster = monster;
-    }
-
     @Contract(pure = true)
-    public static Monster getCurrentMonster(){
+    public static Monster getCurrentMonster() {
         return _currentMonster;
     }
 
-    public static void addObserverToList(GameObserver observer){
+    public static void setCurrentMonster(Monster monster) {
+        _currentMonster = monster;
+    }
+
+    public static void addObserverToList(GameObserver observer) {
         ensureObserverListCreation();
         observerList.add(observer);
     }
 
-    public static void addMessengerObserver(MessageObserver observer){
+    public static void addMessengerObserver(MessageObserver observer) {
         ensureObserverListCreation();
         messageObservers.add(observer);
     }
 
-    public static void removeObserverFromList(GameObserver observer){
+    public static void removeObserverFromList(GameObserver observer) {
         ensureObserverListCreation();
         observerList.remove(observer);
     }
 
-    public static void removeMessengerObserver(MessageObserver observer){
+    public static void removeMessengerObserver(MessageObserver observer) {
         ensureObserverListCreation();
         messageObservers.remove(observer);
     }
 
-    public static void sendObserverNotification(String message){
-        for(GameObserver observer : observerList){
+    public static void sendObserverNotification(String message) {
+        for (GameObserver observer : observerList) {
             observer.sendNotification(message);
         }
     }
 
-    public static void sendMessengerObserverNotification(String type, String message){
-        for(MessageObserver mo : messageObservers){
+    public static void sendMessengerObserverNotification(String type, String message) {
+        for (MessageObserver mo : messageObservers) {
             mo.sendMessage(type, message);
         }
     }
 
-    public static void setGameUI(GameUI ui){
-        gameUI = ui;
-    }
-
     @Contract(pure = true)
-    public static Player getPlayer(){
+    public static Player getPlayer() {
         return _player;
     }
 
     @Nullable
-    public static Item ItemByID(ItemID id){
-        for(Item item : items){
-            if(item.getID() == id){
+    public static Item ItemByID(ItemID id) {
+        for (Item item : items) {
+            if (item.getID() == id) {
                 return item;
             }
         }
@@ -269,9 +263,9 @@ public class World {
     }
 
     @Nullable
-    public static Monster MonsterByID(MonsterID id){
-        for(Monster monster : monsters){
-            if(monster.getID() == id){
+    public static Monster MonsterByID(MonsterID id) {
+        for (Monster monster : monsters) {
+            if (monster.getID() == id) {
                 return monster;
             }
         }
@@ -280,9 +274,9 @@ public class World {
     }
 
     @Nullable
-    private static Quest QuestByID(QuestID id){
-        for(Quest quest : quests){
-            if(quest.getID() == id){
+    private static Quest QuestByID(QuestID id) {
+        for (Quest quest : quests) {
+            if (quest.getID() == id) {
                 return quest;
             }
         }
@@ -291,9 +285,9 @@ public class World {
     }
 
     @Nullable
-    public static Location LocationByID(LocationID id){
-        for(Location location : locations){
-            if(location.getID() == id){
+    public static Location LocationByID(LocationID id) {
+        for (Location location : locations) {
+            if (location.getID() == id) {
                 return location;
             }
         }
@@ -301,17 +295,16 @@ public class World {
         return null;
     }
 
-    public static void saveObjectToJson(Object object, boolean debugFlag){
+    public static void saveObjectToJson(Object object, boolean debugFlag) {
         Gson gson = new Gson();
         try {
             String path, teststr = "";
-            if(!debugFlag){
+            if (!debugFlag) {
                 path = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
                         .getLocation().getPath(), "UTF-8");
                 path = FilenameUtils.getPath(path);
                 path += object.getClass().getSimpleName() + ".json";
-            }
-            else{
+            } else {
                 path = "/E:/IntelliJ Workspace/gamedev/rpg-game/" + object.getClass().getSimpleName() + ".json";
                 teststr = URLDecoder.decode(rpg.main.GameRunner.class.getProtectionDomain().getCodeSource()
                         .getLocation().getPath(), "UTF-8");
