@@ -224,7 +224,7 @@ public class GameUI {
         });
         gamePanel.add(btnWest);
 
-        /*JButton btnSave = new JButton("Save");
+        /*JButton btnSave = new JButton("SaveSystem");
         btnSave.setLocation(620, 630);
         btnSave.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         gamePanel.add(btnSave);*/

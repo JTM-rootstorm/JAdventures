@@ -424,7 +424,7 @@ public class Player extends Entity {
     }
 
     public void moveHome() {
-        moveTo(World.LocationByID(LocationID.HOME));
+        moveTo(World.LocationByID(LocationID.HOME.getValue()));
         World.sendObserverNotification("plr_move");
     }
 

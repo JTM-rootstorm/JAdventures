@@ -1,13 +1,12 @@
 package logic.entity;
 
-import logic.enums.MonsterID;
 import logic.item.LootItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Monster extends Entity {
-    private final MonsterID ID;
+    private final int ID;
 
     private String name;
     private int maxDamage;
@@ -16,7 +15,7 @@ public class Monster extends Entity {
 
     private List<LootItem> lootTable;
 
-    public Monster(MonsterID id, String name, int maxDamage, int rewardExperiencePoints,
+    public Monster(int id, String name, int maxDamage, int rewardExperiencePoints,
                    int rewardGold, int currentHitPoints, int maxHitPoints){
         super(currentHitPoints, maxHitPoints);
         ID = id;
@@ -28,7 +27,7 @@ public class Monster extends Entity {
         lootTable = new ArrayList<>();
     }
 
-    public MonsterID getID(){
+    public int getID(){
         return ID;
     }
 

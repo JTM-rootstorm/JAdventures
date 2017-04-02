@@ -1,12 +1,11 @@
 package logic.core;
 
 import logic.entity.Monster;
-import logic.enums.LocationID;
 import logic.item.Item;
 import logic.quests.Quest;
 
 public class Location {
-    private final LocationID ID;
+    private final int ID;
     private transient String name;
     private transient String description;
 
@@ -19,7 +18,7 @@ public class Location {
     private transient Location locationToSouth = null;
     private transient Location locationToWest = null;
 
-    public Location(LocationID id, String name, String description, Item itemRequiredToEnter, Quest questAvailableHere,
+    public Location(int id, String name, String description, Item itemRequiredToEnter, Quest questAvailableHere,
                     Monster monsterLivingHere) {
         ID = id;
         this.name = name;
@@ -29,7 +28,7 @@ public class Location {
         this.monsterLivingHere = monsterLivingHere;
     }
 
-    LocationID getID() {
+    int getID() {
         return ID;
     }
 

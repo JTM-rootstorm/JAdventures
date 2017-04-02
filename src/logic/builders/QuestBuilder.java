@@ -1,10 +1,9 @@
 package logic.builders;
 
-import logic.enums.QuestID;
 import logic.quests.Quest;
 
 public class QuestBuilder {
-    private QuestID ID;
+    private int ID;
     private String name;
     private String description;
 
@@ -17,7 +16,7 @@ public class QuestBuilder {
         return new Quest(ID, name, description, rewardExperiencePoints, rewardGold);
     }
 
-    public QuestBuilder id(QuestID id){
+    public QuestBuilder id(int id){
         ID = id;
         return this;
     }

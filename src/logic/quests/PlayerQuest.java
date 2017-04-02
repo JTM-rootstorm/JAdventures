@@ -15,10 +15,6 @@ public class PlayerQuest {
         return details;
     }
 
-    public void setDetails(Quest details) {
-        this.details = details;
-    }
-
     public boolean isCompleted() {
         return isCompleted;
     }

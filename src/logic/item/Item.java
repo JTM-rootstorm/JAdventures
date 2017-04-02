@@ -1,19 +1,17 @@
 package logic.item;
 
-import logic.enums.ItemID;
-
 public class Item {
-    private final ItemID ID;
+    private final int ID;
     private final String name;
     private final String namePlural;
 
-    public Item(ItemID id, String name, String namePlural){
+    public Item(int id, String name, String namePlural){
         ID = id;
         this.name = name;
         this.namePlural = namePlural;
     }
 
-    public ItemID getID(){
+    public int getID(){
         return ID;
     }
 

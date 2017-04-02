@@ -2,12 +2,11 @@ package logic.builders;
 
 import logic.core.Location;
 import logic.entity.Monster;
-import logic.enums.LocationID;
 import logic.item.Item;
 import logic.quests.Quest;
 
 public class LocationBuilder {
-    private LocationID ID;
+    private int ID;
     private String name;
     private String description;
 
@@ -22,7 +21,7 @@ public class LocationBuilder {
         return new Location(ID, name, description, itemRequiredToEnter, questAvailableHere, monsterLivingHere);
     }
 
-    public LocationBuilder id(LocationID id) {
+    public LocationBuilder id(int id) {
         ID = id;
         return this;
     }
