@@ -14,7 +14,7 @@ public class Monster extends Entity {
     @Expose private int rewardExperiencePoints;
     @Expose private int rewardGold;
 
-    private List<LootItem> lootTable;
+    @Expose private List<LootItem> lootTable;
 
     public Monster(int id, String name, int maxDamage, int rewardExperiencePoints,
                    int rewardGold, int currentHitPoints, int maxHitPoints){

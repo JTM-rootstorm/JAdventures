@@ -1,25 +1,15 @@
 package logic.core;
 
-import logic.builders.LocationBuilder;
-import logic.builders.QuestBuilder;
 import logic.entity.Monster;
 import logic.entity.Player;
 import logic.enums.ItemID;
-import logic.enums.LocationID;
-import logic.enums.MonsterID;
-import logic.enums.QuestID;
-import logic.item.HealingPotion;
 import logic.item.Item;
-import logic.item.LootItem;
-import logic.item.weapon.Weapon;
 import logic.observer.GameObserver;
 import logic.observer.MessageObserver;
 import logic.quests.Quest;
-import logic.quests.QuestCompletionItem;
 import ui.GameUI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class World {
@@ -39,26 +29,30 @@ public class World {
     }
 
     public static void init(GameUI ui) {
+        SaveSystem.init();
+        LoadSystem.init();
+
         populateItems();
         populateMonsters();
         populateQuests();
         populateLocations();
-        initPlayer();
 
+        initPlayer();
         ui.init();
-        SaveSystem.init();
 
         _player.moveHome();
         _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD.getValue()));
-        System.out.println(_player.getCurrentLocation().getName());
     }
 
     private static void initPlayer() {
-        _player = new Player(10, 10, 20, 0, 1);
+        _player = LoadSystem.loadPlayer();
+        if(_player == null){
+            _player = new Player(10, 10, 20, 0, 1);
+        }
     }
 
     private static void populateItems() {
-        items.add(new Weapon(ItemID.RUSTY_SWORD.getValue(), "Rusty Sword",
+        /*items.add(new Weapon(ItemID.RUSTY_SWORD.getValue(), "Rusty Sword",
                 "Rusty Swords", 0, 5));
         items.add(new Item(ItemID.RAT_TAIL.getValue(), "Rat Tail", "Rat Tails"));
         items.add(new Item(ItemID.PIECE_OF_FUR.getValue(), "Piece of Fur", "Pieces of Fur"));
@@ -69,11 +63,13 @@ public class World {
                 "Healing Potions", 5));
         items.add(new Item(ItemID.SPIDER_FANG.getValue(), "Spider Fang", "Spider Fangs"));
         items.add(new Item(ItemID.SPIDER_SILK.getValue(), "Spider Silk", "Spider Silks"));
-        items.add(new Item(ItemID.ADVENTURER_PASS.getValue(), "Adventurer Pass", "Adventurer Passes"));
+        items.add(new Item(ItemID.ADVENTURER_PASS.getValue(), "Adventurer Pass", "Adventurer Passes"));*/
+
+        items = LoadSystem.loadItemList();
     }
 
     private static void populateMonsters() {
-        Monster rat = new Monster(MonsterID.RAT.getValue(), "Rat", 5, 3,
+        /*Monster rat = new Monster(MonsterID.RAT.getValue(), "Rat", 5, 3,
                 10, 3, 3);
         rat.getLootTable().add(new LootItem(ItemID.RAT_TAIL.getValue(), 75, false));
         rat.getLootTable().add(new LootItem(ItemID.PIECE_OF_FUR.getValue(), 75, true));
@@ -88,11 +84,13 @@ public class World {
         giantSpider.getLootTable().add(new LootItem(ItemID.SPIDER_FANG.getValue(), 75, true));
         giantSpider.getLootTable().add(new LootItem(ItemID.SPIDER_SILK.getValue(), 25, false));
 
-        monsters.addAll(Arrays.asList(rat, snake, giantSpider));
+        monsters.addAll(Arrays.asList(rat, snake, giantSpider));*/
+
+        monsters = LoadSystem.loadMonsters();
     }
 
     private static void populateQuests() {
-        Quest clearAlchemistGuarden = new QuestBuilder().id(QuestID.CLEAR_ALCHEMIST_GARDEN.getValue())
+        /*Quest clearAlchemistGuarden = new QuestBuilder().id(QuestID.CLEAR_ALCHEMIST_GARDEN.getValue())
                 .name("Clear the Alchemist's Garden")
                 .description("Kill rats in the alchemist's garden and bring back 3 rat tails. You will receive a " +
                         "healing potion and 10 gold pieces.")
@@ -112,11 +110,13 @@ public class World {
         clearFarmersField.getQuestCompletionItems().add(new QuestCompletionItem(ItemID.SNAKE_FANG.getValue(), 3));
         clearFarmersField.setRewardItem(ItemID.ADVENTURER_PASS.getValue());
 
-        quests.addAll(Arrays.asList(clearAlchemistGuarden, clearFarmersField));
+        quests.addAll(Arrays.asList(clearAlchemistGuarden, clearFarmersField));*/
+
+        quests = LoadSystem.loadQuests();
     }
 
     private static void populateLocations() {
-        Location home = new LocationBuilder().id(LocationID.HOME.getValue())
+        /*Location home = new LocationBuilder().id(LocationID.HOME.getValue())
                 .name("Home")
                 .description("It's your house.")
                 .buildLocation();
@@ -193,7 +193,9 @@ public class World {
         spiderField.setLocationToWest(bridge.getID());
 
         locations.addAll(Arrays.asList(home, townSquare, farmhouse, farmersField, alchemistHut, alchemistGarden,
-                guardPost, bridge, spiderField));
+                guardPost, bridge, spiderField));*/
+
+        locations = LoadSystem.loadLocations();
     }
 
     private static void ensureObserverListCreation() {

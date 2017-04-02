@@ -1,0 +1,1 @@
+{"ID":2,"name":"Giant Spider","maxDamage":20,"rewardExperiencePoints":5,"rewardGold":40,"lootTable":[{"details":7,"dropPercentage":75,"isDefaultItem":true},{"details":8,"dropPercentage":25,"isDefaultItem":false}],"currentHitPoints":10,"maxHitPoints":10}

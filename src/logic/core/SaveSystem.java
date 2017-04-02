@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import logic.entity.Monster;
 import logic.entity.Player;
 import logic.item.Item;
+import logic.item.weapon.Weapon;
 import logic.quests.Quest;
 import main.GameRunner;
 import org.apache.commons.io.FilenameUtils;
@@ -68,7 +69,8 @@ class SaveSystem {
         saveFile.mkdir();
 
         for(Location location : locationList){
-            saveFilePath = dataPath + "/locations/" + location.getName() + ".json";
+            saveFilePath = dataPath + "/locations/" + location.getID() + "_"
+                    + location.getName().replaceAll(" ", "_") + ".json";
             saveFile = new File(saveFilePath);
 
             writeObjectToFile(saveFile, location);
@@ -79,8 +81,13 @@ class SaveSystem {
         String saveFilePath;
         File saveFile;
 
+        saveFilePath = dataPath + "/monsters/";
+        saveFile = new File(saveFilePath);
+        saveFile.mkdir();
+
         for(Monster monster : monsterList){
-            saveFilePath = jarPathOnSystem + "/data/monsters/" + monster.getName() + ".json";
+            saveFilePath = dataPath + "/monsters/" + monster.getID() + "_"
+                    + monster.getName().replaceAll(" ", "_") + ".json";
             saveFile = new File(saveFilePath);
 
             writeObjectToFile(saveFile, monster);
@@ -91,8 +98,19 @@ class SaveSystem {
         String saveFilePath;
         File saveFile;
 
+        saveFilePath = dataPath + "/items/weapons/";
+        saveFile = new File(saveFilePath);
+        saveFile.mkdirs();
+
         for(Item item : itemList){
-            saveFilePath = jarPathOnSystem + "/data/items/" + item.getName() + ".json";
+            if(item instanceof Weapon){
+                saveFilePath = dataPath + "/items/weapons/" + item.getID() + "_"
+                        + item.getName().replaceAll(" ", "_") + ".json";
+            }
+            else{
+                saveFilePath = dataPath + "/items/" + item.getID() + "_"
+                        + item.getName().replaceAll(" ", "_") + ".json";
+            }
             saveFile = new File(saveFilePath);
 
             writeObjectToFile(saveFile, item);
@@ -103,8 +121,13 @@ class SaveSystem {
         String saveFilePath;
         File saveFile;
 
+        saveFilePath = dataPath + "/quests/";
+        saveFile = new File(saveFilePath);
+        saveFile.mkdir();
+
         for(Quest quest : questList){
-            saveFilePath = jarPathOnSystem + "/data/quests/" + quest.getName() + ".json";
+            saveFilePath = dataPath + "/quests/" + quest.getID() + "_"
+                    + quest.getName().replaceAll(" ", "_") + ".json";
             saveFile = new File(saveFilePath);
 
             writeObjectToFile(saveFile, quest);

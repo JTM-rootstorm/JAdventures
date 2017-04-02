@@ -1,0 +1,1 @@
+{"ID":1,"name":"Snake","maxDamage":5,"rewardExperiencePoints":3,"rewardGold":10,"lootTable":[{"details":3,"dropPercentage":75,"isDefaultItem":false},{"details":4,"dropPercentage":75,"isDefaultItem":true}],"currentHitPoints":3,"maxHitPoints":3}

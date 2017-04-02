@@ -1,8 +1,10 @@
 package logic.entity;
 
+import com.google.gson.annotations.Expose;
+
 public class Entity{
-    private int currentHitPoints;
-    private int maxHitPoints;
+    @Expose private int currentHitPoints;
+    @Expose private int maxHitPoints;
 
     Entity(int currentHitPoints, int maxHitPoints){
         this.currentHitPoints = currentHitPoints;
