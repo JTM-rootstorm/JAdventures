@@ -19,7 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class LoadSystem {
@@ -57,7 +59,7 @@ class LoadSystem {
                 }
             }
         }
-        return null;
+        return new Player(10, 10, 20, 0, 1);
     }
 
     static List<Location> loadLocations(){
@@ -125,7 +127,8 @@ class LoadSystem {
             e.printStackTrace();
         }
 
-        return itemList;
+        return itemList.stream()
+                .sorted(Comparator.comparing(itemOne -> ((Integer) itemOne.getID()))).collect(Collectors.toList());
     }
 
     static List<Quest> loadQuests(){

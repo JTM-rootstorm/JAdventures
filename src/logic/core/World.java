@@ -46,9 +46,6 @@ public class World {
 
     private static void initPlayer() {
         _player = LoadSystem.loadPlayer();
-        if(_player == null){
-            _player = new Player(10, 10, 20, 0, 1);
-        }
     }
 
     private static void populateItems() {
