@@ -3,19 +3,19 @@ package logic.item;
 import logic.core.World;
 
 public class InventoryItem {
-    private Item details;
+    private int details;
     private int quantity;
 
-    public InventoryItem(Item item, int quantity){
+    public InventoryItem(int item, int quantity){
         details = item;
         this.quantity = quantity;
     }
 
     public Item getDetails() {
-        return details;
+        return World.ItemByID(details);
     }
 
-    public void setDetails(Item details) {
+    public void setDetails(int details) {
         this.details = details;
     }
 

@@ -1,25 +1,26 @@
 package logic.core;
 
+import com.google.gson.annotations.Expose;
 import logic.entity.Monster;
 import logic.item.Item;
 import logic.quests.Quest;
 
 public class Location {
-    private final int ID;
-    private transient String name;
-    private transient String description;
+    @Expose private int ID;
+    @Expose private String name;
+    @Expose private String description;
 
-    private transient Item itemRequiredToEnter;
-    private transient Quest questAvailableHere;
-    private transient Monster monsterLivingHere;
+    @Expose private Integer itemRequiredToEnter;
+    @Expose private Integer questAvailableHere;
+    @Expose private Integer monsterLivingHere;
 
-    private transient Location locationToNorth = null;
-    private transient Location locationToEast = null;
-    private transient Location locationToSouth = null;
-    private transient Location locationToWest = null;
+    @Expose private Integer locationToNorth = null;
+    @Expose private Integer locationToEast = null;
+    @Expose private Integer locationToSouth = null;
+    @Expose private Integer locationToWest = null;
 
-    public Location(int id, String name, String description, Item itemRequiredToEnter, Quest questAvailableHere,
-                    Monster monsterLivingHere) {
+    public Location(int id, String name, String description, Integer itemRequiredToEnter, Integer questAvailableHere,
+                    Integer monsterLivingHere) {
         ID = id;
         this.name = name;
         this.description = description;
@@ -28,7 +29,22 @@ public class Location {
         this.monsterLivingHere = monsterLivingHere;
     }
 
-    int getID() {
+    public Location(int id, String name, String description, Integer itemRequiredToEnter, Integer questAvailableHere,
+                    Integer monsterLivingHere, Integer locationToNorth, Integer locationToEast,
+                    Integer locationToSouth, Integer locationToWest) {
+        ID = id;
+        this.name = name;
+        this.description = description;
+        this.itemRequiredToEnter = itemRequiredToEnter;
+        this.questAvailableHere = questAvailableHere;
+        this.monsterLivingHere = monsterLivingHere;
+        this.locationToNorth = locationToNorth;
+        this.locationToEast = locationToEast;
+        this.locationToSouth = locationToSouth;
+        this.locationToWest = locationToWest;
+    }
+
+    public int getID() {
         return ID;
     }
 
@@ -41,46 +57,46 @@ public class Location {
     }
 
     public Item getItemRequiredToEnter() {
-        return itemRequiredToEnter;
+        return World.ItemByID(itemRequiredToEnter);
     }
 
     public Quest getQuestAvailableHere() {
-        return questAvailableHere;
+        return World.QuestByID(questAvailableHere);
     }
 
     public Monster getMonsterLivingHere() {
-        return monsterLivingHere;
+        return World.MonsterByID(monsterLivingHere);
     }
 
     public Location getLocationToNorth() {
-        return locationToNorth;
+        return World.LocationByID(locationToNorth);
     }
 
-    void setLocationToNorth(Location locationToNorth) {
+    void setLocationToNorth(int locationToNorth) {
         this.locationToNorth = locationToNorth;
     }
 
     public Location getLocationToEast() {
-        return locationToEast;
+        return World.LocationByID(locationToEast);
     }
 
-    void setLocationToEast(Location locationToEast) {
+    void setLocationToEast(int locationToEast) {
         this.locationToEast = locationToEast;
     }
 
     public Location getLocationToSouth() {
-        return locationToSouth;
+        return World.LocationByID(locationToSouth);
     }
 
-    void setLocationToSouth(Location locationToSouth) {
+    void setLocationToSouth(int locationToSouth) {
         this.locationToSouth = locationToSouth;
     }
 
     public Location getLocationToWest() {
-        return locationToWest;
+        return World.LocationByID(locationToWest);
     }
 
-    void setLocationToWest(Location locationToWest) {
+    void setLocationToWest(int locationToWest) {
         this.locationToWest = locationToWest;
     }
 

@@ -1,21 +1,23 @@
 package logic.item;
 
+import logic.core.World;
+
 public class LootItem {
-    private Item details;
+    private Integer details;
     private int dropPercentage;
     private boolean isDefaultItem;
 
-    public LootItem(Item item, int dropPercentage, boolean isDefaultItem){
+    public LootItem(Integer item, int dropPercentage, boolean isDefaultItem){
         details = item;
         this.dropPercentage = dropPercentage;
         this.isDefaultItem = isDefaultItem;
     }
 
     public Item getDetails() {
-        return details;
+        return World.ItemByID(details);
     }
 
-    public void setDetails(Item details) {
+    public void setDetails(Integer details) {
         this.details = details;
     }
 

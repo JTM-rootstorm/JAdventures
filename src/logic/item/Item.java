@@ -1,9 +1,11 @@
 package logic.item;
 
+import com.google.gson.annotations.Expose;
+
 public class Item {
-    private final int ID;
-    private final String name;
-    private final String namePlural;
+    @Expose private int ID;
+    @Expose private String name;
+    @Expose private String namePlural;
 
     public Item(int id, String name, String namePlural){
         ID = id;

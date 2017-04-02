@@ -1,17 +1,18 @@
 package logic.entity;
 
+import com.google.gson.annotations.Expose;
 import logic.item.LootItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Monster extends Entity {
-    private final int ID;
+    @Expose private int ID;
 
-    private String name;
-    private int maxDamage;
-    private int rewardExperiencePoints;
-    private int rewardGold;
+    @Expose private String name;
+    @Expose private int maxDamage;
+    @Expose private int rewardExperiencePoints;
+    @Expose private int rewardGold;
 
     private List<LootItem> lootTable;
 

@@ -3,16 +3,16 @@ package logic.quests;
 import logic.core.World;
 
 public class PlayerQuest {
-    private Quest details;
+    private int details;
     private boolean isCompleted;
 
-    public PlayerQuest(Quest quest){
+    public PlayerQuest(int quest){
         details = quest;
         isCompleted = false;
     }
 
     public Quest getDetails() {
-        return details;
+        return World.QuestByID(details);
     }
 
     public boolean isCompleted() {

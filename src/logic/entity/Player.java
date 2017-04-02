@@ -1,5 +1,6 @@
 package logic.entity;
 
+import com.google.gson.annotations.Expose;
 import logic.core.Location;
 import logic.core.RandomNumberGenerator;
 import logic.core.World;
@@ -17,14 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Entity {
-    private int gold;
-    private int expPoints;
-    private int level;
+    @Expose private int gold;
+    @Expose private int expPoints;
+    @Expose private int level;
 
-    private List<InventoryItem> inventory;
-    private List<PlayerQuest> quests;
+    @Expose private List<InventoryItem> inventory;
+    @Expose private List<PlayerQuest> quests;
 
-    private Location currentLocation = null;
+    @Expose private Integer currentLocation;
 
     private Weapon currentWeapon = null;
 
@@ -90,11 +91,11 @@ public class Player extends Entity {
     }
 
     public Location getCurrentLocation() {
-        return currentLocation;
+        return World.LocationByID(currentLocation);
     }
 
     private void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
+        this.currentLocation = currentLocation.getID();
         World.sendMessengerObserverNotification("location",
                 "\n\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
     }
@@ -172,7 +173,7 @@ public class Player extends Entity {
             }
         }
 
-        inventory.add(new InventoryItem(itemToAdd, 1));
+        inventory.add(new InventoryItem(itemToAdd.getID(), 1));
 
         World.sendObserverNotification("plr_inv_additem");
     }
@@ -311,7 +312,7 @@ public class Player extends Entity {
         }
         World.sendMessengerObserverNotification("message", "\n");
 
-        addQuestToList(new PlayerQuest(quest));
+        addQuestToList(new PlayerQuest(quest.getID()));
     }
 
     public void useWeapon(Object cboObject) {
@@ -348,14 +349,14 @@ public class Player extends Entity {
 
             for (LootItem lootItem : World.getCurrentMonster().getLootTable()) {
                 if (RandomNumberGenerator.NumberBetween(1, 100) <= lootItem.getDropPercentage()) {
-                    lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
+                    lootedItems.add(new InventoryItem(lootItem.getDetails().getID(), 1));
                 }
             }
 
             if (lootedItems.size() == 0) {
                 for (LootItem lootItem : World.getCurrentMonster().getLootTable()) {
                     if (lootItem.isDefaultItem()) {
-                        lootedItems.add(new InventoryItem(lootItem.getDetails(), 1));
+                        lootedItems.add(new InventoryItem(lootItem.getDetails().getID(), 1));
                     }
                 }
             }
@@ -429,29 +430,33 @@ public class Player extends Entity {
     }
 
     public void moveNorth() {
-        if (currentLocation.getLocationToNorth() != null) {
-            moveTo(currentLocation.getLocationToNorth());
+        Location location = World.LocationByID(currentLocation).getLocationToNorth();
+        if (location != null) {
+            moveTo(location);
             World.sendObserverNotification("plr_move");
         }
     }
 
     public void moveEast() {
-        if (currentLocation.getLocationToEast() != null) {
-            moveTo(currentLocation.getLocationToEast());
+        Location location = World.LocationByID(currentLocation).getLocationToEast();
+        if (location != null) {
+            moveTo(location);
             World.sendObserverNotification("plr_move");
         }
     }
 
     public void moveSouth() {
-        if (currentLocation.getLocationToSouth() != null) {
-            moveTo(currentLocation.getLocationToSouth());
+        Location location = World.LocationByID(currentLocation).getLocationToSouth();
+        if (location != null) {
+            moveTo(location);
             World.sendObserverNotification("plr_move");
         }
     }
 
     public void moveWest() {
-        if (currentLocation.getLocationToWest() != null) {
-            moveTo(currentLocation.getLocationToWest());
+        Location location = World.LocationByID(currentLocation).getLocationToWest();
+        if (location != null) {
+            moveTo(location);
             World.sendObserverNotification("plr_move");
         }
     }

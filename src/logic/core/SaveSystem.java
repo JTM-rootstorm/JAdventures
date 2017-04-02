@@ -1,6 +1,7 @@
 package logic.core;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import logic.entity.Monster;
 import logic.entity.Player;
 import logic.item.Item;
@@ -16,8 +17,9 @@ import java.net.URLDecoder;
 import java.util.List;
 
 class SaveSystem {
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     private static String jarPathOnSystem;
+    private static String dataPath;
     private static FileWriter saveFileWriter;
 
     private SaveSystem(){}
@@ -27,15 +29,26 @@ class SaveSystem {
             jarPathOnSystem = FilenameUtils.getPath(
                     URLDecoder.decode(GameRunner.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
                             "UTF-8"));
+
+            dataPath = jarPathOnSystem + "/data/";
+
+            File temp = new File(dataPath);
+            temp.mkdir();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
     static void savePlayer(Player player){
-        String saveFilePath = jarPathOnSystem + "/save/" + player.getClass().getSimpleName() + ".json";
+        String saveFilePath = jarPathOnSystem + "/save/";
         try {
-            saveFileWriter = new FileWriter(saveFilePath);
+            File save = new File(saveFilePath);
+            save.mkdir();
+
+            save = new File(saveFilePath + player.getClass().getSimpleName() + ".json");
+            save.createNewFile();
+
+            saveFileWriter = new FileWriter(save);
 
             String jsonString = gson.toJson(player);
 
@@ -50,8 +63,12 @@ class SaveSystem {
         String saveFilePath;
         File saveFile;
 
+        saveFilePath = dataPath + "/locations/";
+        saveFile = new File(saveFilePath);
+        saveFile.mkdir();
+
         for(Location location : locationList){
-            saveFilePath = jarPathOnSystem + "/data/locations/" + location.getName() + ".json";
+            saveFilePath = dataPath + "/locations/" + location.getName() + ".json";
             saveFile = new File(saveFilePath);
 
             writeObjectToFile(saveFile, location);
@@ -96,17 +113,16 @@ class SaveSystem {
 
     private static void writeObjectToFile(File saveFile, Object objectToSave) {
         String jsonString;
-        if(!saveFile.exists()){
-            try{
-                saveFileWriter = new FileWriter(saveFile);
+        try{
+            saveFile.createNewFile();
+            saveFileWriter = new FileWriter(saveFile);
 
-                jsonString = gson.toJson(objectToSave);
+            jsonString = gson.toJson(objectToSave);
 
-                saveFileWriter.write(jsonString);
-                saveFileWriter.close();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
+            saveFileWriter.write(jsonString);
+            saveFileWriter.close();
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

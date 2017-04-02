@@ -1,8 +1,10 @@
 package logic.item;
 
+import com.google.gson.annotations.Expose;
+
 public class HealingPotion extends Item {
 
-    private final int amountToHeal;
+    @Expose private int amountToHeal;
 
     public HealingPotion(int id, String name, String namePlural, int amountToHeal){
         super(id, name, namePlural);

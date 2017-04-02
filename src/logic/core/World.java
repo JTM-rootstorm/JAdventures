@@ -50,6 +50,7 @@ public class World {
 
         _player.moveHome();
         _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD.getValue()));
+        System.out.println(_player.getCurrentLocation().getName());
     }
 
     private static void initPlayer() {
@@ -74,18 +75,18 @@ public class World {
     private static void populateMonsters() {
         Monster rat = new Monster(MonsterID.RAT.getValue(), "Rat", 5, 3,
                 10, 3, 3);
-        rat.getLootTable().add(new LootItem(ItemByID(ItemID.RAT_TAIL.getValue()), 75, false));
-        rat.getLootTable().add(new LootItem(ItemByID(ItemID.PIECE_OF_FUR.getValue()), 75, true));
+        rat.getLootTable().add(new LootItem(ItemID.RAT_TAIL.getValue(), 75, false));
+        rat.getLootTable().add(new LootItem(ItemID.PIECE_OF_FUR.getValue(), 75, true));
 
-        Monster snake = new Monster(MonsterID.SNAKE.getValue(), "Snake", 5, 3, 10,
-                3, 3);
-        snake.getLootTable().add(new LootItem(ItemByID(ItemID.SNAKE_FANG.getValue()), 75, false));
-        snake.getLootTable().add(new LootItem(ItemByID(ItemID.SNAKE_SKIN.getValue()), 75, true));
+        Monster snake = new Monster(MonsterID.SNAKE.getValue(), "Snake", 5, 3,
+                10, 3, 3);
+        snake.getLootTable().add(new LootItem(ItemID.SNAKE_FANG.getValue(), 75, false));
+        snake.getLootTable().add(new LootItem(ItemID.SNAKE_SKIN.getValue(), 75, true));
 
         Monster giantSpider = new Monster(MonsterID.GIANT_SPIDER.getValue(), "Giant Spider", 20,
                 5, 40, 10, 10);
-        giantSpider.getLootTable().add(new LootItem(ItemByID(ItemID.SPIDER_FANG.getValue()), 75, true));
-        giantSpider.getLootTable().add(new LootItem(ItemByID(ItemID.SPIDER_SILK.getValue()), 25, false));
+        giantSpider.getLootTable().add(new LootItem(ItemID.SPIDER_FANG.getValue(), 75, true));
+        giantSpider.getLootTable().add(new LootItem(ItemID.SPIDER_SILK.getValue(), 25, false));
 
         monsters.addAll(Arrays.asList(rat, snake, giantSpider));
     }
@@ -98,8 +99,8 @@ public class World {
                 .rewardXP(20)
                 .rewardGold(10)
                 .buildQuest();
-        clearAlchemistGuarden.getQuestCompletionItems().add(new QuestCompletionItem(ItemByID(ItemID.RAT_TAIL.getValue()), 3));
-        clearAlchemistGuarden.setRewardItem(ItemByID(ItemID.HEALING_POTION.getValue()));
+        clearAlchemistGuarden.getQuestCompletionItems().add(new QuestCompletionItem(ItemID.RAT_TAIL.getValue(), 3));
+        clearAlchemistGuarden.setRewardItem(ItemID.HEALING_POTION.getValue());
 
         Quest clearFarmersField = new QuestBuilder().id(QuestID.CLEAR_FARMERS_FIELD.getValue())
                 .name("Clear the Farmer's Field")
@@ -108,8 +109,8 @@ public class World {
                 .rewardXP(20)
                 .rewardGold(20)
                 .buildQuest();
-        clearFarmersField.getQuestCompletionItems().add(new QuestCompletionItem(ItemByID(ItemID.SNAKE_FANG.getValue()), 3));
-        clearFarmersField.setRewardItem(ItemByID(ItemID.ADVENTURER_PASS.getValue()));
+        clearFarmersField.getQuestCompletionItems().add(new QuestCompletionItem(ItemID.SNAKE_FANG.getValue(), 3));
+        clearFarmersField.setRewardItem(ItemID.ADVENTURER_PASS.getValue());
 
         quests.addAll(Arrays.asList(clearAlchemistGuarden, clearFarmersField));
     }
@@ -128,31 +129,31 @@ public class World {
         Location alchemistHut = new LocationBuilder().id(LocationID.ALCHEMIST_HUT.getValue())
                 .name("Alchemist's Hut")
                 .description("There are many strange plants on the shelves.")
-                .questAvailableHere(QuestByID(QuestID.CLEAR_ALCHEMIST_GARDEN.getValue()))
+                .questAvailableHere(QuestID.CLEAR_ALCHEMIST_GARDEN.getValue())
                 .buildLocation();
 
         Location alchemistGarden = new LocationBuilder().id(LocationID.ALCHEMISTS_GARDEN.getValue())
                 .name("Alchemist's Garden")
                 .description("Many plants are growing here.")
-                .monsterLivingHere(MonsterByID(MonsterID.RAT.getValue()))
+                .monsterLivingHere(MonsterID.RAT.getValue())
                 .buildLocation();
 
         Location farmhouse = new LocationBuilder().id(LocationID.FARMHOUSE.getValue())
                 .name("Farmhouse")
                 .description("There is a small farmhouse, with a farmer in front.")
-                .questAvailableHere(QuestByID(QuestID.CLEAR_FARMERS_FIELD.getValue()))
+                .questAvailableHere(QuestID.CLEAR_FARMERS_FIELD.getValue())
                 .buildLocation();
 
         Location farmersField = new LocationBuilder().id(LocationID.FARM_FIELD.getValue())
                 .name("Farmer's Field")
                 .description("You see rows of vegetables growing here.")
-                .monsterLivingHere(MonsterByID(MonsterID.SNAKE.getValue()))
+                .monsterLivingHere(MonsterID.SNAKE.getValue())
                 .buildLocation();
 
         Location guardPost = new LocationBuilder().id(LocationID.GUARD_POST.getValue())
                 .name("Guard Post")
                 .description("There is a large, tough-looking guard here.")
-                .itemRequiredToEnter(ItemByID(ItemID.ADVENTURER_PASS.getValue()))
+                .itemRequiredToEnter(ItemID.ADVENTURER_PASS.getValue())
                 .buildLocation();
 
         Location bridge = new LocationBuilder().id(LocationID.BRIDGE.getValue())
@@ -163,33 +164,33 @@ public class World {
         Location spiderField = new LocationBuilder().id(LocationID.SPIDER_FIELD.getValue())
                 .name("Forest")
                 .description("You see spider webs covering covering the trees in this forest.")
-                .monsterLivingHere(MonsterByID(MonsterID.GIANT_SPIDER.getValue()))
+                .monsterLivingHere(MonsterID.GIANT_SPIDER.getValue())
                 .buildLocation();
 
-        home.setLocationToNorth(townSquare);
+        home.setLocationToNorth(townSquare.getID());
 
-        townSquare.setLocationToNorth(alchemistHut);
-        townSquare.setLocationToSouth(home);
-        townSquare.setLocationToEast(guardPost);
-        townSquare.setLocationToWest(farmhouse);
+        townSquare.setLocationToNorth(alchemistHut.getID());
+        townSquare.setLocationToSouth(home.getID());
+        townSquare.setLocationToEast(guardPost.getID());
+        townSquare.setLocationToWest(farmhouse.getID());
 
-        farmhouse.setLocationToEast(townSquare);
-        farmhouse.setLocationToWest(farmersField);
+        farmhouse.setLocationToEast(townSquare.getID());
+        farmhouse.setLocationToWest(farmersField.getID());
 
-        farmersField.setLocationToEast(farmhouse);
+        farmersField.setLocationToEast(farmhouse.getID());
 
-        alchemistHut.setLocationToSouth(townSquare);
-        alchemistHut.setLocationToNorth(alchemistGarden);
+        alchemistHut.setLocationToSouth(townSquare.getID());
+        alchemistHut.setLocationToNorth(alchemistGarden.getID());
 
-        alchemistGarden.setLocationToSouth(alchemistHut);
+        alchemistGarden.setLocationToSouth(alchemistHut.getID());
 
-        guardPost.setLocationToEast(bridge);
-        guardPost.setLocationToWest(townSquare);
+        guardPost.setLocationToEast(bridge.getID());
+        guardPost.setLocationToWest(townSquare.getID());
 
-        bridge.setLocationToWest(guardPost);
-        bridge.setLocationToEast(spiderField);
+        bridge.setLocationToWest(guardPost.getID());
+        bridge.setLocationToEast(spiderField.getID());
 
-        spiderField.setLocationToWest(bridge);
+        spiderField.setLocationToWest(bridge.getID());
 
         locations.addAll(Arrays.asList(home, townSquare, farmhouse, farmersField, alchemistHut, alchemistGarden,
                 guardPost, bridge, spiderField));
@@ -249,40 +250,48 @@ public class World {
         return _player;
     }
 
-    private static Item ItemByID(int id) {
-        for (Item item : items) {
-            if (item.getID() == id) {
-                return item;
+    public static Item ItemByID(Integer id) {
+        if(id != null){
+            for (Item item : items) {
+                if (item.getID() == id) {
+                    return item;
+                }
             }
         }
 
         return null;
     }
 
-    public static Monster MonsterByID(int id) {
-        for (Monster monster : monsters) {
-            if (monster.getID() == id) {
-                return monster;
+    public static Monster MonsterByID(Integer id) {
+        if(id != null){
+            for (Monster monster : monsters) {
+                if (monster.getID() == id) {
+                    return monster;
+                }
             }
         }
 
         return null;
     }
 
-    private static Quest QuestByID(int id) {
-        for (Quest quest : quests) {
-            if (quest.getID() == id) {
-                return quest;
+    public static Quest QuestByID(Integer id) {
+        if(id != null){
+            for (Quest quest : quests) {
+                if (quest.getID() == id) {
+                    return quest;
+                }
             }
         }
 
         return null;
     }
 
-    public static Location LocationByID(int id) {
-        for (Location location : locations) {
-            if (location.getID() == id) {
-                return location;
+    public static Location LocationByID(Integer id) {
+        if(id != null){
+            for (Location location : locations) {
+                if (location.getID() == id) {
+                    return location;
+                }
             }
         }
 

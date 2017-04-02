@@ -1,18 +1,20 @@
 package logic.builders;
 
 import logic.core.Location;
-import logic.entity.Monster;
-import logic.item.Item;
-import logic.quests.Quest;
 
 public class LocationBuilder {
     private int ID;
     private String name;
     private String description;
 
-    private Item itemRequiredToEnter = null;
-    private Quest questAvailableHere = null;
-    private Monster monsterLivingHere = null;
+    private Integer itemRequiredToEnter = null;
+    private Integer questAvailableHere = null;
+    private Integer monsterLivingHere = null;
+
+    private Integer locationToNorth = null;
+    private Integer locationToEast = null;
+    private Integer locationToSouth = null;
+    private Integer locationToWest = null;
 
     public LocationBuilder() {
     }
@@ -36,18 +38,23 @@ public class LocationBuilder {
         return this;
     }
 
-    public LocationBuilder itemRequiredToEnter(Item item) {
+    public LocationBuilder itemRequiredToEnter(Integer item) {
         itemRequiredToEnter = item;
         return this;
     }
 
-    public LocationBuilder questAvailableHere(Quest quest) {
+    public LocationBuilder questAvailableHere(Integer quest) {
         questAvailableHere = quest;
         return this;
     }
 
-    public LocationBuilder monsterLivingHere(Monster monster) {
+    public LocationBuilder monsterLivingHere(Integer monster) {
         monsterLivingHere = monster;
         return this;
+    }
+
+    public Location buildLocationFromJSONInut() {
+        return new Location(ID, name, description,itemRequiredToEnter,
+                questAvailableHere, monsterLivingHere, locationToNorth, locationToEast, locationToSouth, locationToWest);
     }
 }
