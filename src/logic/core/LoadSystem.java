@@ -80,7 +80,8 @@ class LoadSystem {
             e.printStackTrace();
         }
 
-        return locationList;
+        return locationList.stream()
+                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
     static List<Monster> loadMonsters(){
@@ -101,7 +102,8 @@ class LoadSystem {
             e.printStackTrace();
         }
 
-        return monsterList;
+        return monsterList.stream()
+                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
     static List<Item> loadItemList(){
@@ -128,7 +130,7 @@ class LoadSystem {
         }
 
         return itemList.stream()
-                .sorted(Comparator.comparing(itemOne -> ((Integer) itemOne.getID()))).collect(Collectors.toList());
+                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
     static List<Quest> loadQuests(){
@@ -149,6 +151,7 @@ class LoadSystem {
             e.printStackTrace();
         }
 
-        return questList;
+        return questList.stream()
+                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 }

@@ -258,9 +258,7 @@ public class GameUI {
                     }
                 }
             }
-        });
-        cboWeapons.addObserver(message -> {
-            if (message.equals("plr_move")) {
+            else if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null
                         || World.getPlayer().getWeapons().size() == 0) {
                     cboWeapons.setVisible(false);
@@ -287,9 +285,7 @@ public class GameUI {
                     cboPotions.setSelectedIndex(0);
                 }
             }
-        });
-        cboPotions.addObserver(message -> {
-            if (message.equals("plr_move")) {
+            else if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null
                         || World.getPlayer().getPotions().size() == 0) {
                     cboPotions.setVisible(false);

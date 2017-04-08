@@ -8,10 +8,6 @@ import javax.swing.*;
 public class GameButton extends JButton {
     private GameObserver observer;
 
-    public GameButton(){
-        super();
-    }
-
     public GameButton(String text){
         super(text);
     }

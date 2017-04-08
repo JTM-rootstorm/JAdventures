@@ -9,10 +9,6 @@ import javax.swing.table.TableModel;
 public class GameTable extends JTable {
     private GameObserver observer;
 
-    public GameTable(){
-        super();
-    }
-
     public GameTable(TableModel dm){
         super(dm);
     }
