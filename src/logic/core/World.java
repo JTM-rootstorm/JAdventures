@@ -2,7 +2,6 @@ package logic.core;
 
 import logic.entity.Monster;
 import logic.entity.Player;
-import logic.enums.ItemID;
 import logic.item.Item;
 import logic.observer.GameObserver;
 import logic.observer.MessageObserver;
@@ -41,7 +40,7 @@ public class World {
         ui.init();
 
         _player.moveHome();
-        _player.addItemToInventory(World.ItemByID(ItemID.RUSTY_SWORD.getValue()));
+        _player.addItemToInventory(World.ItemByID(0));
     }
 
     private static void ensureObserverListCreation() {

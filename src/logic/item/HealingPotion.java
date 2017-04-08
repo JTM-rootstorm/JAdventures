@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 public class HealingPotion extends Item {
 
-    @Expose private int amountToHeal;
+    @Expose private int amountToHeal = 10;
 
     public HealingPotion(int id, String name, String namePlural, int amountToHeal){
         super(id, name, namePlural);

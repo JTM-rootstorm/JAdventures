@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import logic.entity.Monster;
 import logic.entity.Player;
+import logic.item.HealingPotion;
 import logic.item.Item;
 import logic.item.weapon.Weapon;
 import logic.quests.Quest;
@@ -114,8 +115,11 @@ class LoadSystem {
             paths.forEach(filePath -> {
                 if(Files.isRegularFile(filePath)){
                     try(FileReader saveFileReader = new FileReader(filePath.toString())) {
-                        if(filePath.toString().contains("weapons")){
+                        if(filePath.toString().contains("_Weapon_")){
                             itemList.add(gson.fromJson(saveFileReader, Weapon.class));
+                        }
+                        else if(filePath.toString().contains("_Potion")){
+                            itemList.add(gson.fromJson(saveFileReader, HealingPotion.class));
                         }
                         else{
                             itemList.add(gson.fromJson(saveFileReader, Item.class));

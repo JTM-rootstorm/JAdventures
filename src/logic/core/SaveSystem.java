@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import logic.entity.Monster;
 import logic.entity.Player;
+import logic.item.HealingPotion;
 import logic.item.Item;
 import logic.item.weapon.Weapon;
 import logic.quests.Quest;
@@ -98,13 +99,17 @@ class SaveSystem {
         String saveFilePath;
         File saveFile;
 
-        saveFilePath = dataPath + "/items/weapons/";
+        saveFilePath = dataPath + "/items/";
         saveFile = new File(saveFilePath);
         saveFile.mkdirs();
 
         for(Item item : itemList){
             if(item instanceof Weapon){
-                saveFilePath = dataPath + "/items/weapons/" + item.getID() + "_"
+                saveFilePath = dataPath + "/items/" + item.getID() + "_Weapon_"
+                        + item.getName().replaceAll(" ", "_") + ".json";
+            }
+            else if(item instanceof HealingPotion){
+                saveFilePath = dataPath + "/items/" + item.getID() + "_Potion_"
                         + item.getName().replaceAll(" ", "_") + ".json";
             }
             else{

@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import logic.core.Location;
 import logic.core.RandomNumberGenerator;
 import logic.core.World;
-import logic.enums.LocationID;
 import logic.item.HealingPotion;
 import logic.item.InventoryItem;
 import logic.item.Item;
@@ -425,7 +424,7 @@ public class Player extends Entity {
     }
 
     public void moveHome() {
-        moveTo(World.LocationByID(LocationID.HOME.getValue()));
+        moveTo(World.LocationByID(0));
         World.sendObserverNotification("plr_move");
     }
 
