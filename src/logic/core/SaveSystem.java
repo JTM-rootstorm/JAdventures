@@ -8,38 +8,17 @@ import logic.item.HealingPotion;
 import logic.item.Item;
 import logic.item.weapon.Weapon;
 import logic.quests.Quest;
-import main.GameRunner;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 
-class SaveSystem {
+class SaveSystem extends FileSystemInit{
     private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-    private static String jarPathOnSystem;
-    private static String dataPath;
     private static FileWriter saveFileWriter;
 
     private SaveSystem(){}
-
-    static void init(){
-        try {
-            jarPathOnSystem = FilenameUtils.getPath(
-                    URLDecoder.decode(GameRunner.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
-                            "UTF-8"));
-
-            dataPath = jarPathOnSystem + "/data/";
-
-            File temp = new File(dataPath);
-            temp.mkdir();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
 
     static void savePlayer(Player player){
         String saveFilePath = jarPathOnSystem + "/save/";
