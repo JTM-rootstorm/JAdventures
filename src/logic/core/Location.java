@@ -1,3 +1,21 @@
+/*
+   JAdventure - A Java-based RPG
+   Copyright (C) 2017  TehGuy
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package logic.core;
 
 import com.google.gson.annotations.Expose;
@@ -18,31 +36,6 @@ public class Location {
     @Expose private Integer locationToEast = null;
     @Expose private Integer locationToSouth = null;
     @Expose private Integer locationToWest = null;
-
-    public Location(int id, String name, String description, Integer itemRequiredToEnter, Integer questAvailableHere,
-                    Integer monsterLivingHere) {
-        ID = id;
-        this.name = name;
-        this.description = description;
-        this.itemRequiredToEnter = itemRequiredToEnter;
-        this.questAvailableHere = questAvailableHere;
-        this.monsterLivingHere = monsterLivingHere;
-    }
-
-    public Location(int id, String name, String description, Integer itemRequiredToEnter, Integer questAvailableHere,
-                    Integer monsterLivingHere, Integer locationToNorth, Integer locationToEast,
-                    Integer locationToSouth, Integer locationToWest) {
-        ID = id;
-        this.name = name;
-        this.description = description;
-        this.itemRequiredToEnter = itemRequiredToEnter;
-        this.questAvailableHere = questAvailableHere;
-        this.monsterLivingHere = monsterLivingHere;
-        this.locationToNorth = locationToNorth;
-        this.locationToEast = locationToEast;
-        this.locationToSouth = locationToSouth;
-        this.locationToWest = locationToWest;
-    }
 
     public int getID() {
         return ID;
@@ -72,32 +65,16 @@ public class Location {
         return World.LocationByID(locationToNorth);
     }
 
-    void setLocationToNorth(int locationToNorth) {
-        this.locationToNorth = locationToNorth;
-    }
-
     public Location getLocationToEast() {
         return World.LocationByID(locationToEast);
-    }
-
-    void setLocationToEast(int locationToEast) {
-        this.locationToEast = locationToEast;
     }
 
     public Location getLocationToSouth() {
         return World.LocationByID(locationToSouth);
     }
 
-    void setLocationToSouth(int locationToSouth) {
-        this.locationToSouth = locationToSouth;
-    }
-
     public Location getLocationToWest() {
         return World.LocationByID(locationToWest);
-    }
-
-    void setLocationToWest(int locationToWest) {
-        this.locationToWest = locationToWest;
     }
 
     @Override
