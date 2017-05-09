@@ -25,4 +25,8 @@ class FileSystemInit {
             e.printStackTrace();
         }
     }
+
+    static String getResourcePath(String resource) throws UnsupportedEncodingException {
+        return URLDecoder.decode(GameRunner.class.getResource(resource).getPath(), "UTF-8");
+    }
 }

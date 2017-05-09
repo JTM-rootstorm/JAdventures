@@ -10,13 +10,16 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'commons-io:commons-io:2.5'
+}
+
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['resource']
 
-dependencies {
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'commons-io:commons-io:2.5'
-}
+defaultTasks 'clean', 'test'

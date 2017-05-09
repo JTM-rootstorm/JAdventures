@@ -8,6 +8,7 @@ import logic.observer.MessageObserver;
 import logic.quests.Quest;
 import ui.GameUI;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class World {
 
     }
 
-    public static void init(GameUI ui) {
+    public static void init(GameUI ui) throws UnsupportedEncodingException {
         SaveSystem.init();
         LoadSystem.init();
 

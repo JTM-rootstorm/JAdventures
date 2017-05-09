@@ -12,6 +12,7 @@ import logic.quests.Quest;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,9 @@ import java.util.stream.Stream;
 class LoadSystem extends FileSystemInit {
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
-    private LoadSystem(){}
+    private LoadSystem(){
+
+    }
 
     static Player loadPlayer(){
         String saveFilePath = jarPathOnSystem + "/save/";
@@ -34,17 +37,17 @@ class LoadSystem extends FileSystemInit {
             if(save.exists()){
                 try(FileReader saveFileReader = new FileReader(save)){
                     return gson.fromJson(saveFileReader, Player.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
         }
         return new Player(10, 10, 20, 0, 1);
     }
 
-    static List<Location> loadLocations(){
+    static List<Location> loadLocations() throws UnsupportedEncodingException {
         List<Location> locationList = new ArrayList<>();
-        File saveFile = new File(dataPath + "/locations/");
+        File saveFile = new File(getResourcePath("/locations/"));
 
         try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
             paths.forEach(filePath -> {
@@ -64,9 +67,9 @@ class LoadSystem extends FileSystemInit {
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Monster> loadMonsters(){
+    static List<Monster> loadMonsters() throws UnsupportedEncodingException {
         List<Monster> monsterList = new ArrayList<>();
-        File saveFile = new File(dataPath + "/monsters/");
+        File saveFile = new File(getResourcePath("/monsters/"));
 
         try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
             paths.forEach(filePath -> {
@@ -86,9 +89,9 @@ class LoadSystem extends FileSystemInit {
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Item> loadItemList(){
+    static List<Item> loadItemList() throws UnsupportedEncodingException {
         List<Item> itemList = new ArrayList<>();
-        File saveFile = new File(dataPath + "/items/");
+        File saveFile = new File(getResourcePath("/items/"));
 
         try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
             paths.forEach(filePath -> {
@@ -116,9 +119,9 @@ class LoadSystem extends FileSystemInit {
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Quest> loadQuests(){
+    static List<Quest> loadQuests() throws UnsupportedEncodingException {
         List<Quest> questList = new ArrayList<>();
-        File saveFile = new File(dataPath + "/quests/");
+        File saveFile = new File(getResourcePath("/quests/"));
 
         try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
             paths.forEach(filePath -> {
