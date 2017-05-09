@@ -10,8 +10,7 @@ import logic.item.Item;
 import logic.item.LootItem;
 import logic.item.weapon.Weapon;
 import logic.quests.PlayerQuest;
-import logic.quests.Quest;
-import logic.quests.QuestCompletionItem;
+import logic.quests.QuestLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class Player extends Entity {
         World.sendObserverNotification("plr_curhp");
     }
 
-    private void addExperiencePoints(int xp) {
+    public void addExperiencePoints(int xp) {
         setExpPoints(expPoints + xp);
     }
 
@@ -58,7 +57,7 @@ public class Player extends Entity {
         return gold;
     }
 
-    private void setGold(int gold) {
+    public void setGold(int gold) {
         this.gold = gold;
         World.sendObserverNotification("plr_gold");
     }
@@ -109,61 +108,6 @@ public class Player extends Entity {
         }
     }
 
-    private Boolean hasThisQuest(Quest quest) {
-        for (PlayerQuest pq : quests) {
-            if (pq.getDetails().getID() == quest.getID()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Boolean completedThisQuest(Quest quest) {
-        for (PlayerQuest pq : quests) {
-            if (pq.getDetails().getID() == quest.getID()) {
-                return pq.isCompleted();
-            }
-        }
-
-        return false;
-    }
-
-    private Boolean hasAllQuestCompletionItems(Quest quest) {
-        for (QuestCompletionItem qci : quest.getQuestCompletionItems()) {
-            boolean foundItemInPlayerInv = false;
-
-            for (InventoryItem item : inventory) {
-                if (item.getDetails().getID() == qci.getDetails().getID()) {
-                    foundItemInPlayerInv = true;
-
-                    if (item.getQuantity() < qci.getQuantity()) {
-                        return false;
-                    }
-                }
-            }
-
-            if (!foundItemInPlayerInv) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void removeQuestCompletionItems(Quest quest) {
-        for (QuestCompletionItem qci : quest.getQuestCompletionItems()) {
-            for (InventoryItem item : inventory) {
-                if (item.getDetails().getID() == qci.getDetails().getID()) {
-                    item.setQuantity(item.getQuantity() - qci.getQuantity());
-                    break;
-                }
-            }
-        }
-
-        World.sendObserverNotification("plr_inv_additem");
-    }
-
     public void addItemToInventory(Item itemToAdd) {
         for (InventoryItem item : inventory) {
             if (item.getDetails().getID() == itemToAdd.getID()) {
@@ -175,20 +119,6 @@ public class Player extends Entity {
         inventory.add(new InventoryItem(itemToAdd.getID(), 1));
 
         World.sendObserverNotification("plr_inv_additem");
-    }
-
-    private void addQuestToList(PlayerQuest quest) {
-        quests.add(quest);
-        World.sendObserverNotification("plr_quest");
-    }
-
-    private void markQuestAsCompleted(Quest quest) {
-        for (PlayerQuest pq : quests) {
-            if (pq.getDetails().getID() == quest.getID()) {
-                pq.setCompleted();
-                return;
-            }
-        }
     }
 
     public List<Object> getWeapons() {
@@ -241,15 +171,15 @@ public class Player extends Entity {
         setCurrentHitPoints(getMaxHitPoints());
 
         if (newLocation.getQuestAvailableHere() != null) {
-            if (hasThisQuest(newLocation.getQuestAvailableHere())) {
-                if (!completedThisQuest(newLocation.getQuestAvailableHere())) {
+            if (QuestLogic.hasThisQuest(newLocation.getQuestAvailableHere(), quests)) {
+                if (!QuestLogic.completedThisQuest(newLocation.getQuestAvailableHere(), quests)) {
 
-                    if (hasAllQuestCompletionItems(newLocation.getQuestAvailableHere())) {
-                        completeQuest(newLocation.getQuestAvailableHere());
+                    if (QuestLogic.hasAllQuestCompletionItems(newLocation.getQuestAvailableHere(), inventory)) {
+                        QuestLogic.completeQuest(newLocation.getQuestAvailableHere());
                     }
                 }
             } else {
-                giveQuestToPlayer(newLocation.getQuestAvailableHere());
+                QuestLogic.giveQuestToPlayer(newLocation.getQuestAvailableHere());
             }
         }
 
@@ -273,45 +203,6 @@ public class Player extends Entity {
         } else {
             World.setCurrentMonster(null);
         }
-    }
-
-    private void completeQuest(Quest quest) {
-        World.sendMessengerObserverNotification("message", "You complete the \'"
-                + quest.getName() + "\' quest.\n");
-        removeQuestCompletionItems(quest);
-
-        World.sendMessengerObserverNotification("message", "You receive: \n"
-                + Integer.toString(quest.getRewardExperiencePoints())
-                + " XP points\n"
-                + Integer.toString(quest.getRewardGold()) + " gold\n"
-                + quest.getRewardItem().getName() + "\n\n");
-
-        addExperiencePoints(quest.getRewardExperiencePoints());
-        setGold(gold + quest.getRewardGold());
-
-        addItemToInventory(quest.getRewardItem());
-
-        markQuestAsCompleted(quest);
-    }
-
-    private void giveQuestToPlayer(Quest quest) {
-        World.sendMessengerObserverNotification("message", "You receive the \'"
-                + quest.getName() + "\' quest.\n"
-                + "To complete it, return with:\n");
-
-        for (QuestCompletionItem qci : quest.getQuestCompletionItems()) {
-            if (qci.getQuantity() == 1) {
-                World.sendMessengerObserverNotification("message",
-                        Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getName() + "\n");
-            } else {
-                World.sendMessengerObserverNotification("message",
-                        Integer.toString(qci.getQuantity()) + " " + qci.getDetails().getNamePlural()
-                                + "\n");
-            }
-        }
-        World.sendMessengerObserverNotification("message", "\n");
-
-        addQuestToList(new PlayerQuest(quest.getID()));
     }
 
     public void useWeapon(Object cboObject) {

@@ -124,8 +124,6 @@ public class GameUI {
             }
         });
         gamePanel.add(lblLevel);
-
-        World.getPlayer().fireInitMessages();
     }
 
     private void initButtons() {

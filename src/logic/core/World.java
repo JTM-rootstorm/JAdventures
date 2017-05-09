@@ -39,6 +39,7 @@ public class World {
 
         _player = LoadSystem.loadPlayer();
         ui.init();
+        _player.fireInitMessages();
 
         _player.moveHome();
         _player.addItemToInventory(World.ItemByID(0));
