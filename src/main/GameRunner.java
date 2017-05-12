@@ -18,22 +18,12 @@
 
 package main;
 
-import logic.core.World;
-import ui.GameUI;
+import ui.MainFrame;
 
-import java.awt.*;
-import java.io.UnsupportedEncodingException;
+import static javax.swing.SwingUtilities.invokeLater;
 
 public class GameRunner {
     public static void main(String[] args){
-        Runnable gameRunner = () -> {
-            try {
-                World.init(new GameUI());
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        };
-
-        EventQueue.invokeLater(gameRunner);
+        invokeLater(MainFrame::createAndShowGUI);
     }
 }

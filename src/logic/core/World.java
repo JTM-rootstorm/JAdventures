@@ -24,7 +24,6 @@ import logic.item.Item;
 import logic.observer.GameObserver;
 import logic.observer.MessageObserver;
 import logic.quests.Quest;
-import ui.GameUI;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class World {
 
     }
 
-    public static void init(GameUI ui) throws UnsupportedEncodingException {
+    public static void init() throws UnsupportedEncodingException {
         SaveSystem.init();
         LoadSystem.init();
 
@@ -56,8 +55,9 @@ public class World {
         locations = LoadSystem.loadLocations();
 
         _player = LoadSystem.loadPlayer();
-        ui.init();
+    }
 
+    public static void finishInit(){
         sendObserverNotification("plr_gold");
         sendObserverNotification("plr_exp");
         sendObserverNotification("plr_curhp");

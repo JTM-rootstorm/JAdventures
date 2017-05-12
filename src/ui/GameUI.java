@@ -27,9 +27,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-public class GameUI {
+class GameUI extends JInternalFrame {
     private JPanel gamePanel;
 
     private GameLabel lblHitPoints;
@@ -46,35 +47,43 @@ public class GameUI {
     private GameTable dgvInventory;
     private GameTable dgvQuests;
 
-    public void init(){
-        initFrame();
-        initLabels();
-        initComboBoxes();
-        initButtons();
-        initTextBoxes();
-        initDataTables();
-    }
+    GameUI(){
+        super("Main Window", false, true, false, true);
 
-    private void initFrame() {
         final int WIDTH = 735;
         final int HEIGHT = 690;
 
-        JFrame gameFrame = new JFrame();
-        gamePanel = new JPanel();
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        setSize(new Dimension(WIDTH, HEIGHT));
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
-        gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        gameFrame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        gameFrame.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-        gameFrame.setResizable(false);
+        setLocation(100, 100);
+
+        gamePanel = new JPanel();
 
         gamePanel.setOpaque(true);
         gamePanel.setBackground(Color.WHITE);
         gamePanel.setLayout(null);
 
-        gameFrame.setContentPane(gamePanel);
+        setContentPane(gamePanel);
 
-        gameFrame.setVisible(true);
-        gameFrame.setEnabled(true);
+        try {
+            World.init();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        init();
+        World.finishInit();
+    }
+
+    private void init(){
+        initLabels();
+        initComboBoxes();
+        initButtons();
+        initTextBoxes();
+        initDataTables();
     }
 
     private void initLabels() {
@@ -239,11 +248,6 @@ public class GameUI {
             }
         });
         gamePanel.add(btnWest);
-
-        /*JButton btnSave = new JButton("SaveSystem");
-        btnSave.setLocation(620, 630);
-        btnSave.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        gamePanel.add(btnSave);*/
     }
 
     @SuppressWarnings("unchecked")
@@ -325,7 +329,7 @@ public class GameUI {
         locPane.setLocation(347, 19);
         locPane.setSize(360, 105);
         locPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        gamePanel.add(locPane);
+        add(locPane);
 
         rtbMessages = new GameTextArea();
         rtbMessages.setEditable(false);
