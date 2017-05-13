@@ -18,6 +18,8 @@
 
 package ui;
 
+import logic.core.World;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -27,7 +29,10 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 
 public class MainFrame extends JFrame{
-    private static GameUI gameUI = null;
+    private static GameFrame gameFrame = null;
+    private static InventoryFrame inventoryFrame = null;
+    private static QuestFrame questFrame = null;
+
     private JMenuBar menuBar = new JMenuBar();
     private JDesktopPane desktopPane = new JDesktopPane();
     private MainFrame thisFrame = this;
@@ -60,12 +65,12 @@ public class MainFrame extends JFrame{
 
         fileMenu.add(createMenuItem("New", KeyEvent.VK_N, "new",
                 actionEvent -> {
-                    if (gameUI == null){
+                    if (gameFrame == null){
                         createGameUI();
                     }
                     else{
-                        if(!gameUI.isVisible()){
-                            gameUI.setVisible(true);
+                        if(!gameFrame.isVisible()){
+                            gameFrame.setVisible(true);
                         }
                     }
                 }));
@@ -74,6 +79,39 @@ public class MainFrame extends JFrame{
                 actionEvent -> thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING))));
 
         menuBar.add(fileMenu);
+
+        JMenu characterMenu = new JMenu("Character");
+        characterMenu.setMnemonic(KeyEvent.VK_C);
+
+        characterMenu.add(createMenuItem("Inventory", KeyEvent.VK_I, "inventory",
+                actionEvent -> {
+                    if(gameFrame != null){
+                        if(inventoryFrame == null){
+                            createInventoryWindow();
+                        }
+                        else{
+                            if(!inventoryFrame.isVisible()){
+                                inventoryFrame.setVisible(true);
+                            }
+                        }
+                    }
+                }));
+
+        characterMenu.add(createMenuItem("Quests", KeyEvent.VK_U, "quests",
+                actionEvent -> {
+                    if(gameFrame != null){
+                        if(questFrame == null){
+                            createQuestWindow();
+                        }
+                        else{
+                            if(!questFrame.isVisible()){
+                                questFrame.setVisible(true);
+                            }
+                        }
+                    }
+                }));
+
+        menuBar.add(characterMenu);
 
         return menuBar;
     }
@@ -89,15 +127,30 @@ public class MainFrame extends JFrame{
     }
 
     private void createGameUI(){
-        gameUI = new GameUI();
-        gameUI.setVisible(true);
-        gameUI.show();
-        desktopPane.add(gameUI);
+        gameFrame = new GameFrame();
+        gameFrame.show();
+        desktopPane.add(gameFrame);
 
         try {
-            gameUI.setSelected(true);
+            gameFrame.setSelected(true);
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createInventoryWindow(){
+        inventoryFrame = new InventoryFrame();
+        inventoryFrame.show();
+        desktopPane.add(inventoryFrame);
+
+        World.sendObserverNotification("plr_inv_additem");
+    }
+
+    private void createQuestWindow(){
+        questFrame = new QuestFrame();
+        questFrame.show();
+        desktopPane.add(questFrame);
+
+        World.sendObserverNotification("plr_quest");
     }
 }

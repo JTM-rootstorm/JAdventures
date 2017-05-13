@@ -19,18 +19,18 @@
 package ui;
 
 import logic.core.World;
-import logic.item.InventoryItem;
-import logic.quests.PlayerQuest;
-import ui.components.*;
+import ui.components.GameButton;
+import ui.components.GameCboBox;
+import ui.components.GameLabel;
+import ui.components.GameTextArea;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-class GameUI extends JInternalFrame {
+class GameFrame extends JInternalFrame {
     private JPanel gamePanel;
 
     private GameLabel lblHitPoints;
@@ -44,13 +44,10 @@ class GameUI extends JInternalFrame {
     private GameTextArea rtbLocation;
     private GameTextArea rtbMessages;
 
-    private GameTable dgvInventory;
-    private GameTable dgvQuests;
-
-    GameUI(){
+    GameFrame(){
         super("Main Window", false, true, false, true);
 
-        final int WIDTH = 735;
+        final int WIDTH = 560;
         final int HEIGHT = 690;
 
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -83,7 +80,6 @@ class GameUI extends JInternalFrame {
         initComboBoxes();
         initButtons();
         initTextBoxes();
-        initDataTables();
     }
 
     private void initLabels() {
@@ -108,7 +104,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(label4);
 
         JLabel label5 = new JLabel("Select Action");
-        label5.setLocation(617, 531);
+        label5.setLocation(440, 531);
         label5.setSize(110, 10);
         gamePanel.add(label5);
 
@@ -158,7 +154,7 @@ class GameUI extends JInternalFrame {
         final int BUTTON_HEIGHT = 20;
 
         GameButton btnUseWeapon = new GameButton("Use");
-        btnUseWeapon.setLocation(620, 559);
+        btnUseWeapon.setLocation(443, 559);
         btnUseWeapon.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnUseWeapon.addActionListener(e -> World.getPlayer().useWeapon(cboWeapons.getSelectedItem()));
         btnUseWeapon.addObserver(message -> {
@@ -174,7 +170,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(btnUseWeapon);
 
         GameButton btnUsePotion = new GameButton("Use");
-        btnUsePotion.setLocation(620, 593);
+        btnUsePotion.setLocation(443, 593);
         btnUsePotion.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnUsePotion.addActionListener(e -> World.getPlayer().drinkPotion(cboPotions.getSelectedItem()));
         btnUsePotion.addObserver(message -> {
@@ -190,7 +186,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(btnUsePotion);
 
         GameButton btnNorth = new GameButton("North");
-        btnNorth.setLocation(493, 433);
+        btnNorth.setLocation(316, 433);
         btnNorth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnNorth.addActionListener(e -> World.getPlayer().moveNorth());
         btnNorth.addObserver(message -> {
@@ -205,7 +201,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(btnNorth);
 
         GameButton btnEast = new GameButton("East");
-        btnEast.setLocation(573, 457);
+        btnEast.setLocation(396, 457);
         btnEast.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnEast.addActionListener(e -> World.getPlayer().moveEast());
         btnEast.addObserver(message -> {
@@ -220,7 +216,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(btnEast);
 
         GameButton btnSouth = new GameButton("South");
-        btnSouth.setLocation(493, 487);
+        btnSouth.setLocation(316, 487);
         btnSouth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnSouth.addActionListener(e -> World.getPlayer().moveSouth());
         btnSouth.addObserver(message -> {
@@ -235,7 +231,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(btnSouth);
 
         GameButton btnWest = new GameButton("West");
-        btnWest.setLocation(412, 457);
+        btnWest.setLocation(235, 457);
         btnWest.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         btnWest.addActionListener(e -> World.getPlayer().moveWest());
         btnWest.addObserver(message -> {
@@ -253,7 +249,7 @@ class GameUI extends JInternalFrame {
     @SuppressWarnings("unchecked")
     private void initComboBoxes() {
         cboWeapons = new GameCboBox<>();
-        cboWeapons.setLocation(369, 559);
+        cboWeapons.setLocation(192, 559);
         cboWeapons.setSize(150, 20);
         cboWeapons.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -290,7 +286,7 @@ class GameUI extends JInternalFrame {
         gamePanel.add(cboWeapons);
 
         cboPotions = new GameCboBox<>();
-        cboPotions.setLocation(369, 593);
+        cboPotions.setLocation(192, 593);
         cboPotions.setSize(150, 20);
         cboPotions.addObserver(message -> {
             if (message.equals("plr_inv_additem")) {
@@ -326,7 +322,7 @@ class GameUI extends JInternalFrame {
             }
         });
         JScrollPane locPane = new JScrollPane(rtbLocation);
-        locPane.setLocation(347, 19);
+        locPane.setLocation(170, 19);
         locPane.setSize(360, 105);
         locPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(locPane);
@@ -339,61 +335,9 @@ class GameUI extends JInternalFrame {
             }
         }));
         JScrollPane spane = new JScrollPane(rtbMessages);
-        spane.setLocation(347, 130);
+        spane.setLocation(170, 130);
         spane.setSize(360, 286);
         spane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         gamePanel.add(spane);
-    }
-
-    private void initDataTables() {
-        String[] invCol = {"Name", "Quantity"};
-        DefaultTableModel invTableModel = new DefaultTableModel(invCol, 0);
-        dgvInventory = new GameTable(invTableModel);
-        dgvInventory.setDragEnabled(false);
-        dgvInventory.setCellSelectionEnabled(false);
-        dgvInventory.setEnabled(false);
-        dgvInventory.addObserver(message -> {
-            if (message.equals("plr_inv_additem")) {
-                DefaultTableModel uInvModel = (DefaultTableModel) dgvInventory.getModel();
-                uInvModel.setRowCount(0);
-
-                for (InventoryItem item : World.getPlayer().getInventory()) {
-                    if (item.getQuantity() > 0) {
-                        uInvModel.addRow(new Object[]{item.getDetails().getName(), item.getQuantity()});
-                    }
-                }
-
-                dgvInventory.setModel(uInvModel);
-                dgvInventory.revalidate();
-            }
-        });
-        JScrollPane invPane = new JScrollPane(dgvInventory);
-        invPane.setLocation(16, 130);
-        invPane.setSize(312, 309);
-        gamePanel.add(invPane);
-
-        String[] questCol = {"Name", "Done?"};
-        DefaultTableModel questModel = new DefaultTableModel(questCol, 0);
-        dgvQuests = new GameTable(questModel);
-        dgvQuests.setDragEnabled(false);
-        dgvQuests.setCellSelectionEnabled(false);
-        dgvQuests.setEnabled(true);
-        dgvQuests.addObserver(message -> {
-            if (message.equals("plr_quest")) {
-                DefaultTableModel uQuestModel = (DefaultTableModel) dgvQuests.getModel();
-                uQuestModel.setRowCount(0);
-
-                for (PlayerQuest quest : World.getPlayer().getQuests()) {
-                    uQuestModel.addRow(new Object[]{quest.getDetails().getName(), quest.isCompleted()});
-                }
-
-                dgvQuests.setModel(uQuestModel);
-                dgvQuests.revalidate();
-            }
-        });
-        JScrollPane qPane = new JScrollPane(dgvQuests);
-        qPane.setLocation(16, 446);
-        qPane.setSize(312, 189);
-        gamePanel.add(qPane);
     }
 }
