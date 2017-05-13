@@ -1,1 +1,8 @@
-{"ID":3,"name":"Alchemist\u0027s Hut","description":"There are many strange plants on the shelves.","questAvailableHere":0,"locationToNorth":4,"locationToSouth":1}
+{
+  "ID":3,
+  "name":"Alchemist\u0027s Hut",
+  "description":"There are many strange plants on the shelves.",
+  "questAvailableHere":0,
+  "locationToNorth":4,
+  "locationToSouth":1
+}

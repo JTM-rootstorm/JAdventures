@@ -1,1 +1,22 @@
-{"ID":0,"name":"Rat","maxDamage":5,"rewardExperiencePoints":3,"rewardGold":10,"lootTable":[{"details":1,"dropPercentage":75,"isDefaultItem":false},{"details":2,"dropPercentage":75,"isDefaultItem":true}],"currentHitPoints":3,"maxHitPoints":3}
+{
+  "ID":0,
+  "name":"Rat",
+  "maxDamage":5,
+  "rewardExperiencePoints":3,
+  "rewardGold":10,
+  "lootTable":
+    [
+      {
+        "details":1,
+        "dropPercentage":75,
+        "isDefaultItem":false
+      },
+      {
+        "details":2,
+        "dropPercentage":75,
+        "isDefaultItem":true
+      }
+    ],
+  "currentHitPoints":3,
+  "maxHitPoints":3
+}

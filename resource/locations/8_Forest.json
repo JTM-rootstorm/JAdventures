@@ -1,1 +1,7 @@
-{"ID":8,"name":"Forest","description":"You see spider webs covering covering the trees in this forest.","monsterLivingHere":2,"locationToWest":7}
+{
+  "ID":8,
+  "name":"Forest",
+  "description":"You see spider webs covering covering the trees in this forest.",
+  "monsterLivingHere":2,
+  "locationToWest":7
+}

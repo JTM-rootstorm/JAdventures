@@ -1,1 +1,7 @@
-{"ID":4,"name":"Alchemist\u0027s Garden","description":"Many plants are growing here.","monsterLivingHere":0,"locationToSouth":3}
+{
+  "ID":4,
+  "name":"Alchemist\u0027s Garden",
+  "description":"Many plants are growing here.",
+  "monsterLivingHere":0,
+  "locationToSouth":3
+}

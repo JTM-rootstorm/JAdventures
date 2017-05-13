@@ -1,1 +1,15 @@
-{"ID":0,"name":"Clear the Alchemist\u0027s Garden","description":"Kill rats in the alchemist\u0027s garden and bring back 3 rat tails. You will receive a healing potion and 10 gold pieces.","rewardExperiencePoints":20,"rewardGold":10,"questCompletionItems":[{"details":1,"quantity":3}],"rewardItem":6}
+{
+  "ID":0,
+  "name":"Clear the Alchemist\u0027s Garden",
+  "description":"Kill rats in the alchemist\u0027s garden and bring back 3 rat tails. You will receive a healing potion and 10 gold pieces.",
+  "rewardExperiencePoints":20,
+  "rewardGold":10,
+  "questCompletionItems":
+    [
+      {
+        "details":1,
+        "quantity":3
+      }
+    ],
+  "rewardItem":6
+}

@@ -1,1 +1,7 @@
-{"ID":6,"name":"Farmer\u0027s Field","description":"You see rows of vegetables growing here.","monsterLivingHere":1,"locationToEast":5}
+{
+  "ID":6,
+  "name":"Farmer\u0027s Field",
+  "description":"You see rows of vegetables growing here.",
+  "monsterLivingHere":1,
+  "locationToEast":5
+}
