@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "Getting current version?"
+select yn in "Yes" "No"; do
+	case $yn in
+		Yes ) subject="Current Version"; rm ./docs/assets/images/badges/Current*; break;;
+		No ) echo "Enter subject: "; read subject; break;;
+	esac
+done
+
+echo "Enter status: " 
+read _status
+
+echo "Enter color: " 
+read color
+
+wgetSub=${subject// /%20}
+wgetSub=${wgetSub//-/--}
+wgetStat=${_status// /%20}
+wgetStat=${wgetStat//-/--}
+
+wget -P ./docs/assets/images/badges https://img.shields.io/badge/$wgetSub-$wgetStat-$color.svg
