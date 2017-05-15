@@ -37,7 +37,7 @@ class CharacterCreationFrame extends JInternalFrame {
 
     private JPanel mainPanel;
 
-    private int halfElfMod = 2;
+    private int halfElfModTotal = 2;
     private int str, dex, con, intel, wis, cha;
 
     CharacterCreationFrame(){
@@ -259,41 +259,41 @@ class CharacterCreationFrame extends JInternalFrame {
         chkStrRaceMod.setLocation(508, 102);
         chkStrRaceMod.setSize(boxDim);
         chkStrRaceMod.setEnabled(false);
-        chkStrRaceMod.addActionListener(actionEvent -> handleCheckBoxes(chkStrRaceMod));
+        chkStrRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkStrRaceMod));
         mainPanel.add(chkStrRaceMod);
 
         chkDexRaceMod = new JCheckBox();
         chkDexRaceMod.setLocation(508, 142);
         chkDexRaceMod.setSize(boxDim);
         chkDexRaceMod.setEnabled(false);
-        chkDexRaceMod.addActionListener(actionEvent -> handleCheckBoxes(chkDexRaceMod));
+        chkDexRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkDexRaceMod));
         mainPanel.add(chkDexRaceMod);
 
         chkConRaceMod = new JCheckBox();
         chkConRaceMod.setLocation(508, 182);
         chkConRaceMod.setSize(boxDim);
         chkConRaceMod.setEnabled(false);
-        chkConRaceMod.addActionListener(actionEvent -> handleCheckBoxes(chkConRaceMod));
+        chkConRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkConRaceMod));
         mainPanel.add(chkConRaceMod);
 
         chkIntRaceMod = new JCheckBox();
         chkIntRaceMod.setLocation(508, 222);
         chkIntRaceMod.setSize(boxDim);
         chkIntRaceMod.setEnabled(false);
-        chkIntRaceMod.addActionListener(actionEvent -> handleCheckBoxes(chkIntRaceMod));
+        chkIntRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkIntRaceMod));
         mainPanel.add(chkIntRaceMod);
 
         chkWisRaceMod = new JCheckBox();
         chkWisRaceMod.setLocation(508, 262);
         chkWisRaceMod.setSize(boxDim);
         chkWisRaceMod.setEnabled(false);
-        chkWisRaceMod.addActionListener(actionEvent -> handleCheckBoxes(chkWisRaceMod));
+        chkWisRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkWisRaceMod));
         mainPanel.add(chkWisRaceMod);
     }
 
     private void updateRaceMods(String race){
         resetRaceModLabels();
-        resetCheckBoxes();
+        disableCheckBoxesForHalfElf();
 
         switch (race) {
             case "Dwarf - Hill":
@@ -342,7 +342,7 @@ class CharacterCreationFrame extends JInternalFrame {
                 break;
             case "Half-Elf":
                 lblAbsChaRaceMod.setText("2");
-                enableCheckBoxes();
+                enableCheckBoxesForHalfElf();
                 break;
             case "Half-Orc":
                 lblAbsStrRaceMod.setText("2");
@@ -354,7 +354,7 @@ class CharacterCreationFrame extends JInternalFrame {
                 break;
                 default:
                     resetRaceModLabels();
-                    resetCheckBoxes();
+                    disableCheckBoxesForHalfElf();
                     break;
         }
 
@@ -370,21 +370,20 @@ class CharacterCreationFrame extends JInternalFrame {
         lblAbsChaRaceMod.setText("0");
     }
 
-    private void resetCheckBoxes(){
-        chkStrRaceMod.setEnabled(false);
-        chkDexRaceMod.setEnabled(false);
-        chkConRaceMod.setEnabled(false);
-        chkIntRaceMod.setEnabled(false);
-        chkWisRaceMod.setEnabled(false);
-
-        chkStrRaceMod.setSelected(false);
-        chkDexRaceMod.setSelected(false);
-        chkConRaceMod.setSelected(false);
-        chkIntRaceMod.setSelected(false);
-        chkWisRaceMod.setSelected(false);
+    private void resetCheckBox(JCheckBox chkBox){
+        chkBox.setEnabled(false);
+        chkBox.setSelected(false);
     }
 
-    private void enableCheckBoxes(){
+    private void disableCheckBoxesForHalfElf(){
+        resetCheckBox(chkStrRaceMod);
+        resetCheckBox(chkDexRaceMod);
+        resetCheckBox(chkConRaceMod);
+        resetCheckBox(chkIntRaceMod);
+        resetCheckBox(chkWisRaceMod);
+    }
+
+    private void enableCheckBoxesForHalfElf(){
         chkStrRaceMod.setEnabled(true);
         chkDexRaceMod.setEnabled(true);
         chkConRaceMod.setEnabled(true);
@@ -392,9 +391,9 @@ class CharacterCreationFrame extends JInternalFrame {
         chkWisRaceMod.setEnabled(true);
     }
 
-    private void handleCheckBoxes(JCheckBox box){
+    private void handleCheckBoxesForHalfElf(JCheckBox box){
         if (box.isSelected()){
-            halfElfMod--;
+            halfElfModTotal--;
             if (box == chkStrRaceMod){
                 lblAbsStrRaceMod.setText("1");
             }
@@ -412,7 +411,7 @@ class CharacterCreationFrame extends JInternalFrame {
             }
         }
         else {
-            halfElfMod++;
+            halfElfModTotal++;
             if (box == chkStrRaceMod){
                 lblAbsStrRaceMod.setText("0");
             }
@@ -430,7 +429,7 @@ class CharacterCreationFrame extends JInternalFrame {
             }
         }
 
-        if (halfElfMod < 0){
+        if (halfElfModTotal < 0){
             box.setSelected(false);
         }
 
@@ -438,75 +437,54 @@ class CharacterCreationFrame extends JInternalFrame {
     }
 
     private void updateStats(){
-        lblAbsStr.setText(Integer.toString(str + Integer.parseInt(lblAbsStrRaceMod.getText())));
-        lblAbsDex.setText(Integer.toString(dex + Integer.parseInt(lblAbsDexRaceMod.getText())));
-        lblAbsCon.setText(Integer.toString(con + Integer.parseInt(lblAbsConRaceMod.getText())));
-        lblAbsInt.setText(Integer.toString(intel + Integer.parseInt(lblAbsIntRaceMod.getText())));
-        lblAbsWis.setText(Integer.toString(wis + Integer.parseInt(lblAbsWisRaceMod.getText())));
-        lblAbsCha.setText(Integer.toString(cha + Integer.parseInt(lblAbsChaRaceMod.getText())));
+        updateAbsLabelInfo(lblAbsStr, str, lblAbsStrRaceMod, lblAbsStrMod);
+        updateAbsLabelInfo(lblAbsDex, dex, lblAbsDexRaceMod, lblAbsDexMod);
+        updateAbsLabelInfo(lblAbsCon, con, lblAbsConRaceMod, lblAbsConMod);
+        updateAbsLabelInfo(lblAbsInt, intel, lblAbsIntRaceMod, lblAbsIntMod);
+        updateAbsLabelInfo(lblAbsWis, wis, lblAbsWisRaceMod, lblAbsWisMod);
+        updateAbsLabelInfo(lblAbsCha, cha, lblAbsChaRaceMod, lblAbsChaMod);
+    }
 
-        lblAbsStrMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsStr.getText()) - 10.0d) / 2.0d)));
-        lblAbsDexMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsDex.getText()) - 10.0d) / 2.0d)));
-        lblAbsConMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsCon.getText()) - 10.0d) / 2.0d)));
-        lblAbsIntMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsInt.getText()) - 10.0d) / 2.0d)));
-        lblAbsWisMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsWis.getText()) - 10.0d) / 2.0d)));
-        lblAbsChaMod.setText(Integer.toString((int)Math.floor((Double.parseDouble(lblAbsCha.getText()) - 10.0d) / 2.0d)));
+    private void updateAbsLabelInfo(JLabel absLabel, int abs, JLabel absRaceModLabel, JLabel absModLabel){
+        absLabel.setText(Integer.toString(abs + Integer.parseInt(absRaceModLabel.getText())));
+        absModLabel.setText(Integer.toString((int)Math.floor((Double.parseDouble(absLabel.getText()) - 10.0d) / 2.0d)));
     }
 
     private void rollStats(){
         if (cboRollType.getSelectedItem().equals("3d6")){
-            str = RandomNumberGenerator.NumberBetween(3, 18);
-            dex = RandomNumberGenerator.NumberBetween(3, 18);
-            con = RandomNumberGenerator.NumberBetween(3, 18);
-            intel = RandomNumberGenerator.NumberBetween(3, 18);
-            wis = RandomNumberGenerator.NumberBetween(3, 18);
-            cha = RandomNumberGenerator.NumberBetween(3, 18);
+            assignRolls(3, false);
         }
         else if (cboRollType.getSelectedItem().equals("2d6+6")){
-            str = RandomNumberGenerator.NumberBetween(2, 12) + 6;
-            dex = RandomNumberGenerator.NumberBetween(2, 12) + 6;
-            con = RandomNumberGenerator.NumberBetween(2, 12) + 6;
-            intel = RandomNumberGenerator.NumberBetween(2, 12) + 6;
-            wis = RandomNumberGenerator.NumberBetween(2, 12) + 6;
-            cha = RandomNumberGenerator.NumberBetween(2, 12) + 6;
+            assignRolls(2, true);
         }
         else if (cboRollType.getSelectedItem().equals("4d6 drop lowest 1")){
-            List<List<Integer>> rollList = new ArrayList<>();
-
-            for (int i = 0; i < 6; i++){
-                rollList.add(new ArrayList<>());
-                for (int j = 0; j < 4; j++){
-                    rollList.get(i).add(RandomNumberGenerator.NumberBetween(1, 6));
-                }
-            }
-
-            for (List<Integer> innerList : rollList){
-                innerList.sort(Collections.reverseOrder());
-            }
-
-            assignRolls(rollList);
+            assignRolls(4, false);
         }
         else if (cboRollType.getSelectedItem().equals("5d6 drop lowest 2")){
-            List<List<Integer>> rollList = new ArrayList<>();
-
-            for (int i = 0; i < 6; i++){
-                rollList.add(new ArrayList<>());
-                for (int j = 0; j < 5; j++){
-                    rollList.get(i).add(RandomNumberGenerator.NumberBetween(1, 6));
-                }
-            }
-
-            for (List<Integer> innerList : rollList){
-                innerList.sort(Collections.reverseOrder());
-            }
-
-            assignRolls(rollList);
+            assignRolls(5, false);
         }
 
         updateStats();
     }
 
-    private void assignRolls(List<List<Integer>> rollList){
+    private void assignRolls(int numberOfDiceRolled, boolean rollingTwoDice){
+        List<List<Integer>> rollList = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++){
+            rollList.add(new ArrayList<>());
+            for (int j = 0; j < numberOfDiceRolled; j++){
+                rollList.get(i).add(RandomNumberGenerator.NumberBetween(1, 6));
+            }
+
+            if (rollingTwoDice){
+                rollList.get(i).add(6);
+            }
+        }
+
+        for (List<Integer> innerList : rollList){
+            innerList.sort(Collections.reverseOrder());
+        }
+
         str = rollList.get(0).get(0) + rollList.get(0).get(1) + rollList.get(0).get(2);
         dex = rollList.get(1).get(0) + rollList.get(1).get(1) + rollList.get(1).get(2);
         con = rollList.get(2).get(0) + rollList.get(2).get(1) + rollList.get(2).get(2);
