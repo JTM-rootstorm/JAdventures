@@ -56,6 +56,8 @@ class CharacterCreationFrame extends JInternalFrame {
         initCboBoxes();
         initButtons();
         initChkBoxes();
+        updateRaceMods((String)cboRace.getSelectedItem());
+        updateStats();
 
         add(mainPanel);
         setVisible(true);
@@ -351,6 +353,8 @@ class CharacterCreationFrame extends JInternalFrame {
                     resetCheckBoxes();
                     break;
         }
+
+        updateStats();
     }
 
     private void resetRaceModLabels(){
