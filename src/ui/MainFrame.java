@@ -66,7 +66,8 @@ public class MainFrame extends JFrame{
         fileMenu.add(createMenuItem("New", KeyEvent.VK_N, "new",
                 actionEvent -> {
                     if (gameFrame == null){
-                        createGameUI();
+                        //createGameUI();
+                        createCharacterCreationWindow();
                     }
                     else{
                         if(!gameFrame.isVisible()){
@@ -152,5 +153,17 @@ public class MainFrame extends JFrame{
         desktopPane.add(questFrame);
 
         World.sendObserverNotification("plr_quest");
+    }
+
+    private void createCharacterCreationWindow(){
+        CharacterCreationFrame characterCreationFrame = new CharacterCreationFrame();
+        characterCreationFrame.show();
+        desktopPane.add(characterCreationFrame);
+
+        try {
+            characterCreationFrame.setSelected(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
     }
 }
