@@ -44,7 +44,7 @@ class CharacterCreationFrame extends JInternalFrame {
         super("Character Creation", false, true, false, true);
         setSize(572, 660);
         setResizable(false);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         mainPanel = new JPanel();
         mainPanel.setOpaque(true);
@@ -245,6 +245,10 @@ class CharacterCreationFrame extends JInternalFrame {
         JButton btnDone = new JButton("Done");
         btnDone.setLocation(233, 553);
         btnDone.setSize(126, 62);
+        btnDone.addActionListener(actionEvent -> {
+            MainFrame.createGameUI();
+            dispose();
+        });
         mainPanel.add(btnDone);
     }
 

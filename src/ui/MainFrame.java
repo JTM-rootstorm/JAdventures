@@ -34,7 +34,7 @@ public class MainFrame extends JFrame{
     private static QuestFrame questFrame = null;
 
     private JMenuBar menuBar = new JMenuBar();
-    private JDesktopPane desktopPane = new JDesktopPane();
+    private static JDesktopPane desktopPane = new JDesktopPane();
     private MainFrame thisFrame = this;
 
 
@@ -127,7 +127,7 @@ public class MainFrame extends JFrame{
         return menuItem;
     }
 
-    private void createGameUI(){
+    static void createGameUI(){
         gameFrame = new GameFrame();
         gameFrame.show();
         desktopPane.add(gameFrame);

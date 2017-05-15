@@ -152,4 +152,8 @@ public class World {
 
         return null;
     }
+
+    public static void setPlayer(Player player){
+        _player = player;
+    }
 }
