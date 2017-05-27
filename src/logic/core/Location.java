@@ -53,7 +53,7 @@ public class Location {
         return World.ItemByID(itemRequiredToEnter);
     }
 
-    public Quest getQuestAvailableHere() {
+    Quest getQuestAvailableHere() {
         return World.QuestByID(questAvailableHere);
     }
 

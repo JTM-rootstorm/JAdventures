@@ -108,7 +108,7 @@ public class QuestLogic {
                 + quest.getRewardItem().getName() + "\n\n");
 
         World.getPlayer().addExperiencePoints(quest.getRewardExperiencePoints());
-        World.getPlayer().setGold(World.getPlayer().getGold() + quest.getRewardGold());
+        World.getPlayer().addGold(quest.getRewardGold());
 
         World.getPlayer().addItemToInventory(quest.getRewardItem());
 

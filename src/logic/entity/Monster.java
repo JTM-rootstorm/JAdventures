@@ -34,9 +34,9 @@ public class Monster extends Entity {
 
     @Expose private List<LootItem> lootTable;
 
-    Monster(int id, String name, int maxDamage, int rewardExperiencePoints,
-            int rewardGold, int currentHitPoints, int maxHitPoints){
-        super(currentHitPoints, maxHitPoints);
+    public Monster(int id, String name, int maxDamage, int rewardExperiencePoints,
+            int rewardGold, int currentHitPoints, int maxHitPoints, List<Integer> stats){
+        super(currentHitPoints, maxHitPoints, stats);
         ID = id;
         this.name = name;
         this.maxDamage = maxDamage;
@@ -54,19 +54,19 @@ public class Monster extends Entity {
         return name;
     }
 
-    int getMaxDamage(){
+    public int getMaxDamage(){
         return maxDamage;
     }
 
-    int getRewardExperiencePoints(){
+    public int getRewardExperiencePoints(){
         return rewardExperiencePoints;
     }
 
-    int getRewardGold(){
+    public int getRewardGold(){
         return rewardGold;
     }
 
-    List<LootItem> getLootTable(){
+    public List<LootItem> getLootTable(){
         return lootTable;
     }
 }

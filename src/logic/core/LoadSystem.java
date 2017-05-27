@@ -83,30 +83,9 @@ class LoadSystem extends FileSystemInit {
     }
 
     static List<Item> loadItemList() throws UnsupportedEncodingException {
-        List<Item> itemList = new ArrayList<>();
-        File saveFile = new File(getResourcePath("/items/"));
-
-        try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
-            paths.forEach(filePath -> {
-                if(Files.isRegularFile(filePath)){
-                    try(FileReader saveFileReader = new FileReader(filePath.toString())) {
-                        if(filePath.toString().contains("_Weapon_")){
-                            itemList.add(gson.fromJson(saveFileReader, Weapon.class));
-                        }
-                        else if(filePath.toString().contains("_Potion")){
-                            itemList.add(gson.fromJson(saveFileReader, HealingPotion.class));
-                        }
-                        else{
-                            itemList.add(gson.fromJson(saveFileReader, Item.class));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Item> itemList = load("/items/general/", Item.class);
+        itemList.addAll(load("/items/weapons/", Weapon.class));
+        itemList.addAll(load("/items/potions/", HealingPotion.class));
 
         return itemList.stream()
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());

@@ -18,6 +18,7 @@
 
 package ui;
 
+import logic.core.LocationLogic;
 import logic.core.World;
 import ui.components.GameButton;
 import ui.components.GameCboBox;
@@ -188,7 +189,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnNorth = new GameButton("North");
         btnNorth.setLocation(316, 433);
         btnNorth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnNorth.addActionListener(e -> World.getPlayer().moveNorth());
+        btnNorth.addActionListener(e -> LocationLogic.moveNorth());
         btnNorth.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToNorth() == null) {
@@ -203,7 +204,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnEast = new GameButton("East");
         btnEast.setLocation(396, 457);
         btnEast.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnEast.addActionListener(e -> World.getPlayer().moveEast());
+        btnEast.addActionListener(e -> LocationLogic.moveEast());
         btnEast.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToEast() == null) {
@@ -218,7 +219,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnSouth = new GameButton("South");
         btnSouth.setLocation(316, 487);
         btnSouth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnSouth.addActionListener(e -> World.getPlayer().moveSouth());
+        btnSouth.addActionListener(e -> LocationLogic.moveSouth());
         btnSouth.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToSouth() == null) {
@@ -233,7 +234,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnWest = new GameButton("West");
         btnWest.setLocation(235, 457);
         btnWest.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnWest.addActionListener(e -> World.getPlayer().moveWest());
+        btnWest.addActionListener(e -> LocationLogic.moveWest());
         btnWest.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToWest() == null) {

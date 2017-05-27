@@ -19,14 +19,19 @@
 package logic.entity;
 
 import com.google.gson.annotations.Expose;
+import logic.Enums.StatArray;
+
+import java.util.List;
 
 public class Entity{
     @Expose private int currentHitPoints;
     @Expose private int maxHitPoints;
+    @Expose private List<Integer> statArray;
 
-    Entity(int currentHitPoints, int maxHitPoints){
+    Entity(int currentHitPoints, int maxHitPoints, List<Integer> stats){
         this.currentHitPoints = currentHitPoints;
         this.maxHitPoints = maxHitPoints;
+        statArray = stats;
     }
 
     public int getCurrentHitPoints(){
@@ -37,11 +42,19 @@ public class Entity{
         currentHitPoints = hitPoints;
     }
 
-    int getMaxHitPoints(){
+    public int getMaxHitPoints(){
         return maxHitPoints;
     }
 
     public void setMaxHitPoints(int hitPoints){
         maxHitPoints = hitPoints;
+    }
+
+    public Integer getAbilityScore(StatArray stat){
+        return statArray.get(stat.getValue());
+    }
+
+    public List<Integer> getStatArray(){
+        return statArray;
     }
 }

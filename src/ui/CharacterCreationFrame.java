@@ -18,7 +18,7 @@
 
 package ui;
 
-import logic.core.RandomNumberGenerator;
+import logic.core.DiceRoller;
 import logic.core.World;
 import logic.entity.Player;
 
@@ -26,11 +26,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 class CharacterCreationFrame extends JInternalFrame {
-    private JLabel lblAbsStr, lblAbsDex, lblAbsCon, lblAbsInt, lblAbsWis, lblAbsCha;
+    private JLabel lblAbsStr, lblAbsDex, lblAbsCon, lblAbsInt, lblAbsWis, lblAbsCha, lblTotalAbsRoll;
     private JLabel lblAbsStrMod, lblAbsDexMod, lblAbsConMod, lblAbsIntMod, lblAbsWisMod, lblAbsChaMod;
     private JLabel lblAbsStrRaceMod, lblAbsDexRaceMod, lblAbsConRaceMod, lblAbsIntRaceMod, lblAbsWisRaceMod, lblAbsChaRaceMod;
 
@@ -157,6 +156,11 @@ class CharacterCreationFrame extends JInternalFrame {
         lblAbsCha.setSize(emptyDim);
         mainPanel.add(lblAbsCha);
 
+        lblTotalAbsRoll = new JLabel("0", JLabel.CENTER);
+        lblTotalAbsRoll.setLocation(326, 342);
+        lblTotalAbsRoll.setSize(emptyDim);
+        mainPanel.add(lblTotalAbsRoll);
+
         lblAbsStrMod = new JLabel("0", JLabel.CENTER);
         lblAbsStrMod.setLocation(442, 102);
         lblAbsStrMod.setSize(emptyDim);
@@ -234,8 +238,8 @@ class CharacterCreationFrame extends JInternalFrame {
         DefaultComboBoxModel<String> rollModel = new DefaultComboBoxModel<>(rollTypes);
         cboRollType = new JComboBox<>();
         cboRollType.setModel(rollModel);
-        cboRollType.setLocation(207, 498);
-        cboRollType.setSize(108, 28);
+        cboRollType.setLocation(207, 502);
+        cboRollType.setSize(158, 28);
         mainPanel.add(cboRollType);
     }
 
@@ -447,6 +451,7 @@ class CharacterCreationFrame extends JInternalFrame {
         updateAbsLabelInfo(lblAbsInt, intel, lblAbsIntRaceMod, lblAbsIntMod);
         updateAbsLabelInfo(lblAbsWis, wis, lblAbsWisRaceMod, lblAbsWisMod);
         updateAbsLabelInfo(lblAbsCha, cha, lblAbsChaRaceMod, lblAbsChaMod);
+        updateTotalAbsValueLabel();
     }
 
     private void updateAbsLabelInfo(JLabel absLabel, int abs, JLabel absRaceModLabel, JLabel absModLabel){
@@ -454,47 +459,38 @@ class CharacterCreationFrame extends JInternalFrame {
         absModLabel.setText(Integer.toString((int)Math.floor((Double.parseDouble(absLabel.getText()) - 10.0d) / 2.0d)));
     }
 
+    private void updateTotalAbsValueLabel(){
+        int value = str + Integer.parseInt(lblAbsStrRaceMod.getText()) + dex + Integer.parseInt(lblAbsDexRaceMod.getText())
+                + con + Integer.parseInt(lblAbsConRaceMod.getText()) + intel + Integer.parseInt(lblAbsIntRaceMod.getText())
+                + wis + Integer.parseInt(lblAbsWisRaceMod.getText()) + cha + Integer.parseInt(lblAbsChaRaceMod.getText());
+
+        lblTotalAbsRoll.setText(Integer.toString(value));
+    }
+
     private void rollStats(){
         if (cboRollType.getSelectedItem().equals("3d6")){
-            assignRolls(3, false);
+            assignRolls(3);
         }
         else if (cboRollType.getSelectedItem().equals("2d6+6")){
-            assignRolls(2, true);
+            assignRolls(2);
         }
         else if (cboRollType.getSelectedItem().equals("4d6 drop lowest 1")){
-            assignRolls(4, false);
+            assignRolls(4);
         }
         else if (cboRollType.getSelectedItem().equals("5d6 drop lowest 2")){
-            assignRolls(5, false);
+            assignRolls(5);
         }
 
         updateStats();
     }
 
-    private void assignRolls(int numberOfDiceRolled, boolean rollingTwoDice){
-        List<List<Integer>> rollList = new ArrayList<>();
-
-        for (int i = 0; i < 6; i++){
-            rollList.add(new ArrayList<>());
-            for (int j = 0; j < numberOfDiceRolled; j++){
-                rollList.get(i).add(RandomNumberGenerator.NumberBetween(1, 6));
-            }
-
-            if (rollingTwoDice){
-                rollList.get(i).add(6);
-            }
-        }
-
-        for (List<Integer> innerList : rollList){
-            innerList.sort(Collections.reverseOrder());
-        }
-
-        str = rollList.get(0).get(0) + rollList.get(0).get(1) + rollList.get(0).get(2);
-        dex = rollList.get(1).get(0) + rollList.get(1).get(1) + rollList.get(1).get(2);
-        con = rollList.get(2).get(0) + rollList.get(2).get(1) + rollList.get(2).get(2);
-        intel = rollList.get(3).get(0) + rollList.get(3).get(1) + rollList.get(3).get(2);
-        wis = rollList.get(4).get(0) + rollList.get(4).get(1) + rollList.get(4).get(2);
-        cha = rollList.get(5).get(0) + rollList.get(5).get(1) + rollList.get(5).get(2);
+    private void assignRolls(int numberOfDiceRolled){
+        str = DiceRoller.rollAbilityScore(numberOfDiceRolled);
+        dex = DiceRoller.rollAbilityScore(numberOfDiceRolled);
+        con = DiceRoller.rollAbilityScore(numberOfDiceRolled);
+        intel = DiceRoller.rollAbilityScore(numberOfDiceRolled);
+        wis = DiceRoller.rollAbilityScore(numberOfDiceRolled);
+        cha = DiceRoller.rollAbilityScore(numberOfDiceRolled);
     }
 
     private void finalizeStats(){

@@ -18,5 +18,6 @@
       }
     ],
   "currentHitPoints":3,
-  "maxHitPoints":3
+  "maxHitPoints":3,
+  "statArray": [10, 10, 10, 10, 10, 10]
 }
