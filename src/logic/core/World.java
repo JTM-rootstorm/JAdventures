@@ -54,7 +54,7 @@ public class World {
         quests = LoadSystem.loadQuests();
         locations = LoadSystem.loadLocations();
 
-        _player = LoadSystem.loadPlayer();
+        //_player = LoadSystem.loadPlayer();
     }
 
     public static void finishInit(){
@@ -121,6 +121,10 @@ public class World {
         return _player;
     }
 
+    public static void setPlayer(Player player){
+        _player = player;
+    }
+
     public static Item ItemByID(Integer id) {
         if(id != null){
             return items.get(id);
@@ -151,9 +155,5 @@ public class World {
         }
 
         return null;
-    }
-
-    public static void setPlayer(Player player){
-        _player = player;
     }
 }

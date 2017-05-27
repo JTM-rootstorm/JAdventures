@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,48 +61,24 @@ class LoadSystem extends FileSystemInit {
                 }
             }
         }
-        return new Player(10, 10, 20, 0, 1);
+        return createDefaultPlayerOnLoadFail();
+    }
+
+    private static Player createDefaultPlayerOnLoadFail(){
+        List<Integer> tempStats = new ArrayList<>();
+        tempStats.addAll(Arrays.asList(10, 10, 10, 10, 10, 10));
+        return new Player(10, 10, tempStats);
     }
 
     static List<Location> loadLocations() throws UnsupportedEncodingException {
-        List<Location> locationList = new ArrayList<>();
-        File saveFile = new File(getResourcePath("/locations/"));
-
-        try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
-            paths.forEach(filePath -> {
-                if(Files.isRegularFile(filePath)){
-                    try(FileReader saveFileReader = new FileReader(filePath.toFile())) {
-                        locationList.add(gson.fromJson(saveFileReader, Location.class));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Location> locationList = load("/locations/", Location.class);
 
         return locationList.stream()
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
     static List<Monster> loadMonsters() throws UnsupportedEncodingException {
-        List<Monster> monsterList = new ArrayList<>();
-        File saveFile = new File(getResourcePath("/monsters/"));
-
-        try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
-            paths.forEach(filePath -> {
-                if(Files.isRegularFile(filePath)){
-                    try(FileReader saveFileReader = new FileReader(filePath.toString())) {
-                        monsterList.add(gson.fromJson(saveFileReader, Monster.class));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Monster> monsterList = load("/monsters/", Monster.class);
 
         return monsterList.stream()
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
@@ -138,14 +115,22 @@ class LoadSystem extends FileSystemInit {
     }
 
     static List<Quest> loadQuests() throws UnsupportedEncodingException {
-        List<Quest> questList = new ArrayList<>();
-        File saveFile = new File(getResourcePath("/quests/"));
+        List<Quest> questList = load("/quests/", Quest.class);
+
+        return questList.stream()
+                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
+    }
+
+    private static <T> List<T> load(String resourcePath, Class<T> objectClassType) throws UnsupportedEncodingException{
+        File saveFile = new File(getResourcePath(resourcePath));
+
+        List<T> objectList = new ArrayList<>();
 
         try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
             paths.forEach(filePath -> {
                 if(Files.isRegularFile(filePath)){
-                    try(FileReader saveFileReader = new FileReader(filePath.toString())) {
-                        questList.add(gson.fromJson(saveFileReader, Quest.class));
+                    try(FileReader saveFileReader = new FileReader(filePath.toString())){
+                        objectList.add(gson.fromJson(saveFileReader, objectClassType));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -155,7 +140,6 @@ class LoadSystem extends FileSystemInit {
             e.printStackTrace();
         }
 
-        return questList.stream()
-                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
+        return objectList;
     }
 }

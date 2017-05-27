@@ -19,10 +19,13 @@
 package ui;
 
 import logic.core.RandomNumberGenerator;
+import logic.core.World;
+import logic.entity.Player;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +42,7 @@ class CharacterCreationFrame extends JInternalFrame {
 
     private int halfElfModTotal = 2;
     private int str, dex, con, intel, wis, cha;
+    private List<Integer> finalStatArray = new ArrayList<>();
 
     CharacterCreationFrame(){
         super("Character Creation", false, true, false, true);
@@ -246,8 +250,8 @@ class CharacterCreationFrame extends JInternalFrame {
         btnDone.setLocation(233, 553);
         btnDone.setSize(126, 62);
         btnDone.addActionListener(actionEvent -> {
-            MainFrame.createGameUI();
-            dispose();
+            finalizeStats();
+            passPlayerObjectAndStartGame();
         });
         mainPanel.add(btnDone);
     }
@@ -491,5 +495,22 @@ class CharacterCreationFrame extends JInternalFrame {
         intel = rollList.get(3).get(0) + rollList.get(3).get(1) + rollList.get(3).get(2);
         wis = rollList.get(4).get(0) + rollList.get(4).get(1) + rollList.get(4).get(2);
         cha = rollList.get(5).get(0) + rollList.get(5).get(1) + rollList.get(5).get(2);
+    }
+
+    private void finalizeStats(){
+        str += Integer.parseInt(lblAbsStrRaceMod.getText());
+        dex += Integer.parseInt(lblAbsDexRaceMod.getText());
+        con += Integer.parseInt(lblAbsConRaceMod.getText());
+        intel += Integer.parseInt(lblAbsIntRaceMod.getText());
+        wis += Integer.parseInt(lblAbsWisRaceMod.getText());
+        cha += Integer.parseInt(lblAbsChaRaceMod.getText());
+
+        finalStatArray.addAll(Arrays.asList(str, dex, con, intel, wis, cha));
+    }
+
+    private void passPlayerObjectAndStartGame(){
+        World.setPlayer(new Player(10, 10, finalStatArray));
+        MainFrame.createGameUI();
+        dispose();
     }
 }

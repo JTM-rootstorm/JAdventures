@@ -19,6 +19,7 @@
 package logic.entity;
 
 import com.google.gson.annotations.Expose;
+import logic.Enums.StatArray;
 import logic.core.Location;
 import logic.core.RandomNumberGenerator;
 import logic.core.World;
@@ -42,14 +43,16 @@ public class Player extends Entity {
     @Expose private List<PlayerQuest> quests;
 
     @Expose private Integer currentLocation;
+    @Expose private List<Integer> statArray;
 
     private Weapon currentWeapon = null;
 
-    public Player(int currentHitPoints, int maxHitPoints, int gold, int expPoints, int level) {
+    public Player(int currentHitPoints, int maxHitPoints, List<Integer> stats){
         super(currentHitPoints, maxHitPoints);
-        setGold(gold);
-        setExpPoints(expPoints);
-        setLevel(level);
+        statArray = stats;
+        setGold(0);
+        setExpPoints(0);
+        setLevel(1);
         inventory = new ArrayList<>();
         quests = new ArrayList<>();
     }
@@ -107,6 +110,10 @@ public class Player extends Entity {
         this.currentLocation = currentLocation.getID();
         World.sendMessengerObserverNotification("location",
                 "\n\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
+    }
+
+    public Integer getAbilityScore(StatArray stat){
+        return statArray.get(stat.getValue());
     }
 
     public Weapon getCurrentWeapon() {
