@@ -18,6 +18,7 @@
 
 package ui;
 
+import logic.core.CombatLogic;
 import logic.core.LocationLogic;
 import logic.core.World;
 import ui.components.GameButton;
@@ -157,7 +158,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnUseWeapon = new GameButton("Use");
         btnUseWeapon.setLocation(443, 559);
         btnUseWeapon.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUseWeapon.addActionListener(e -> World.getPlayer().useWeapon(cboWeapons.getSelectedItem()));
+        btnUseWeapon.addActionListener(e -> CombatLogic.useWeapon(cboWeapons.getSelectedItem()));
         btnUseWeapon.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null
@@ -173,7 +174,7 @@ class GameFrame extends JInternalFrame {
         GameButton btnUsePotion = new GameButton("Use");
         btnUsePotion.setLocation(443, 593);
         btnUsePotion.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUsePotion.addActionListener(e -> World.getPlayer().drinkPotion(cboPotions.getSelectedItem()));
+        btnUsePotion.addActionListener(e -> CombatLogic.drinkPotion(cboPotions.getSelectedItem()));
         btnUsePotion.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null

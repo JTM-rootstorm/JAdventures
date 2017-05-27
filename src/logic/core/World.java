@@ -61,7 +61,7 @@ public class World {
         sendObserverNotification("plr_curhp");
         sendObserverNotification("plr_lvl");
 
-        _player.moveHome();
+        LocationLogic.moveToPlayerHome();
         _player.addItemToInventory(World.ItemByID(0));
     }
 
@@ -75,11 +75,11 @@ public class World {
         }
     }
 
-    public static Monster getCurrentMonster() {
+    static Monster getCurrentMonster() {
         return _currentMonster;
     }
 
-    public static void setCurrentMonster(Monster monster) {
+    static void setCurrentMonster(Monster monster) {
         _currentMonster = monster;
     }
 
@@ -135,7 +135,7 @@ public class World {
         return null;
     }
 
-    public static Monster MonsterByID(Integer id) {
+    static Monster MonsterByID(Integer id) {
         if(id != null){
             return monsters.get(id);
         }

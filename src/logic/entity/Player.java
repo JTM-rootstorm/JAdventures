@@ -19,11 +19,12 @@
 package logic.entity;
 
 import com.google.gson.annotations.Expose;
-import logic.core.DiceRoller;
 import logic.core.Location;
-import logic.core.LocationLogic;
 import logic.core.World;
-import logic.item.*;
+import logic.item.HealingPotion;
+import logic.item.InventoryItem;
+import logic.item.Item;
+import logic.item.Weapon;
 import logic.quests.PlayerQuest;
 
 import java.util.ArrayList;
@@ -168,117 +169,5 @@ public class Player extends Entity {
         }
 
         return false;
-    }
-
-    public void useWeapon(Object cboObject) {
-        Weapon weapon;
-
-        if (cboObject instanceof Weapon) {
-            weapon = (Weapon) cboObject;
-        } else {
-            return;
-        }
-
-        int damageToMonster = DiceRoller.rollDice(1, weapon.getMaxDamage(), 0);
-
-        World.getCurrentMonster().setCurrentHitPoints(World.getCurrentMonster().getCurrentHitPoints() - damageToMonster);
-
-        World.sendMessengerObserverNotification("message",
-                "You hit the " + World.getCurrentMonster().getName() + " for " + damageToMonster
-                        + " points.\n");
-
-        if (World.getCurrentMonster().getCurrentHitPoints() <= 0) {
-            World.sendMessengerObserverNotification("message", "\nYou defeated the "
-                    + World.getCurrentMonster().getName() + "\n");
-
-            addExperiencePoints(World.getCurrentMonster().getRewardExperiencePoints());
-            World.sendMessengerObserverNotification("message", "You receive "
-                    + World.getCurrentMonster().getRewardExperiencePoints() + " experience points.\n");
-
-            addGold(World.getCurrentMonster().getRewardGold());
-            World.sendMessengerObserverNotification("message", "You receive "
-                    + World.getCurrentMonster().getRewardGold() + " gold.\n");
-
-            List<InventoryItem> lootedItems = new ArrayList<>();
-
-            for (LootItem lootItem : World.getCurrentMonster().getLootTable()) {
-                if (DiceRoller.rollDice(1, 100, 0) <= lootItem.getDropPercentage()) {
-                    lootedItems.add(new InventoryItem(lootItem.getDetails().getID(), 1));
-                }
-            }
-
-            if (lootedItems.size() == 0) {
-                for (LootItem lootItem : World.getCurrentMonster().getLootTable()) {
-                    if (lootItem.isDefaultItem()) {
-                        lootedItems.add(new InventoryItem(lootItem.getDetails().getID(), 1));
-                    }
-                }
-            }
-
-            for (InventoryItem item : lootedItems) {
-                addItemToInventory(item.getDetails());
-
-                if (item.getQuantity() == 1) {
-                    World.sendMessengerObserverNotification("message", "You loot " + item.getQuantity()
-                            + " " + item.getDetails().getName() + "\n");
-                } else {
-                    World.sendMessengerObserverNotification("message", "You loot " + item.getQuantity()
-                            + " " + item.getDetails().getNamePlural() + "\n");
-                }
-            }
-
-            World.sendMessengerObserverNotification("message", "\n");
-
-            LocationLogic.moveToLocation(getCurrentLocation());
-        } else {
-            monsterAttack();
-        }
-    }
-
-    public void drinkPotion(Object cboObject) {
-        HealingPotion potion;
-
-        if (cboObject instanceof HealingPotion) {
-            potion = (HealingPotion) cboObject;
-        } else {
-            return;
-        }
-
-        setCurrentHitPoints(getCurrentHitPoints() + potion.getAmountToHeal());
-
-        if (getCurrentHitPoints() > getMaxHitPoints()) {
-            setCurrentHitPoints(getMaxHitPoints());
-        }
-
-        for (InventoryItem item : getInventory()) {
-            if (item.getDetails().getID() == potion.getID()) {
-                item.setQuantity(item.getQuantity() - 1);
-                break;
-            }
-        }
-
-        World.sendMessengerObserverNotification("message", "You drink a " + potion.getName() + "\n");
-
-        monsterAttack();
-    }
-
-    private void monsterAttack() {
-        int damageToPlayer = DiceRoller.rollDice(1, World.getCurrentMonster().getMaxDamage(), 0);
-
-        World.sendMessengerObserverNotification("message", "The "
-                + World.getCurrentMonster().getName() + " did " + damageToPlayer + " points of damage.\n");
-
-        setCurrentHitPoints(getCurrentHitPoints() - damageToPlayer);
-
-        if (getCurrentHitPoints() <= 0) {
-            World.sendMessengerObserverNotification("message", "The "
-                    + World.getCurrentMonster().getName() + " killed you.\n");
-
-            moveHome();
-        }
-    }
-
-    public void moveHome() {
-        LocationLogic.moveToLocation(World.LocationByID(0));
     }
 }

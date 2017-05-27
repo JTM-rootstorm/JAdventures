@@ -27,7 +27,7 @@ public class LocationLogic {
 
     }
 
-    public static void moveToLocation(Location newLocation){
+    private static void moveToLocation(Location newLocation){
         if (!World.getPlayer().hasRequiredItemToEnter(newLocation)) {
             World.sendMessengerObserverNotification("message",
                     "\nYou must have a " + newLocation.getItemRequiredToEnter().getName()
@@ -102,5 +102,13 @@ public class LocationLogic {
         if (location != null) {
             moveToLocation(location);
         }
+    }
+
+    static void moveToPlayerHome(){
+        moveToLocation(World.LocationByID(0));
+    }
+
+    static void refreshLocation(){
+        moveToLocation(World.getPlayer().getCurrentLocation());
     }
 }
