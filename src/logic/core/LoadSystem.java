@@ -24,7 +24,7 @@ import logic.entity.Monster;
 import logic.entity.Player;
 import logic.item.HealingPotion;
 import logic.item.Item;
-import logic.item.weapon.Weapon;
+import logic.item.Weapon;
 import logic.quests.Quest;
 
 import java.io.File;
@@ -65,9 +65,7 @@ class LoadSystem extends FileSystemInit {
     }
 
     private static Player createDefaultPlayerOnLoadFail(){
-        List<Integer> tempStats = new ArrayList<>();
-        tempStats.addAll(Arrays.asList(10, 10, 10, 10, 10, 10));
-        return new Player(10, 10, tempStats);
+        return new Player(10, 10, Arrays.asList(10, 10, 10, 10, 10, 10));
     }
 
     static List<Location> loadLocations() throws UnsupportedEncodingException {

@@ -32,9 +32,8 @@ public class MainFrame extends JFrame{
     private static GameFrame gameFrame = null;
     private static InventoryFrame inventoryFrame = null;
     private static QuestFrame questFrame = null;
-
-    private JMenuBar menuBar = new JMenuBar();
     private static JDesktopPane desktopPane = new JDesktopPane();
+    private JMenuBar menuBar = new JMenuBar();
     private MainFrame thisFrame = this;
 
 
@@ -59,6 +58,18 @@ public class MainFrame extends JFrame{
         frame.setResizable(true);
     }
 
+    static void createGameUI(){
+        gameFrame = new GameFrame();
+        gameFrame.show();
+        desktopPane.add(gameFrame);
+
+        try {
+            gameFrame.setSelected(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+    }
+
     private JMenuBar createMenuBar() {
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -66,7 +77,6 @@ public class MainFrame extends JFrame{
         fileMenu.add(createMenuItem("New", KeyEvent.VK_N, "new",
                 actionEvent -> {
                     if (gameFrame == null){
-                        //createGameUI();
                         createCharacterCreationWindow();
                     }
                     else{
@@ -75,6 +85,13 @@ public class MainFrame extends JFrame{
                         }
                     }
                 }));
+
+        fileMenu.add(createMenuItem("Load", KeyEvent.VK_L, "load", actionEvent -> {
+            if (gameFrame == null){
+                World.loadPlayer();
+                createGameUI();
+            }
+        }));
 
         fileMenu.add(createMenuItem("Quit", KeyEvent.VK_Q, "quit",
                 actionEvent -> thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING))));
@@ -125,18 +142,6 @@ public class MainFrame extends JFrame{
         menuItem.addActionListener(actionListener);
 
         return menuItem;
-    }
-
-    static void createGameUI(){
-        gameFrame = new GameFrame();
-        gameFrame.show();
-        desktopPane.add(gameFrame);
-
-        try {
-            gameFrame.setSelected(true);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
     }
 
     private void createInventoryWindow(){

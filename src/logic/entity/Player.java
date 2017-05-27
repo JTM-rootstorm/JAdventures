@@ -23,11 +23,7 @@ import logic.Enums.StatArray;
 import logic.core.Location;
 import logic.core.RandomNumberGenerator;
 import logic.core.World;
-import logic.item.HealingPotion;
-import logic.item.InventoryItem;
-import logic.item.Item;
-import logic.item.LootItem;
-import logic.item.weapon.Weapon;
+import logic.item.*;
 import logic.quests.PlayerQuest;
 import logic.quests.QuestLogic;
 

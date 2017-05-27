@@ -53,8 +53,6 @@ public class World {
         monsters = LoadSystem.loadMonsters();
         quests = LoadSystem.loadQuests();
         locations = LoadSystem.loadLocations();
-
-        //_player = LoadSystem.loadPlayer();
     }
 
     public static void finishInit(){
@@ -123,6 +121,10 @@ public class World {
 
     public static void setPlayer(Player player){
         _player = player;
+    }
+
+    public static void loadPlayer(){
+        _player = LoadSystem.loadPlayer();
     }
 
     public static Item ItemByID(Integer id) {

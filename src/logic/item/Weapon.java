@@ -16,10 +16,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.item.weapon;
+package logic.item;
 
 import com.google.gson.annotations.Expose;
-import logic.item.Item;
 
 public class Weapon extends Item {
     @Expose private int minDamage;
