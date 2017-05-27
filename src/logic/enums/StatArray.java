@@ -16,7 +16,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.Enums;
+package logic.enums;
 
 public enum StatArray {
 

@@ -19,7 +19,7 @@
 package logic.entity;
 
 import com.google.gson.annotations.Expose;
-import logic.Enums.StatArray;
+import logic.enums.StatArray;
 
 import java.util.List;
 
