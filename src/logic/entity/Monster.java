@@ -33,6 +33,7 @@ public class Monster extends Entity {
     @Expose private int rewardExperiencePoints;
     @Expose private int rewardGold;
     @Expose private int toHitModifier;
+    @Expose private int armorClass;
     @Expose private List<Integer> dicePool;
 
     @Expose private List<LootItem> lootTable;
@@ -87,5 +88,9 @@ public class Monster extends Entity {
 
     public int getToHitModifier() {
         return toHitModifier;
+    }
+
+    public int getArmorClass() {
+        return armorClass;
     }
 }

@@ -18,6 +18,7 @@
 
 package main;
 
+import logic.core.file.SQLiteJDBCDriverConnection;
 import ui.MainFrame;
 
 import static javax.swing.SwingUtilities.invokeLater;
@@ -25,5 +26,9 @@ import static javax.swing.SwingUtilities.invokeLater;
 public class GameRunner {
     public static void main(String[] args){
         invokeLater(MainFrame::createAndShowGUI);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            SQLiteJDBCDriverConnection.disconnect();
+            System.out.println("SQL Disconnected");
+        }));
     }
 }

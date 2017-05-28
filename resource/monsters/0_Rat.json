@@ -4,6 +4,7 @@
   "rewardExperiencePoints":10,
   "rewardGold":10,
   "toHitModifier": 0,
+  "armorClass": 10,
   "dicePool": [1, 4, -1, 1, 1, 0],
   "lootTable":
     [

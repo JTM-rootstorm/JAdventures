@@ -19,6 +19,7 @@
 package logic.core;
 
 import logic.core.file.LoadSystem;
+import logic.core.file.SQLiteJDBCDriverConnection;
 import logic.core.file.SaveSystem;
 import logic.entity.Monster;
 import logic.entity.Player;
@@ -32,10 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private static List<Item> items = new ArrayList<>();
-    private static List<Monster> monsters = new ArrayList<>();
     private static List<Quest> quests = new ArrayList<>();
-    private static List<Location> locations = new ArrayList<>();
 
     private static Player _player;
     private static Monster _currentMonster;
@@ -50,11 +48,9 @@ public class World {
     public static void init() throws UnsupportedEncodingException {
         SaveSystem.init();
         LoadSystem.init();
+        SQLiteJDBCDriverConnection.connect();
 
-        items = LoadSystem.loadItemList();
-        monsters = LoadSystem.loadMonsters();
-        quests = LoadSystem.loadQuests();
-        locations = LoadSystem.loadLocations();
+        //quests = LoadSystem.loadQuests();
     }
 
     public static void finishInit(){
@@ -131,7 +127,7 @@ public class World {
 
     public static Item ItemByID(Integer id) {
         if(id != null){
-            return items.get(id);
+            return LoadSystem.loadItem(id);
         }
 
         return null;
@@ -139,7 +135,7 @@ public class World {
 
     static Monster MonsterByID(Integer id) {
         if(id != null){
-            return monsters.get(id);
+            return LoadSystem.loadMonster(id);
         }
 
         return null;
@@ -147,7 +143,8 @@ public class World {
 
     public static Quest QuestByID(Integer id) {
         if(id != null){
-            return quests.get(id);
+            //return quests.get(id);
+            return LoadSystem.loadQuest(id);
         }
 
         return null;
@@ -155,7 +152,7 @@ public class World {
 
     public static Location LocationByID(Integer id) {
         if(id != null){
-            return locations.get(id);
+            return LoadSystem.loadLocation(id);
         }
 
         return null;

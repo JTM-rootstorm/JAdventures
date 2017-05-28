@@ -31,17 +31,10 @@ import logic.quests.Quest;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+@SuppressWarnings("ConstantConditions")
 public class LoadSystem extends FileSystemInit {
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -69,55 +62,28 @@ public class LoadSystem extends FileSystemInit {
         return new Player(10, 10, Arrays.asList(10, 10, 10, 10, 10, 10));
     }
 
-    public static List<Location> loadLocations() throws UnsupportedEncodingException {
-        List<Location> locationList = load("/locations/", Location.class);
-
-        return locationList.stream()
-                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
+    public static Monster loadMonster(int id){
+        return gson.fromJson(SQLiteJDBCDriverConnection.selectObjectFromDatabase(id, "Monster", false).get(0), Monster.class);
     }
 
-    public static List<Monster> loadMonsters() throws UnsupportedEncodingException {
-        List<Monster> monsterList = load("/monsters/", Monster.class);
-
-        return monsterList.stream()
-                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
+    public static Location loadLocation(int id){
+        return gson.fromJson(SQLiteJDBCDriverConnection.selectObjectFromDatabase(id, "Location", false).get(0), Location.class);
     }
 
-    public static List<Item> loadItemList() throws UnsupportedEncodingException {
-        List<Item> itemList = load("/items/general/", Item.class);
-        itemList.addAll(load("/items/weapons/", Weapon.class));
-        itemList.addAll(load("/items/potions/", HealingPotion.class));
+    public static Item loadItem(int id){
+        List<String> resultList = SQLiteJDBCDriverConnection.selectObjectFromDatabase(id, "Item", true);
 
-        return itemList.stream()
-                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
-    }
-
-    public static List<Quest> loadQuests() throws UnsupportedEncodingException {
-        List<Quest> questList = load("/quests/", Quest.class);
-
-        return questList.stream()
-                .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
-    }
-
-    private static <T> List<T> load(String resourcePath, Class<T> objectClassType) throws UnsupportedEncodingException{
-        File saveFile = new File(getResourcePath(resourcePath));
-
-        List<T> objectList = new ArrayList<>();
-
-        try(Stream<Path> paths = Files.walk(Paths.get(saveFile.toURI()))){
-            paths.forEach(filePath -> {
-                if(Files.isRegularFile(filePath)){
-                    try(FileReader saveFileReader = new FileReader(filePath.toString())){
-                        objectList.add(gson.fromJson(saveFileReader, objectClassType));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(Integer.parseInt(resultList.get(1)) == 1){
+            return gson.fromJson(resultList.get(0), Weapon.class);
+        }
+        else if(Integer.parseInt(resultList.get(1)) == 2){
+            return gson.fromJson(resultList.get(0), HealingPotion.class);
         }
 
-        return objectList;
+        return gson.fromJson(resultList.get(0), Item.class);
+    }
+
+    public static Quest loadQuest(int id){
+        return gson.fromJson(SQLiteJDBCDriverConnection.selectObjectFromDatabase(id, "Quest", false).get(0), Quest.class);
     }
 }
