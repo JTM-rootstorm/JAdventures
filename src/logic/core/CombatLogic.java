@@ -20,6 +20,7 @@ package logic.core;
 
 import logic.core.dice.DiceRoller;
 import logic.entity.Entity;
+import logic.enums.MonsterDice;
 import logic.enums.StatArray;
 import logic.item.HealingPotion;
 import logic.item.InventoryItem;
@@ -101,7 +102,8 @@ public class CombatLogic {
     }
 
     private static void monsterAttack() {
-        int damageToPlayer = DiceRoller.rollDice(1, World.getCurrentMonster().getMaxDamage(), 0);
+        int damageToPlayer = DiceRoller.rollDice(World.getCurrentMonster().getDicePool(MonsterDice.NUM_ATTACK_DICE),
+                World.getCurrentMonster().getDicePool(MonsterDice.ATTACK_DIE_TYPE), World.getCurrentMonster().getDicePool(MonsterDice.ATTACK_DIE_MODIFIER));
 
         World.sendMessengerObserverNotification("message", "The "
                 + World.getCurrentMonster().getName() + " did " + damageToPlayer + " points of damage.\n");

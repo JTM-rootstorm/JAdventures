@@ -69,9 +69,8 @@ public class LocationLogic {
             Monster standardMonster = World.MonsterByID(location.getMonsterLivingHere().getID());
 
             World.setCurrentMonster(new Monster(standardMonster.getID(), standardMonster.getName(),
-                    standardMonster.getMaxDamage(), standardMonster.getRewardExperiencePoints(),
-                    standardMonster.getRewardGold(), standardMonster.getCurrentHitPoints(),
-                    standardMonster.getMaxHitPoints(), standardMonster.getStatArray()));
+                    standardMonster.getRewardExperiencePoints(), standardMonster.getRewardGold(),
+                    standardMonster.getDicePoolList(), standardMonster.getStatArray()));
 
             for (LootItem li : standardMonster.getLootTable()) {
                 World.getCurrentMonster().getLootTable().add(li);

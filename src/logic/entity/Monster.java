@@ -19,6 +19,8 @@
 package logic.entity;
 
 import com.google.gson.annotations.Expose;
+import logic.core.dice.DiceRoller;
+import logic.enums.MonsterDice;
 import logic.item.LootItem;
 
 import java.util.ArrayList;
@@ -28,22 +30,31 @@ public class Monster extends Entity {
     @Expose private int ID;
 
     @Expose private String name;
-    @Expose private int maxDamage;
     @Expose private int rewardExperiencePoints;
     @Expose private int rewardGold;
+    @Expose private int toHitModifier;
+    @Expose private List<Integer> dicePool;
 
     @Expose private List<LootItem> lootTable;
 
-    public Monster(int id, String name, int maxDamage, int rewardExperiencePoints,
-            int rewardGold, int currentHitPoints, int maxHitPoints, List<Integer> stats){
-        super(currentHitPoints, maxHitPoints, stats);
+    public Monster(int id, String name, int rewardExperiencePoints, int rewardGold, List<Integer> dicePool,
+                   List<Integer> stats){
+        super(stats);
         ID = id;
         this.name = name;
-        this.maxDamage = maxDamage;
         this.rewardExperiencePoints = rewardExperiencePoints;
         this.rewardGold = rewardGold;
-
+        this.dicePool = dicePool;
         lootTable = new ArrayList<>();
+
+        rollHealth();
+    }
+
+    private void rollHealth(){
+        setMaxHitPoints(DiceRoller.rollDice(getDicePool(MonsterDice.NUM_HIT_DICE),
+                getDicePool(MonsterDice.HIT_DIE_TYPE), getDicePool(MonsterDice.HIT_DIE_MODIFIER)));
+
+        setCurrentHitPoints(getMaxHitPoints());
     }
 
     public int getID(){
@@ -52,10 +63,6 @@ public class Monster extends Entity {
 
     public String getName() {
         return name;
-    }
-
-    public int getMaxDamage(){
-        return maxDamage;
     }
 
     public int getRewardExperiencePoints(){
@@ -68,5 +75,17 @@ public class Monster extends Entity {
 
     public List<LootItem> getLootTable(){
         return lootTable;
+    }
+
+    public List<Integer> getDicePoolList(){
+        return dicePool;
+    }
+
+    public int getDicePool(MonsterDice dieType) {
+        return dicePool.get(dieType.getValue());
+    }
+
+    public int getToHitModifier() {
+        return toHitModifier;
     }
 }

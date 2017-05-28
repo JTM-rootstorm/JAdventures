@@ -1,9 +1,10 @@
 {
   "ID":1,
   "name":"Snake",
-  "maxDamage":5,
   "rewardExperiencePoints":3,
   "rewardGold":10,
+  "toHitModifier": 0,
+  "dicePool": [1, 4, -1, 1, 1, 0],
   "lootTable":
     [
       {
@@ -17,7 +18,5 @@
         "isDefaultItem":true
       }
     ],
-  "currentHitPoints":3,
-  "maxHitPoints":3,
   "statArray": [10, 10, 10, 10, 10, 10]
 }

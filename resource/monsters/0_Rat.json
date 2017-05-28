@@ -1,9 +1,10 @@
 {
   "ID":0,
   "name":"Rat",
-  "maxDamage":5,
-  "rewardExperiencePoints":3,
+  "rewardExperiencePoints":10,
   "rewardGold":10,
+  "toHitModifier": 0,
+  "dicePool": [1, 4, -1, 1, 1, 0],
   "lootTable":
     [
       {
@@ -17,7 +18,5 @@
         "isDefaultItem":true
       }
     ],
-  "currentHitPoints":3,
-  "maxHitPoints":3,
-  "statArray": [10, 10, 10, 10, 10, 10]
+  "statArray": [2, 11, 9, 2, 10, 4]
 }

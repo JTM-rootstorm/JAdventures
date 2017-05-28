@@ -1,9 +1,10 @@
 {
   "ID":2,
   "name":"Giant Spider",
-  "maxDamage":20,
-  "rewardExperiencePoints":5,
+  "rewardExperiencePoints":200,
   "rewardGold":40,
+  "toHitModifier": 5,
+  "dicePool": [4, 10, 4, 1, 8, 3],
   "lootTable":
     [
       {
@@ -17,7 +18,5 @@
         "isDefaultItem":false
       }
     ],
-  "currentHitPoints":10,
-  "maxHitPoints":10,
-  "statArray": [10, 10, 10, 10, 10, 10]
+  "statArray": [14, 16, 12, 2, 11, 4]
 }

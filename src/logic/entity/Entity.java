@@ -34,6 +34,10 @@ public class Entity{
         statArray = stats;
     }
 
+    Entity(List<Integer> stats){
+        statArray = stats;
+    }
+
     public int getCurrentHitPoints(){
         return currentHitPoints;
     }
@@ -46,7 +50,7 @@ public class Entity{
         return maxHitPoints;
     }
 
-    public void setMaxHitPoints(int hitPoints){
+    void setMaxHitPoints(int hitPoints){
         maxHitPoints = hitPoints;
     }
 
