@@ -16,7 +16,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.core;
+package logic.core.file;
 
 import main.GameRunner;
 import org.apache.commons.io.FilenameUtils;
@@ -25,10 +25,10 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-class FileSystemInit {
+public class FileSystemInit {
     static String jarPathOnSystem;
 
-    static void init(){
+    public static void init(){
         try {
             jarPathOnSystem = FilenameUtils.getPath(
                     URLDecoder.decode(GameRunner.class.getProtectionDomain().getCodeSource().getLocation().getPath(),

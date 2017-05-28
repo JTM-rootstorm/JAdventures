@@ -19,6 +19,7 @@
 package logic.core;
 
 import logic.entity.Monster;
+import logic.item.InventoryItem;
 import logic.item.LootItem;
 import logic.quests.QuestLogic;
 
@@ -28,7 +29,7 @@ public class LocationLogic {
     }
 
     private static void moveToLocation(Location newLocation){
-        if (!World.getPlayer().hasRequiredItemToEnter(newLocation)) {
+        if (!hasRequiredItemToEnter(newLocation)) {
             World.sendMessengerObserverNotification("message",
                     "\nYou must have a " + newLocation.getItemRequiredToEnter().getName()
                             + " to enter this location\n");
@@ -36,6 +37,10 @@ public class LocationLogic {
         }
 
         World.getPlayer().setCurrentLocation(newLocation);
+
+        World.sendMessengerObserverNotification("location",
+                "\n\n" + newLocation.getName() + "\n" + newLocation.getDescription());
+
         World.getPlayer().setCurrentHitPoints(World.getPlayer().getMaxHitPoints());
 
         if (newLocation.getQuestAvailableHere() != null) {
@@ -110,5 +115,19 @@ public class LocationLogic {
 
     static void refreshLocation(){
         moveToLocation(World.getPlayer().getCurrentLocation());
+    }
+
+    private static Boolean hasRequiredItemToEnter(Location location) {
+        if (location.getItemRequiredToEnter() == null) {
+            return true;
+        }
+
+        for (InventoryItem item : World.getPlayer().getInventory()) {
+            if (item.getDetails().getID() == location.getItemRequiredToEnter().getID()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,6 +1,8 @@
 {
-  "minDamage":3,
-  "maxDamage":10,
+  "weaponType": "0",
+  "attackStat": "strength",
+  "numAttackDice": 1,
+  "sidesOnDie": 4,
   "ID":5,
   "name":"Club",
   "namePlural":"Clubs"

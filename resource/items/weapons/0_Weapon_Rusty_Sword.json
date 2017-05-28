@@ -1,6 +1,8 @@
 {
-  "minDamage":0,
-  "maxDamage":5,
+  "weaponType": "2",
+  "attackStat": "strength",
+  "numAttackDice": 1,
+  "sidesOnDie": 6,
   "ID":0,
   "name":"Rusty Sword",
   "namePlural":"Rusty Swords"

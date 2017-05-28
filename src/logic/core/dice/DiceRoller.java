@@ -16,7 +16,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.core;
+package logic.core.dice;
 
 import java.util.ArrayList;
 import java.util.Collections;

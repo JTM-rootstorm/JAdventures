@@ -19,22 +19,24 @@
 package logic.item;
 
 import com.google.gson.annotations.Expose;
+import logic.enums.StatArray;
+import logic.enums.WeaponType;
 
 public class Weapon extends Item {
-    @Expose private int minDamage;
-    @Expose private int maxDamage;
+    @SuppressWarnings("unused") @Expose private WeaponType weaponType;
+    @SuppressWarnings("unused") @Expose private StatArray attackStat;
+    @SuppressWarnings("unused") @Expose private int numAttackDice;
+    @SuppressWarnings("unused") @Expose private int sidesOnDie;
 
-    public Weapon(int id, String name, String namePlural, int minDamage, int maxDamage){
-        super(id, name, namePlural);
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
+    public StatArray getAttackStat(){
+        return attackStat;
     }
 
-    public int getMinDamage(){
-        return minDamage;
+    public int getNumAttackDice(){
+        return numAttackDice;
     }
 
-    public int getMaxDamage(){
-        return maxDamage;
+    public int getSidesOnDie(){
+        return sidesOnDie;
     }
 }

@@ -16,10 +16,11 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.core;
+package logic.core.file;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import logic.core.Location;
 import logic.entity.Monster;
 import logic.entity.Player;
 import logic.item.HealingPotion;
@@ -41,14 +42,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class LoadSystem extends FileSystemInit {
+public class LoadSystem extends FileSystemInit {
     private static Gson gson = new GsonBuilder().serializeNulls().create();
 
     private LoadSystem(){
 
     }
 
-    static Player loadPlayer(){
+    public static Player loadPlayer(){
         String saveFilePath = jarPathOnSystem + "/save/";
         File save = new File(saveFilePath);
         if(save.isDirectory()){
@@ -68,21 +69,21 @@ class LoadSystem extends FileSystemInit {
         return new Player(10, 10, Arrays.asList(10, 10, 10, 10, 10, 10));
     }
 
-    static List<Location> loadLocations() throws UnsupportedEncodingException {
+    public static List<Location> loadLocations() throws UnsupportedEncodingException {
         List<Location> locationList = load("/locations/", Location.class);
 
         return locationList.stream()
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Monster> loadMonsters() throws UnsupportedEncodingException {
+    public static List<Monster> loadMonsters() throws UnsupportedEncodingException {
         List<Monster> monsterList = load("/monsters/", Monster.class);
 
         return monsterList.stream()
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Item> loadItemList() throws UnsupportedEncodingException {
+    public static List<Item> loadItemList() throws UnsupportedEncodingException {
         List<Item> itemList = load("/items/general/", Item.class);
         itemList.addAll(load("/items/weapons/", Weapon.class));
         itemList.addAll(load("/items/potions/", HealingPotion.class));
@@ -91,7 +92,7 @@ class LoadSystem extends FileSystemInit {
                 .sorted(Comparator.comparing(o1 -> ((Integer) o1.getID()))).collect(Collectors.toList());
     }
 
-    static List<Quest> loadQuests() throws UnsupportedEncodingException {
+    public static List<Quest> loadQuests() throws UnsupportedEncodingException {
         List<Quest> questList = load("/quests/", Quest.class);
 
         return questList.stream()

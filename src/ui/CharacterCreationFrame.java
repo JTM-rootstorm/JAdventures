@@ -18,8 +18,8 @@
 
 package ui;
 
-import logic.core.DiceRoller;
 import logic.core.World;
+import logic.core.dice.DiceRoller;
 import logic.entity.Player;
 
 import javax.swing.*;

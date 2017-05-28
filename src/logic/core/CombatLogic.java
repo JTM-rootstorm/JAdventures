@@ -18,6 +18,9 @@
 
 package logic.core;
 
+import logic.core.dice.DiceRoller;
+import logic.entity.Entity;
+import logic.enums.StatArray;
 import logic.item.HealingPotion;
 import logic.item.InventoryItem;
 import logic.item.LootItem;
@@ -40,7 +43,8 @@ public class CombatLogic {
             return;
         }
 
-        int damageToMonster = DiceRoller.rollDice(1, weapon.getMaxDamage(), 0);
+        int damageToMonster = DiceRoller.rollDice(weapon.getNumAttackDice(), weapon.getSidesOnDie(),
+                getAttackModifier(weapon.getAttackStat(), World.getPlayer()));
 
         World.getCurrentMonster().setCurrentHitPoints(World.getCurrentMonster().getCurrentHitPoints() - damageToMonster);
 
@@ -121,7 +125,8 @@ public class CombatLogic {
             return;
         }
 
-        World.getPlayer().setCurrentHitPoints(World.getPlayer().getCurrentHitPoints() + potion.getAmountToHeal());
+        World.getPlayer().addHitPoints(DiceRoller.rollDice(potion.getNumberOfHealDice(), potion.getSidesOnDie(),
+                potion.getModifier()));
 
         if (World.getPlayer().getCurrentHitPoints() > World.getPlayer().getMaxHitPoints()) {
             World.getPlayer().setCurrentHitPoints(World.getPlayer().getMaxHitPoints());
@@ -137,5 +142,10 @@ public class CombatLogic {
         World.sendMessengerObserverNotification("message", "You drink a " + potion.getName() + "\n");
 
         monsterAttack();
+    }
+
+    private static int getAttackModifier(StatArray abs, Entity attacker){
+
+        return (int)Math.ceil((attacker.getAbilityScore(abs) - 10) / 2);
     }
 }

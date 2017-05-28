@@ -18,9 +18,16 @@
 
 package logic.enums;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum StatArray {
 
-    STRENGTH(0), DEXTERITY(1), CONSTITUTION(2), INTELLIGENCE(3), WISDOM(4), CHARISMA(5);
+    @SerializedName("strength") STRENGTH(0),
+    @SerializedName("dexterity") DEXTERITY(1),
+    @SerializedName("constitution") CONSTITUTION(2),
+    @SerializedName("intelligence") INTELLIGENCE(3),
+    @SerializedName("wisdom") WISDOM(4),
+    @SerializedName("charisma") CHARISMA(5);
 
     private int value;
     StatArray(int val){

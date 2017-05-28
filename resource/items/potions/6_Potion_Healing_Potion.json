@@ -1,5 +1,7 @@
 {
-  "amountToHeal":5,
+  "numberOfHealDice": 2,
+  "sidesOnDie": 4,
+  "modifier": 2,
   "ID":6,
   "name":"Healing Potion",
   "namePlural":"Healing Potions"

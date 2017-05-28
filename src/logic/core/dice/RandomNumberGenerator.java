@@ -16,21 +16,16 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.quests;
+package logic.core.dice;
 
-import com.google.gson.annotations.Expose;
-import logic.core.World;
-import logic.item.Item;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class QuestCompletionItem {
-    @Expose private int details;
-    @Expose private int quantity;
+final class RandomNumberGenerator {
+    private RandomNumberGenerator(){
 
-    public Item getDetails(){
-        return World.ItemByID(details);
     }
 
-    int getQuantity(){
-        return quantity;
+    static int NumberBetween(int minVal, int maxVal){
+        return ThreadLocalRandom.current().nextInt(minVal, maxVal + 1);
     }
 }

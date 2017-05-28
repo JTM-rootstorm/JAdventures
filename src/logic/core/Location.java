@@ -49,7 +49,7 @@ public class Location {
         return description;
     }
 
-    public Item getItemRequiredToEnter() {
+    Item getItemRequiredToEnter() {
         return World.ItemByID(itemRequiredToEnter);
     }
 

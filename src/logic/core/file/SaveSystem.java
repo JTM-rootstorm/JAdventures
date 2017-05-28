@@ -16,7 +16,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package logic.core;
+package logic.core.file;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,12 +26,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-class SaveSystem extends FileSystemInit{
+public class SaveSystem extends FileSystemInit{
     private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private SaveSystem(){}
 
-    static void savePlayer(Player player){
+    public static void savePlayer(Player player){
         String saveFilePath = jarPathOnSystem + "/save/";
         try {
             File save = new File(saveFilePath);

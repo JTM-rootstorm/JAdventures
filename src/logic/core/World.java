@@ -18,6 +18,8 @@
 
 package logic.core;
 
+import logic.core.file.LoadSystem;
+import logic.core.file.SaveSystem;
 import logic.entity.Monster;
 import logic.entity.Player;
 import logic.item.Item;

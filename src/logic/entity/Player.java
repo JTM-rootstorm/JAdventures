@@ -44,9 +44,9 @@ public class Player extends Entity {
 
     public Player(int currentHitPoints, int maxHitPoints, List<Integer> stats){
         super(currentHitPoints, maxHitPoints, stats);
-        initGold();
-        initExpPoints();
-        initLevel();
+        gold = 0;
+        expPoints = 0;
+        level = 1;
         inventory = new ArrayList<>();
         quests = new ArrayList<>();
     }
@@ -57,17 +57,16 @@ public class Player extends Entity {
         World.sendObserverNotification("plr_curhp");
     }
 
+    public void addHitPoints(int amountToAdd){
+       setCurrentHitPoints(super.getCurrentHitPoints() + amountToAdd);
+    }
+
     public int getGold() {
         return gold;
     }
 
     public void addGold(int amountToAdd){
         gold += amountToAdd;
-    }
-
-    private void initGold() {
-        this.gold = 0;
-        World.sendObserverNotification("plr_gold");
     }
 
     public int getExpPoints() {
@@ -78,18 +77,8 @@ public class Player extends Entity {
         expPoints += xp;
     }
 
-    private void initExpPoints() {
-        this.expPoints = 0;
-        World.sendObserverNotification("plr_exp");
-    }
-
     public int getLevel() {
         return level;
-    }
-
-    private void initLevel() {
-        this.level = 1;
-        World.sendObserverNotification("plr_lvl");
     }
 
     public List<InventoryItem> getInventory() {
@@ -106,8 +95,6 @@ public class Player extends Entity {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation.getID();
-        World.sendMessengerObserverNotification("location",
-                "\n\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
     }
 
     public Weapon getCurrentWeapon() {
@@ -155,19 +142,5 @@ public class Player extends Entity {
         }
 
         return potions;
-    }
-
-    public Boolean hasRequiredItemToEnter(Location location) {
-        if (location.getItemRequiredToEnter() == null) {
-            return true;
-        }
-
-        for (InventoryItem item : getInventory()) {
-            if (item.getDetails().getID() == location.getItemRequiredToEnter().getID()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -21,16 +21,20 @@ package logic.item;
 import com.google.gson.annotations.Expose;
 
 public class HealingPotion extends Item {
+    
+    @Expose private int numberOfHealDice;
+    @Expose private int sidesOnDie;
+    @Expose private int modifier;
 
-    @Expose private int amountToHeal = 10;
-
-    public HealingPotion(int id, String name, String namePlural, int amountToHeal){
-        super(id, name, namePlural);
-
-        this.amountToHeal = amountToHeal;
+    public int getNumberOfHealDice(){
+        return numberOfHealDice;
     }
 
-    public int getAmountToHeal(){
-        return amountToHeal;
+    public int getSidesOnDie() {
+        return sidesOnDie;
+    }
+
+    public int getModifier() {
+        return modifier;
     }
 }
