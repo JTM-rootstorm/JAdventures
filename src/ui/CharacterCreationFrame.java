@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ui.ElementCreator.createNormalLabel;
+
 class CharacterCreationFrame extends JInternalFrame {
     private JLabel lblAbsStr, lblAbsDex, lblAbsCon, lblAbsInt, lblAbsWis, lblAbsCha, lblTotalAbsRoll;
     private JLabel lblAbsStrMod, lblAbsDexMod, lblAbsConMod, lblAbsIntMod, lblAbsWisMod, lblAbsChaMod;
@@ -67,24 +69,17 @@ class CharacterCreationFrame extends JInternalFrame {
     }
 
     private void initLabels(){
-        createNormalLabel("Strength: ", 34, 102, 79);
-        createNormalLabel("Dexterity: ", 34, 142, 79);
-        createNormalLabel("Constitution: ", 34, 182, 98);
-        createNormalLabel("Intelligence: ", 34, 222, 94);
-        createNormalLabel("Wisdom: ", 34, 262, 70);
-        createNormalLabel("Charisma: ", 34, 302, 80);
-        createNormalLabel("Ability Score", 280, 57, 96);
-        createNormalLabel("ABS Mod", 408, 57, 77);
-        createNormalLabel("Racial Mod", 147, 57, 88);
-        createNormalLabel("Race: ", 34, 388, 51);
-        createNormalLabel("Roll Type:", 111, 506, 78);
-    }
-
-    private void createNormalLabel(String text, int loc_x, int loc_y, int size_x){
-        JLabel tempLabel = new JLabel(text);
-        tempLabel.setLocation(loc_x, loc_y);
-        tempLabel.setSize(size_x, 20);
-        mainPanel.add(tempLabel);
+        mainPanel.add(createNormalLabel("Strength: ", 34, 102, 79, 20));
+        mainPanel.add(createNormalLabel("Dexterity: ", 34, 142, 79, 20));
+        mainPanel.add(createNormalLabel("Constitution: ", 34, 182, 98, 20));
+        mainPanel.add(createNormalLabel("Intelligence: ", 34, 222, 94, 20));
+        mainPanel.add(createNormalLabel("Wisdom: ", 34, 262, 70, 20));
+        mainPanel.add(createNormalLabel("Charisma: ", 34, 302, 80, 20));
+        mainPanel.add(createNormalLabel("Ability Score", 280, 57, 96, 20));
+        mainPanel.add(createNormalLabel("ABS Mod", 408, 57, 77, 20));
+        mainPanel.add(createNormalLabel("Racial Mod", 147, 57, 88, 20));
+        mainPanel.add(createNormalLabel("Race: ", 34, 388, 51, 20));
+        mainPanel.add(createNormalLabel("Roll Type:", 111, 506, 78, 20));
     }
 
     private void initAbsLabels(){

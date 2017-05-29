@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private static List<Quest> quests = new ArrayList<>();
-
     private static Player _player;
     private static Monster _currentMonster;
 
@@ -49,8 +47,6 @@ public class World {
         SaveSystem.init();
         LoadSystem.init();
         SQLiteJDBCDriverConnection.connect();
-
-        //quests = LoadSystem.loadQuests();
     }
 
     public static void finishInit(){
@@ -143,7 +139,6 @@ public class World {
 
     public static Quest QuestByID(Integer id) {
         if(id != null){
-            //return quests.get(id);
             return LoadSystem.loadQuest(id);
         }
 

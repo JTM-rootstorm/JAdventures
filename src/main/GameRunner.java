@@ -26,9 +26,6 @@ import static javax.swing.SwingUtilities.invokeLater;
 public class GameRunner {
     public static void main(String[] args){
         invokeLater(MainFrame::createAndShowGUI);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            SQLiteJDBCDriverConnection.disconnect();
-            System.out.println("SQL Disconnected");
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(SQLiteJDBCDriverConnection::disconnect));
     }
 }

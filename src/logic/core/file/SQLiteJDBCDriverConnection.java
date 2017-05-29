@@ -47,6 +47,7 @@ public class SQLiteJDBCDriverConnection {
         try{
             if (dbConnection != null) {
                 dbConnection.close();
+                System.out.println("SQL Disconnected");
             }
         } catch (SQLException e) {
             e.printStackTrace();

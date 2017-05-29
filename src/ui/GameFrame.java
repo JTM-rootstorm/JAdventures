@@ -32,6 +32,8 @@ import java.awt.event.ItemEvent;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import static ui.ElementCreator.*;
+
 class GameFrame extends JInternalFrame {
     private JPanel gamePanel;
 
@@ -85,65 +87,34 @@ class GameFrame extends JInternalFrame {
     }
 
     private void initLabels() {
-        JLabel label1 = new JLabel("Hit Points: ");
-        label1.setLocation(18, 20);
-        label1.setSize(100, 10);
-        gamePanel.add(label1);
+        gamePanel.add(createNormalLabel("Hit Points: ", 18, 20, 100, 10));
+        gamePanel.add(createNormalLabel("Gold: ", 18, 46, 50, 10));
+        gamePanel.add(createNormalLabel("Experience: ", 18, 74, 100, 15));
+        gamePanel.add(createNormalLabel("Level: ", 18, 100, 50, 10));
+        gamePanel.add(createNormalLabel("Select Action", 440, 531, 110, 10));
 
-        JLabel label2 = new JLabel("Gold: ");
-        label2.setLocation(18, 46);
-        label2.setSize(50, 10);
-        gamePanel.add(label2);
-
-        JLabel label3 = new JLabel("Experience: ");
-        label3.setLocation(18, 74);
-        label3.setSize(100, 15);
-        gamePanel.add(label3);
-
-        JLabel label4 = new JLabel("Level: ");
-        label4.setLocation(18, 100);
-        label4.setSize(50, 10);
-        gamePanel.add(label4);
-
-        JLabel label5 = new JLabel("Select Action");
-        label5.setLocation(440, 531);
-        label5.setSize(110, 10);
-        gamePanel.add(label5);
-
-        lblHitPoints = new GameLabel();
-        lblHitPoints.setLocation(110, 19);
-        lblHitPoints.setSize(50, 10);
-        lblHitPoints.addObserver(message -> {
+        lblHitPoints = createGameLabel(19, message -> {
             if (message.equals("plr_curhp")) {
                 lblHitPoints.setText(Integer.toString(World.getPlayer().getCurrentHitPoints()));
             }
         });
         gamePanel.add(lblHitPoints);
 
-        lblGold = new GameLabel();
-        lblGold.setLocation(110, 45);
-        lblGold.setSize(50, 10);
-        lblGold.addObserver(message -> {
+        lblGold = createGameLabel(45, message -> {
             if (message.equals("plr_gold")) {
                 lblGold.setText(Integer.toString(World.getPlayer().getGold()));
             }
         });
         gamePanel.add(lblGold);
 
-        lblExperience = new GameLabel();
-        lblExperience.setLocation(110, 73);
-        lblExperience.setSize(50, 10);
-        lblExperience.addObserver(message -> {
+        lblExperience = createGameLabel(73, message -> {
             if (message.equals("plr_exp")) {
                 lblExperience.setText(Integer.toString(World.getPlayer().getExpPoints()));
             }
         });
         gamePanel.add(lblExperience);
 
-        lblLevel = new GameLabel();
-        lblLevel.setLocation(110, 99);
-        lblLevel.setSize(50, 10);
-        lblLevel.addObserver(message -> {
+        lblLevel = createGameLabel(99, message -> {
             if (message.equals("plr_lvl")) {
                 lblLevel.setText(Integer.toString(World.getPlayer().getLevel()));
             }
@@ -152,13 +123,8 @@ class GameFrame extends JInternalFrame {
     }
 
     private void initButtons() {
-        final int BUTTON_WIDTH = 100;
-        final int BUTTON_HEIGHT = 20;
-
-        GameButton btnUseWeapon = new GameButton("Use");
-        btnUseWeapon.setLocation(443, 559);
-        btnUseWeapon.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUseWeapon.addActionListener(e -> CombatLogic.useWeapon(cboWeapons.getSelectedItem()));
+        GameButton btnUseWeapon = createGameButton("Use", 443, 559,
+                e -> CombatLogic.useWeapon(cboWeapons.getSelectedItem()));
         btnUseWeapon.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null
@@ -171,10 +137,8 @@ class GameFrame extends JInternalFrame {
         });
         gamePanel.add(btnUseWeapon);
 
-        GameButton btnUsePotion = new GameButton("Use");
-        btnUsePotion.setLocation(443, 593);
-        btnUsePotion.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnUsePotion.addActionListener(e -> CombatLogic.drinkPotion(cboPotions.getSelectedItem()));
+        GameButton btnUsePotion = createGameButton("Use", 443, 593,
+                e -> CombatLogic.drinkPotion(cboPotions.getSelectedItem()));
         btnUsePotion.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getMonsterLivingHere() == null
@@ -187,10 +151,7 @@ class GameFrame extends JInternalFrame {
         });
         gamePanel.add(btnUsePotion);
 
-        GameButton btnNorth = new GameButton("North");
-        btnNorth.setLocation(316, 433);
-        btnNorth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnNorth.addActionListener(e -> LocationLogic.moveNorth());
+        GameButton btnNorth = createGameButton("North", 316, 433, e -> LocationLogic.moveNorth());
         btnNorth.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToNorth() == null) {
@@ -202,10 +163,7 @@ class GameFrame extends JInternalFrame {
         });
         gamePanel.add(btnNorth);
 
-        GameButton btnEast = new GameButton("East");
-        btnEast.setLocation(396, 457);
-        btnEast.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnEast.addActionListener(e -> LocationLogic.moveEast());
+        GameButton btnEast = createGameButton("East", 396, 457, e -> LocationLogic.moveEast());
         btnEast.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToEast() == null) {
@@ -217,10 +175,7 @@ class GameFrame extends JInternalFrame {
         });
         gamePanel.add(btnEast);
 
-        GameButton btnSouth = new GameButton("South");
-        btnSouth.setLocation(316, 487);
-        btnSouth.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnSouth.addActionListener(e -> LocationLogic.moveSouth());
+        GameButton btnSouth = createGameButton("South", 316, 487, e -> LocationLogic.moveSouth());
         btnSouth.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToSouth() == null) {
@@ -232,10 +187,7 @@ class GameFrame extends JInternalFrame {
         });
         gamePanel.add(btnSouth);
 
-        GameButton btnWest = new GameButton("West");
-        btnWest.setLocation(235, 457);
-        btnWest.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        btnWest.addActionListener(e -> LocationLogic.moveWest());
+        GameButton btnWest = createGameButton("West", 235, 457, e -> LocationLogic.moveWest());
         btnWest.addObserver(message -> {
             if (message.equals("plr_move")) {
                 if (World.getPlayer().getCurrentLocation().getLocationToWest() == null) {
@@ -327,7 +279,7 @@ class GameFrame extends JInternalFrame {
         locPane.setLocation(170, 19);
         locPane.setSize(360, 105);
         locPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        add(locPane);
+        gamePanel.add(locPane);
 
         rtbMessages = new GameTextArea();
         rtbMessages.setEditable(false);
