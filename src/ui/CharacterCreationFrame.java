@@ -166,42 +166,24 @@ class CharacterCreationFrame extends JInternalFrame {
     }
 
     private void initChkBoxes(){
+        chkStrRaceMod = createCheckBox(102, actionEvent -> handleCheckBoxesForHalfElf(chkStrRaceMod));
+        chkDexRaceMod = createCheckBox(142, actionEvent -> handleCheckBoxesForHalfElf(chkDexRaceMod));
+        chkConRaceMod = createCheckBox(182, actionEvent -> handleCheckBoxesForHalfElf(chkDexRaceMod));
+        chkIntRaceMod = createCheckBox(222, actionEvent -> handleCheckBoxesForHalfElf(chkIntRaceMod));
+        chkWisRaceMod = createCheckBox(262, actionEvent -> handleCheckBoxesForHalfElf(chkWisRaceMod));
+    }
+
+    private JCheckBox createCheckBox(int loc_y, ActionListener actionListener){
         Dimension boxDim = new Dimension(22, 21);
 
-        chkStrRaceMod = new JCheckBox();
-        chkStrRaceMod.setLocation(508, 102);
-        chkStrRaceMod.setSize(boxDim);
-        chkStrRaceMod.setEnabled(false);
-        chkStrRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkStrRaceMod));
-        mainPanel.add(chkStrRaceMod);
+        JCheckBox tempBox = new JCheckBox();
+        tempBox.setLocation(508, loc_y);
+        tempBox.setSize(boxDim);
+        tempBox.setEnabled(false);
+        tempBox.addActionListener(actionListener);
+        mainPanel.add(tempBox);
 
-        chkDexRaceMod = new JCheckBox();
-        chkDexRaceMod.setLocation(508, 142);
-        chkDexRaceMod.setSize(boxDim);
-        chkDexRaceMod.setEnabled(false);
-        chkDexRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkDexRaceMod));
-        mainPanel.add(chkDexRaceMod);
-
-        chkConRaceMod = new JCheckBox();
-        chkConRaceMod.setLocation(508, 182);
-        chkConRaceMod.setSize(boxDim);
-        chkConRaceMod.setEnabled(false);
-        chkConRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkConRaceMod));
-        mainPanel.add(chkConRaceMod);
-
-        chkIntRaceMod = new JCheckBox();
-        chkIntRaceMod.setLocation(508, 222);
-        chkIntRaceMod.setSize(boxDim);
-        chkIntRaceMod.setEnabled(false);
-        chkIntRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkIntRaceMod));
-        mainPanel.add(chkIntRaceMod);
-
-        chkWisRaceMod = new JCheckBox();
-        chkWisRaceMod.setLocation(508, 262);
-        chkWisRaceMod.setSize(boxDim);
-        chkWisRaceMod.setEnabled(false);
-        chkWisRaceMod.addActionListener(actionEvent -> handleCheckBoxesForHalfElf(chkWisRaceMod));
-        mainPanel.add(chkWisRaceMod);
+        return tempBox;
     }
 
     private void updateRaceMods(String race){
