@@ -20,6 +20,7 @@ package logic.core;
 
 import logic.core.dice.DiceRoller;
 import logic.entity.Entity;
+import logic.entity.Monster;
 import logic.enums.MonsterDice;
 import logic.enums.StatArray;
 import logic.item.HealingPotion;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombatLogic {
+    private List<Entity> turnOrder = new ArrayList<>();
+
     private CombatLogic(){
 
     }
@@ -97,16 +100,16 @@ public class CombatLogic {
 
             LocationLogic.refreshLocation();
         } else {
-            monsterAttack();
+            monsterAttack(World.getCurrentMonster());
         }
     }
 
-    private static void monsterAttack() {
-        int damageToPlayer = DiceRoller.rollDice(World.getCurrentMonster().getDicePool(MonsterDice.NUM_ATTACK_DICE),
-                World.getCurrentMonster().getDicePool(MonsterDice.ATTACK_DIE_TYPE), World.getCurrentMonster().getDicePool(MonsterDice.ATTACK_DIE_MODIFIER));
+    private static void monsterAttack(Monster monster) {
+        int damageToPlayer = DiceRoller.rollDice(monster.getDicePool(MonsterDice.NUM_ATTACK_DICE),
+                monster.getDicePool(MonsterDice.ATTACK_DIE_TYPE), monster.getDicePool(MonsterDice.ATTACK_DIE_MODIFIER));
 
         World.sendMessengerObserverNotification("message", "The "
-                + World.getCurrentMonster().getName() + " did " + damageToPlayer + " points of damage.\n");
+                + monster.getName() + " did " + damageToPlayer + " points of damage.\n");
 
         World.getPlayer().setCurrentHitPoints(World.getPlayer().getCurrentHitPoints() - damageToPlayer);
 
@@ -143,7 +146,7 @@ public class CombatLogic {
 
         World.sendMessengerObserverNotification("message", "You drink a " + potion.getName() + "\n");
 
-        monsterAttack();
+        monsterAttack(World.getCurrentMonster());
     }
 
     private static int getAttackModifier(StatArray abs, Entity attacker){
