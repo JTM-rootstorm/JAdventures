@@ -2,10 +2,12 @@
   <library name="Gradle: org.xerial:sqlite-jdbc:3.18.0">
     <CLASSES>
       <root url="jar:///run/media/michael/Main Drive/gradle/caches/modules-2/files-2.1/org.xerial/sqlite-jdbc/3.18.0/daee04a44c479fcfa525aaba23240b20234ae474/sqlite-jdbc-3.18.0.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.xerial/sqlite-jdbc/3.18.0/daee04a44c479fcfa525aaba23240b20234ae474/sqlite-jdbc-3.18.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar:///run/media/michael/Main Drive/gradle/caches/modules-2/files-2.1/org.xerial/sqlite-jdbc/3.18.0/c1da56f8d3599083fbdde32b4313a7cd6cffcf70/sqlite-jdbc-3.18.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.xerial/sqlite-jdbc/3.18.0/c1da56f8d3599083fbdde32b4313a7cd6cffcf70/sqlite-jdbc-3.18.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -29,15 +29,7 @@ public class DiceRoller {
     }
 
     public static int rollDice(int numberOfDice, int sidesOnDie, int modifier){
-        int result = 0;
-
-        for(int i = 0; i < numberOfDice; i++){
-            result += RandomNumberGenerator.NumberBetween(numberOfDice, (numberOfDice * sidesOnDie));
-        }
-
-        result += modifier;
-
-        return result;
+        return RandomNumberGenerator.NumberBetween(numberOfDice, (numberOfDice * sidesOnDie)) + modifier;
     }
 
     public static int rollAbilityScore(int numberOfDice){
